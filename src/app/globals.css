@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply text-gray-800 bg-surface-50;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-gray-900;
+  }
+
+  ::selection {
+    @apply bg-primary-500 text-white;
+  }
+}
+
+@layer components {
+  /* ── Container variants ─────────────────────────── */
+  .container-narrow {
+    @apply max-w-5xl mx-auto px-4;
+  }
+
+  .section-padding {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+
+  /* ── Cards ──────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-xl border border-surface-200 shadow-card;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:shadow-card-hover hover:border-primary-100 hover:-translate-y-0.5;
+  }
+
+  .card-interactive {
+    @apply card-hover cursor-pointer;
+  }
+
+  /* ── Buttons ────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn px-6 py-3 bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-400 shadow-sm hover:shadow-md;
+  }
+
+  .btn-accent {
+    @apply btn px-6 py-3 bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-400 shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply btn px-6 py-3 bg-white text-gray-700 border border-surface-300 hover:bg-surface-50 hover:border-primary-300 focus:ring-primary-300;
+  }
+
+  .btn-ghost {
+    @apply btn px-4 py-2 text-gray-600 hover:bg-surface-100 hover:text-primary-600 focus:ring-primary-300;
+  }
+
+  .btn-outline-primary {
+    @apply btn px-6 py-3 bg-transparent text-primary-500 border-2 border-primary-500 hover:bg-primary-500 hover:text-white focus:ring-primary-400;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+
+  .btn-call {
+    @apply btn px-5 py-2.5 bg-green-600 text-white hover:bg-green-700 focus:ring-green-400 text-sm;
+  }
+
+  .btn-enquiry {
+    @apply btn px-5 py-2.5 bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-400 text-sm;
+  }
+
+  /* ── Badges ─────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  .badge-verified {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-featured {
+    @apply badge bg-accent-100 text-accent-800;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-amber-100 text-amber-800;
+  }
+
+  .badge-info {
+    @apply badge bg-blue-100 text-blue-800;
+  }
+
+  .badge-premium {
+    @apply badge bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-sm;
+  }
+
+  /* ── Inputs ─────────────────────────────────────── */
+  .input {
+    @apply w-full px-4 py-3 rounded-lg border border-surface-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all bg-white placeholder:text-gray-400;
+  }
+
+  .input-lg {
+    @apply input py-4 text-base;
+  }
+
+  /* ── Links ──────────────────────────────────────── */
+  .link {
+    @apply text-primary-500 hover:text-primary-600 hover:underline underline-offset-2 transition-colors;
+  }
+
+  /* ── Skeleton Loading ───────────────────────────── */
+  .skeleton {
+    @apply bg-gradient-to-r from-surface-200 via-surface-100 to-surface-200 bg-[length:200%_100%] animate-shimmer rounded;
+  }
+
+  /* ── Divider ────────────────────────────────────── */
+  .divider {
+    @apply border-t border-surface-200;
+  }
+
+  /* ── Tag / Chip ─────────────────────────────────── */
+  .tag {
+    @apply inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-surface-100 text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors cursor-pointer;
+  }
+
+  .tag-active {
+    @apply tag bg-primary-500 text-white hover:bg-primary-600 hover:text-white;
+  }
+}
+
+@layer utilities {
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-primary-600;
+  }
+
+  .text-gradient-accent {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-400 to-accent-600;
+  }
+}
+
+/* ── Custom scrollbar ───────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-surface-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-400;
+}
+
+/* ── Custom focus styles ────────────────────────────── */
+*:focus-visible {
+  @apply outline-none ring-2 ring-primary-400 ring-offset-2;
+}
+
+/* ── Toast container ────────────────────────────────── */
+.toast-container {
+  @apply fixed bottom-4 right-4 z-[100] flex flex-col gap-2;
+}
+
+.toast {
+  @apply px-5 py-3 rounded-lg shadow-lg text-sm font-medium animate-slide-up;
+}
+
+.toast-success {
+  @apply toast bg-green-600 text-white;
+}
+
+.toast-error {
+  @apply toast bg-red-600 text-white;
+}
+
+.toast-info {
+  @apply toast bg-primary-500 text-white;
+}
