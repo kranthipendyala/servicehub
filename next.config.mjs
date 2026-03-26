@@ -1,7 +1,4 @@
 /** @type {import('next').NextConfig} */
-const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost/Mechanical/api/api";
-
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -15,14 +12,6 @@ const nextConfig = {
         pathname: "/Mechanical/**",
       },
     ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${apiUrl}/:path*`,
-      },
-    ];
   },
   async headers() {
     return [

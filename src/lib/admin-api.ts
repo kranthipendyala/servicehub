@@ -1,4 +1,3 @@
-// Use relative URL so it goes through Next.js rewrite proxy (avoids CORS)
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "/api";
 
