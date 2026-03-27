@@ -77,6 +77,7 @@ export async function adminFetch<T = unknown>(
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
+    headers["X-Auth-Token"] = token;
   }
 
   const response = await fetch(url, {
