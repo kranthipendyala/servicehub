@@ -1,7 +1,10 @@
 const IS_SERVER = typeof window === "undefined";
+const IS_LOCAL = typeof window !== "undefined" && window.location.hostname === "localhost";
 const API_BASE_URL = IS_SERVER
   ? (process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/api")
-  : "/proxy-api";
+  : IS_LOCAL
+    ? "/proxy-api"
+    : "https://obesityworldconference.com/api/api";
 
 /* ------------------------------------------------------------------ */
 /*  Token helpers                                                      */
