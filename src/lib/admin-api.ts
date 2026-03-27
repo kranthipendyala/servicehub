@@ -1,5 +1,7 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/api";
+const IS_SERVER = typeof window === "undefined";
+const API_BASE_URL = IS_SERVER
+  ? (process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/api")
+  : "/proxy-api";
 
 /* ------------------------------------------------------------------ */
 /*  Token helpers                                                      */

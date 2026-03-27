@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/api";
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -12,6 +15,14 @@ const nextConfig = {
         pathname: "/Mechanical/**",
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/proxy-api/:path*",
+        destination: `${apiUrl}/:path*`,
+      },
+    ];
   },
   async headers() {
     return [
