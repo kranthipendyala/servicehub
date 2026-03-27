@@ -3,7 +3,7 @@ import type { SeoMeta } from "@/types";
 
 export const SITE_NAME = "MechanicalHub";
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://mechanical-hub.vercel.app";
 export const SITE_DESCRIPTION =
   "India's #1 directory for mechanical services. Find verified mechanics, auto repair shops, plumbers, electricians, AC technicians and more across 500+ cities. Read reviews, compare ratings, get instant quotes.";
 export const SITE_TAGLINE = "Find the Best Mechanical Services Near You";
