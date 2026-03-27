@@ -23,14 +23,30 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function load() {
       try {
-        const [statsRes, bizRes, revRes] = await Promise.all([
+        const [statsRes, bizRes, revRes] = await Promise.allSettled([
           getDashboardStats(),
           getRecentBusinesses(),
           getRecentReviews(),
         ]);
-        setStats(statsRes.data);
-        setBusinesses(bizRes.data.businesses || []);
-        setReviews(revRes.data.reviews || []);
+
+        if (statsRes.status === "fulfilled") {
+          setStats(statsRes.value.data);
+        } else {
+          console.error("Dashboard stats failed:", statsRes.reason);
+          toast("Failed to load dashboard stats", "error");
+        }
+
+        if (bizRes.status === "fulfilled") {
+          setBusinesses(bizRes.value.data.businesses || []);
+        } else {
+          console.error("Recent businesses failed:", bizRes.reason);
+        }
+
+        if (revRes.status === "fulfilled") {
+          setReviews(revRes.value.data.reviews || []);
+        } else {
+          console.error("Recent reviews failed:", revRes.reason);
+        }
       } catch (err) {
         toast(
           err instanceof Error ? err.message : "Failed to load dashboard",
