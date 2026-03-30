@@ -1,6 +1,6 @@
 const IS_SERVER = typeof window === "undefined";
 const API_BASE_URL = IS_SERVER
-  ? (process.env.NEXT_PUBLIC_API_URL || "http://localhost/Mechanical/api/api")
+  ? (process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api")
   : "/proxy-api";
 
 /* ------------------------------------------------------------------ */

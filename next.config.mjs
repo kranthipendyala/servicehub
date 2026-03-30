@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost/Mechanical/api/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api";
 
 const nextConfig = {
   images: {
