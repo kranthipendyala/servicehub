@@ -3,6 +3,7 @@ import Link from "next/link";
 import SearchBar from "@/components/layout/SearchBar";
 import BusinessCard from "@/components/business/BusinessCard";
 import {
+  fetchApi,
   getPopularCategories,
   getPopularCities,
   getFeaturedBusinesses,
