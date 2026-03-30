@@ -1,15 +1,15 @@
 const IS_SERVER = typeof window === "undefined";
-const IS_LOCAL =
-  typeof window !== "undefined" && window.location.hostname === "localhost";
 const API_BASE_URL = IS_SERVER
-  ? (process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api")
-  : IS_LOCAL
-    ? "/proxy-api"
-    : "https://obesityworldconference.com/api/m2/api";
+  ? (process.env.NEXT_PUBLIC_API_URL || "http://localhost/Mechanical/api/api")
+  : "/proxy-api";
 
 /* ------------------------------------------------------------------ */
-/*  Token helpers                                                      */
+/*  Token helpers — Customer uses "customer_*" keys                    */
 /* ------------------------------------------------------------------ */
+
+const CUSTOMER_TOKEN_KEY = "customer_token";
+const CUSTOMER_PROFILE_KEY = "customer_profile";
+const ALLOWED_CUSTOMER_ROLES = ["user"];
 
 export interface UserProfile {
   id: number;
@@ -21,12 +21,12 @@ export interface UserProfile {
 
 export function getUserToken(): string | null {
   if (IS_SERVER) return null;
-  return localStorage.getItem("user_token");
+  return localStorage.getItem(CUSTOMER_TOKEN_KEY);
 }
 
 export function getUserProfile(): UserProfile | null {
   if (IS_SERVER) return null;
-  const raw = localStorage.getItem("user_profile");
+  const raw = localStorage.getItem(CUSTOMER_PROFILE_KEY);
   if (!raw) return null;
   try {
     return JSON.parse(raw);
@@ -36,13 +36,13 @@ export function getUserProfile(): UserProfile | null {
 }
 
 export function setUserAuth(token: string, user: UserProfile) {
-  localStorage.setItem("user_token", token);
-  localStorage.setItem("user_profile", JSON.stringify(user));
+  localStorage.setItem(CUSTOMER_TOKEN_KEY, token);
+  localStorage.setItem(CUSTOMER_PROFILE_KEY, JSON.stringify(user));
 }
 
 export function clearUserAuth() {
-  localStorage.removeItem("user_token");
-  localStorage.removeItem("user_profile");
+  localStorage.removeItem(CUSTOMER_TOKEN_KEY);
+  localStorage.removeItem(CUSTOMER_PROFILE_KEY);
 }
 
 export function isLoggedIn(): boolean {
@@ -108,15 +108,25 @@ export async function userLogin(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 
-  if (res.status && res.data) {
-    setUserAuth(res.data.token, {
-      id: Number(res.data.id),
-      name: res.data.name,
-      email: res.data.email,
-      phone: res.data.phone,
-      role: res.data.role,
-    });
+  if (!res.status || !res.data) {
+    throw new Error(res.message || "Login failed");
   }
+
+  // Strict role check: only "user" role allowed on customer portal
+  if (!ALLOWED_CUSTOMER_ROLES.includes(res.data.role)) {
+    if (res.data.role === "vendor" || res.data.role === "business_owner") {
+      throw new Error("This is a vendor account. Please login at the Vendor Portal.");
+    }
+    throw new Error("This account cannot login here. Please contact support.");
+  }
+
+  setUserAuth(res.data.token, {
+    id: Number(res.data.id),
+    name: res.data.name,
+    email: res.data.email,
+    phone: res.data.phone,
+    role: res.data.role,
+  });
 
   return res.data;
 }
@@ -132,15 +142,17 @@ export async function userRegister(data: {
     body: JSON.stringify(data),
   });
 
-  if (res.status && res.data) {
-    setUserAuth(res.data.token, {
-      id: Number(res.data.id),
-      name: res.data.name,
-      email: res.data.email,
-      phone: res.data.phone,
-      role: res.data.role,
-    });
+  if (!res.status || !res.data) {
+    throw new Error(res.message || "Registration failed");
   }
+
+  setUserAuth(res.data.token, {
+    id: Number(res.data.id),
+    name: res.data.name,
+    email: res.data.email,
+    phone: res.data.phone,
+    role: res.data.role,
+  });
 
   return res.data;
 }
@@ -153,4 +165,201 @@ export async function userLogout() {
   } finally {
     clearUserAuth();
   }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Phone OTP Auth                                                     */
+/* ------------------------------------------------------------------ */
+
+interface OtpSendResponse {
+  status: boolean;
+  message: string;
+}
+
+interface PhoneLoginResponse {
+  status: boolean;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    role: string;
+    token: string;
+    is_new_user: boolean;
+  };
+  is_new_user?: boolean;
+}
+
+interface CompleteProfileResponse {
+  status: boolean;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    role: string;
+    token: string;
+  };
+}
+
+export async function sendOtp(phone: string): Promise<OtpSendResponse> {
+  const url = `${API_BASE_URL}/otp/send`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ phone, purpose: "login" }),
+  });
+  const json = await response.json();
+  if (!response.ok || !json.status) {
+    throw new Error(json.message || "Failed to send OTP");
+  }
+  return json;
+}
+
+export async function phoneLogin(
+  phone: string,
+  otp: string
+): Promise<{
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  token: string;
+  is_new_user: boolean;
+}> {
+  const url = `${API_BASE_URL}/auth/phone-login`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ phone, otp }),
+  });
+  const json: PhoneLoginResponse = await response.json();
+  if (!response.ok || !json.status) {
+    throw new Error(json.message || "OTP verification failed");
+  }
+
+  const data = json.data;
+  // is_new_user may come from data or top-level
+  const isNew = data.is_new_user ?? json.is_new_user ?? false;
+
+  if (!isNew) {
+    // Strict role check: only "user" role allowed on customer portal
+    if (!ALLOWED_CUSTOMER_ROLES.includes(data.role)) {
+      if (data.role === "vendor" || data.role === "business_owner") {
+        throw new Error("This is a vendor account. Please login at the Vendor Portal.");
+      }
+      throw new Error("This account cannot login here. Please contact support.");
+    }
+
+    setUserAuth(data.token, {
+      id: Number(data.id),
+      name: data.name,
+      email: data.email,
+      phone: data.phone || phone,
+      role: data.role,
+    });
+  }
+
+  return { ...data, is_new_user: isNew };
+}
+
+export async function completeProfile(data: {
+  phone: string;
+  name: string;
+  email?: string;
+  role?: string;
+}): Promise<{
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  token: string;
+}> {
+  const url = `${API_BASE_URL}/auth/complete-profile`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(data),
+  });
+  const json: CompleteProfileResponse = await response.json();
+  if (!response.ok || !json.status) {
+    throw new Error(json.message || "Profile creation failed");
+  }
+
+  const result = json.data;
+
+  setUserAuth(result.token, {
+    id: Number(result.id),
+    name: result.name,
+    email: result.email,
+    phone: result.phone || data.phone,
+    role: result.role,
+  });
+
+  return result;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Google OAuth Login                                                 */
+/* ------------------------------------------------------------------ */
+
+export async function googleLogin(googleToken: string): Promise<{
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  token: string;
+  is_new_user: boolean;
+}> {
+  const url = `${API_BASE_URL}/auth/google-login`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ google_token: googleToken }),
+  });
+
+  const text = await response.text();
+  let json: { status: boolean; message: string; data: any };
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error("Server error. Please try again.");
+  }
+
+  if (!response.ok || !json.status) {
+    throw new Error(json.message || "Google login failed");
+  }
+
+  const data = json.data;
+
+  // Role check — only customers allowed
+  if (data.role && !ALLOWED_CUSTOMER_ROLES.includes(data.role)) {
+    throw new Error("This Google account is linked to a vendor/admin. Please use the appropriate portal.");
+  }
+
+  // Store auth
+  if (data.token) {
+    setUserAuth(data.token, {
+      id: Number(data.id),
+      name: data.name,
+      email: data.email,
+      phone: data.phone || null,
+      role: data.role,
+    });
+  }
+
+  return {
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    role: data.role,
+    token: data.token,
+    is_new_user: data.is_new_user ?? false,
+  };
 }

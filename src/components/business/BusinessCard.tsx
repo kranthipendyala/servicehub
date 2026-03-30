@@ -156,12 +156,15 @@ export default function BusinessCard({
                 </p>
               </>
             )}
-            <button className="flex-1 sm:flex-none btn-enquiry flex items-center justify-center gap-2 rounded-lg">
+            <Link
+              href={`/book/${business.slug}`}
+              className="flex-1 sm:flex-none bg-accent-500 hover:bg-accent-600 text-white font-semibold flex items-center justify-center gap-2 rounded-lg px-4 py-2 transition-colors text-sm"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              Send Enquiry
-            </button>
+              Book Now
+            </Link>
             <Link
               href={`/business/${business.slug}`}
               className="hidden sm:flex items-center justify-center gap-1 text-xs text-primary-500 hover:text-primary-600 font-semibold mt-1 transition-colors"
@@ -296,9 +299,12 @@ export default function BusinessCard({
               Call Now
             </a>
           )}
-          <button className="flex-1 btn-enquiry text-center rounded-lg text-xs py-2">
-            Enquiry
-          </button>
+          <Link
+            href={`/book/${business.slug}`}
+            className="flex-1 bg-accent-500 hover:bg-accent-600 text-white text-center rounded-lg text-xs py-2 font-semibold transition-colors"
+          >
+            Book Now
+          </Link>
         </div>
       </div>
     </article>

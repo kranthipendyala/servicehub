@@ -62,6 +62,12 @@ const config: Config = {
         "slide-down": "slideDown 0.3s ease-out",
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         shimmer: "shimmer 2s infinite linear",
+        "float": "float 6s ease-in-out infinite",
+        "float-delayed": "float 6s ease-in-out 2s infinite",
+        "float-slow": "float 8s ease-in-out 1s infinite",
+        "gradient-x": "gradientX 6s ease infinite",
+        "pulse-glow": "pulseGlow 2s ease-in-out infinite",
+        "bounce-gentle": "bounceGentle 2s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -79,6 +85,22 @@ const config: Config = {
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        gradientX: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        pulseGlow: {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(255, 102, 0, 0.4)" },
+          "50%": { boxShadow: "0 0 40px rgba(255, 102, 0, 0.8)" },
+        },
+        bounceGentle: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
         },
       },
       boxShadow: {

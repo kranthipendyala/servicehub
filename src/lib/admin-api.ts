@@ -1,10 +1,7 @@
 const IS_SERVER = typeof window === "undefined";
-const IS_LOCAL = typeof window !== "undefined" && window.location.hostname === "localhost";
 const API_BASE_URL = IS_SERVER
-  ? (process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api")
-  : IS_LOCAL
-    ? "/proxy-api"
-    : "https://obesityworldconference.com/api/m2/api";
+  ? (process.env.NEXT_PUBLIC_API_URL || "http://localhost/Mechanical/api/api")
+  : "/proxy-api";
 
 /* ------------------------------------------------------------------ */
 /*  Token helpers                                                      */
@@ -99,7 +96,14 @@ export async function adminFetch<T = unknown>(
     throw new Error("Unauthorized");
   }
 
-  const json = await response.json();
+  const text = await response.text();
+  let json: ApiResult<T>;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    console.error("adminFetch: Non-JSON response from", url, "→", text.slice(0, 200));
+    throw new Error(`Server error (${response.status}). Please try again.`);
+  }
 
   if (!response.ok) {
     throw new Error(json.message || `API error ${response.status}`);
@@ -127,7 +131,7 @@ export async function adminLogin(email: string, password: string) {
   });
 
   if (!["admin", "super_admin"].includes(res.data.role)) {
-    throw new Error("You do not have admin privileges");
+    throw new Error("Access denied. Invalid credentials.");
   }
 
   setAdminAuth(res.data.token, {
@@ -475,4 +479,377 @@ export async function getRecentReviews() {
     reviews: AdminReview[];
     pagination: AdminPagination;
   }>("/admin/reviews", { params: { per_page: 10, page: 1 } });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Bookings                                                           */
+/* ------------------------------------------------------------------ */
+
+export interface AdminBooking {
+  id: number;
+  booking_number: string;
+  customer_id: number;
+  vendor_id: number;
+  business_id: number;
+  scheduled_date: string;
+  scheduled_time: string;
+  status: string;
+  subtotal: number;
+  discount_amount: number;
+  tax_amount: number;
+  total_amount: number;
+  commission_rate: number;
+  commission_amount: number;
+  vendor_payout_amount: number;
+  payment_status: string;
+  payment_method?: string;
+  cancellation_reason?: string;
+  cancelled_by?: string;
+  customer_notes?: string;
+  vendor_notes?: string;
+  started_at?: string;
+  completed_at?: string;
+  cancelled_at?: string;
+  created_at: string;
+  updated_at: string;
+  customer_name?: string;
+  customer_phone?: string;
+  customer_email?: string;
+  vendor_name?: string;
+  vendor_phone?: string;
+  business_name?: string;
+  business_slug?: string;
+  service_address?: string;
+  items?: {
+    id?: number;
+    service_id: number;
+    variant_id?: number;
+    service_name: string;
+    variant_name?: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+  }[];
+}
+
+export async function getAdminBookings(params?: {
+  page?: number;
+  per_page?: number;
+  status?: string;
+  search?: string;
+}) {
+  return adminFetch<{
+    bookings: AdminBooking[];
+    pagination: AdminPagination;
+  }>("/admin/bookings", { params });
+}
+
+export async function getAdminBookingDetail(id: number | string) {
+  return adminFetch<AdminBooking>(`/admin/bookings/${id}`);
+}
+
+export async function updateBookingStatus(
+  id: number | string,
+  status: string
+) {
+  return adminFetch(`/admin/bookings/${id}/status`, {
+    method: "PUT",
+    body: { status },
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Commissions                                                        */
+/* ------------------------------------------------------------------ */
+
+export interface AdminCommissionRule {
+  id: number;
+  category_id?: number;
+  category_name?: string;
+  commission_percentage: number;
+  min_commission: number;
+  is_active: boolean;
+}
+
+export async function getCommissionRules() {
+  return adminFetch<AdminCommissionRule[]>("/admin/commissions");
+}
+
+export async function saveCommissionRule(
+  data: Partial<AdminCommissionRule>
+) {
+  return adminFetch("/admin/commissions", {
+    method: "POST",
+    body: data,
+  });
+}
+
+export async function updateCommissionRule(
+  id: number,
+  data: Partial<AdminCommissionRule>
+) {
+  return adminFetch(`/admin/commissions/${id}`, {
+    method: "PUT",
+    body: data,
+  });
+}
+
+export async function deleteCommissionRule(id: number) {
+  return adminFetch(`/admin/commissions/${id}`, { method: "DELETE" });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Admin Services                                                     */
+/* ------------------------------------------------------------------ */
+
+export interface AdminService {
+  id: number;
+  business_id: number;
+  category_id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  short_description?: string;
+  base_price: number;
+  discounted_price?: number;
+  price_unit: string;
+  duration_minutes: number;
+  image?: string;
+  is_active: boolean;
+  sort_order: number;
+  category_name?: string;
+  category_slug?: string;
+  business_name?: string;
+  business_slug?: string;
+}
+
+export async function getAdminServices(params?: {
+  page?: number;
+  per_page?: number;
+  category?: string;
+  search?: string;
+  status?: string;
+}) {
+  return adminFetch<{
+    services: AdminService[];
+    pagination: AdminPagination;
+  }>("/admin/services", { params });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Subscription Plans (Admin)                                         */
+/* ------------------------------------------------------------------ */
+
+export interface AdminSubscriptionPlan {
+  id: number;
+  name: string;
+  slug: string;
+  monthly_price: number;
+  annual_price: number;
+  features: string[];
+  max_services: number;
+  commission_discount: number;
+  is_popular?: boolean;
+  is_active: boolean;
+  created_at?: string;
+}
+
+export async function getSubscriptionPlans() {
+  return adminFetch<AdminSubscriptionPlan[]>("/admin/subscription-plans");
+}
+
+export async function createSubscriptionPlan(data: Partial<AdminSubscriptionPlan>) {
+  return adminFetch("/admin/subscription-plans", {
+    method: "POST",
+    body: data,
+  });
+}
+
+export async function updateSubscriptionPlan(id: number, data: Partial<AdminSubscriptionPlan>) {
+  return adminFetch(`/admin/subscription-plans/${id}`, {
+    method: "PUT",
+    body: data,
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Vendor Subscriptions                                               */
+/* ------------------------------------------------------------------ */
+
+export interface AdminVendorSubscription {
+  id: number;
+  vendor_id: number;
+  vendor_name?: string;
+  plan_id: number;
+  plan_name?: string;
+  status: string;
+  billing_cycle: "monthly" | "annual";
+  starts_at: string;
+  ends_at: string;
+  auto_renew: boolean;
+  created_at: string;
+}
+
+export async function getVendorSubscriptions(params?: {
+  page?: number;
+  per_page?: number;
+  status?: string;
+}) {
+  return adminFetch<{
+    subscriptions: AdminVendorSubscription[];
+    pagination: AdminPagination;
+  }>("/admin/vendor-subscriptions", { params });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Payouts (Admin)                                                    */
+/* ------------------------------------------------------------------ */
+
+export interface AdminPayout {
+  id: number;
+  vendor_id: number;
+  vendor_name?: string;
+  amount: number;
+  status: string;
+  period_start: string;
+  period_end: string;
+  bookings_count: number;
+  reference_id?: string;
+  paid_at?: string;
+  created_at: string;
+}
+
+export async function getPayouts(params?: {
+  page?: number;
+  per_page?: number;
+  status?: string;
+}) {
+  return adminFetch<{
+    payouts: AdminPayout[];
+    pagination: AdminPagination;
+  }>("/admin/payouts", { params });
+}
+
+export async function processPayout(id: number, referenceId?: string) {
+  return adminFetch(`/admin/payouts/${id}/process`, {
+    method: "POST",
+    body: referenceId ? { reference_id: referenceId } : undefined,
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Vendor Documents (KYC)                                             */
+/* ------------------------------------------------------------------ */
+
+export interface AdminVendorDocument {
+  id: number;
+  vendor_id: number;
+  vendor_name?: string;
+  document_type: string;
+  document_url: string;
+  status: string;
+  rejection_reason?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getVendorDocuments(params?: {
+  page?: number;
+  per_page?: number;
+  status?: string;
+}) {
+  return adminFetch<{
+    documents: AdminVendorDocument[];
+    pagination: AdminPagination;
+  }>("/admin/vendor-documents", { params });
+}
+
+export async function approveDocument(id: number) {
+  return adminFetch(`/admin/vendor-documents/${id}/approve`, { method: "POST" });
+}
+
+export async function rejectDocument(id: number, reason: string) {
+  return adminFetch(`/admin/vendor-documents/${id}/reject`, {
+    method: "POST",
+    body: { reason },
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Coupons                                                            */
+/* ------------------------------------------------------------------ */
+
+export interface AdminCoupon {
+  id: number;
+  code: string;
+  type: "percentage" | "fixed";
+  value: number;
+  min_order_amount?: number;
+  max_discount?: number;
+  usage_limit?: number;
+  used_count: number;
+  valid_from: string;
+  valid_until: string;
+  is_active: boolean;
+  created_at?: string;
+}
+
+export async function getCoupons(params?: {
+  page?: number;
+  per_page?: number;
+  status?: string;
+}) {
+  return adminFetch<{
+    coupons: AdminCoupon[];
+    pagination: AdminPagination;
+  }>("/admin/coupons", { params });
+}
+
+export async function createCoupon(data: Partial<AdminCoupon>) {
+  return adminFetch("/admin/coupons", {
+    method: "POST",
+    body: data,
+  });
+}
+
+export async function updateCoupon(id: number, data: Partial<AdminCoupon>) {
+  return adminFetch(`/admin/coupons/${id}`, {
+    method: "PUT",
+    body: data,
+  });
+}
+
+export async function deleteCoupon(id: number) {
+  return adminFetch(`/admin/coupons/${id}`, { method: "DELETE" });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Analytics                                                          */
+/* ------------------------------------------------------------------ */
+
+export interface RevenueAnalytics {
+  total_revenue: number;
+  total_commission: number;
+  total_payouts: number;
+  revenue_by_month: { month: string; revenue: number; commission: number; payouts: number }[];
+  top_vendors: { vendor_id: number; vendor_name: string; revenue: number; bookings: number }[];
+  bookings_by_status: { status: string; count: number }[];
+  category_performance: { category_id: number; category_name: string; bookings: number; revenue: number }[];
+}
+
+export async function getAnalyticsRevenue(params?: { period?: string }) {
+  return adminFetch<RevenueAnalytics>("/admin/analytics/revenue", { params });
+}
+
+export async function getAnalyticsBookings(params?: { period?: string }) {
+  return adminFetch<{ bookings_by_status: { status: string; count: number }[] }>(
+    "/admin/analytics/bookings",
+    { params }
+  );
+}
+
+export async function getAnalyticsVendors(params?: { period?: string }) {
+  return adminFetch<{
+    top_vendors: { vendor_id: number; vendor_name: string; revenue: number; bookings: number }[];
+  }>("/admin/analytics/vendors", { params });
 }

@@ -36,7 +36,7 @@ const POPULAR_CITIES = [
 export default function SearchBar({
   defaultQuery = "",
   defaultCity,
-  placeholder = "Search for mechanics, plumbers, electricians...",
+  placeholder = "Search cleaning, electrician, plumber, AC repair...",
   variant = "header",
 }: SearchBarProps) {
   const router = useRouter();

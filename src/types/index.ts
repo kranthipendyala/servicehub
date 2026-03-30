@@ -193,3 +193,157 @@ export interface EnquiryForm {
   message: string;
   business_id: number;
 }
+
+// ---- Marketplace Types ----
+
+export interface Service {
+  id: number;
+  business_id: number;
+  category_id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  short_description?: string;
+  base_price: number;
+  discounted_price?: number;
+  price_unit: 'fixed' | 'per_hour' | 'per_sqft' | 'per_unit';
+  duration_minutes: number;
+  image?: string;
+  is_active: boolean;
+  sort_order: number;
+  category_name?: string;
+  category_slug?: string;
+  business_name?: string;
+  business_slug?: string;
+  variants?: ServiceVariant[];
+}
+
+export interface ServiceVariant {
+  id: number;
+  service_id: number;
+  name: string;
+  price: number;
+  duration_minutes?: number;
+  is_active: boolean;
+}
+
+export interface Address {
+  id: number;
+  user_id: number;
+  label: string;
+  full_name?: string;
+  phone?: string;
+  address_line1: string;
+  address_line2?: string;
+  city_id?: number;
+  city_name?: string;
+  locality_id?: number;
+  locality_name?: string;
+  state_id?: number;
+  state_name?: string;
+  pin_code: string;
+  latitude?: number;
+  longitude?: number;
+  is_default: boolean;
+}
+
+export interface BookingItem {
+  id?: number;
+  service_id: number;
+  variant_id?: number;
+  service_name: string;
+  variant_name?: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+}
+
+export type BookingStatus = 'pending' | 'confirmed' | 'assigned' | 'in_progress' | 'completed' | 'cancelled' | 'refunded';
+export type PaymentStatus = 'pending' | 'paid' | 'partially_refunded' | 'refunded' | 'failed';
+
+export interface Booking {
+  id: number;
+  booking_number: string;
+  customer_id: number;
+  vendor_id: number;
+  business_id: number;
+  address_id?: number;
+  service_address?: string;
+  scheduled_date: string;
+  scheduled_time: string;
+  status: BookingStatus;
+  subtotal: number;
+  discount_amount: number;
+  tax_amount: number;
+  total_amount: number;
+  commission_rate: number;
+  commission_amount: number;
+  vendor_payout_amount: number;
+  payment_status: PaymentStatus;
+  payment_method?: string;
+  cancellation_reason?: string;
+  cancelled_by?: 'customer' | 'vendor' | 'admin';
+  customer_notes?: string;
+  vendor_notes?: string;
+  started_at?: string;
+  completed_at?: string;
+  cancelled_at?: string;
+  created_at: string;
+  updated_at: string;
+  // Joined fields
+  customer_name?: string;
+  customer_phone?: string;
+  customer_email?: string;
+  vendor_name?: string;
+  vendor_phone?: string;
+  business_name?: string;
+  business_slug?: string;
+  items?: BookingItem[];
+  address?: Address;
+}
+
+export interface PaymentOrder {
+  razorpay_order_id: string;
+  amount: number;
+  currency: string;
+  booking_number: string;
+}
+
+export interface Notification {
+  id: number;
+  user_id: number;
+  type: string;
+  title: string;
+  body?: string;
+  data?: Record<string, unknown>;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface CommissionRule {
+  id: number;
+  category_id?: number;
+  category_name?: string;
+  commission_percentage: number;
+  min_commission: number;
+  is_active: boolean;
+}
+
+export interface CreateBookingRequest {
+  business_id: number;
+  items: { service_id: number; variant_id?: number; quantity?: number }[];
+  scheduled_date: string;
+  scheduled_time: string;
+  address_id?: number;
+  service_address?: string;
+  customer_notes?: string;
+  discount_amount?: number;
+}
+
+export interface VendorStats {
+  total_bookings: number;
+  pending: number;
+  completed: number;
+  today: number;
+  total_earnings: number;
+}

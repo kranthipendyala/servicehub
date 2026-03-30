@@ -17,64 +17,72 @@ const POPULAR_CITIES = [
 ];
 
 const POPULAR_CATEGORIES = [
-  { name: "Auto Mechanics", slug: "auto-mechanics" },
-  { name: "Plumbers", slug: "plumbers" },
-  { name: "Electricians", slug: "electricians" },
-  { name: "AC Repair", slug: "ac-repair" },
-  { name: "Welding Services", slug: "welding-services" },
-  { name: "CNC Machining", slug: "cnc-machining" },
-  { name: "Hydraulic Services", slug: "hydraulic-services" },
-  { name: "Fabrication", slug: "fabrication" },
-  { name: "Lathe Work", slug: "lathe-work" },
-  { name: "Motor Rewinding", slug: "motor-rewinding" },
-  { name: "Pump Repair", slug: "pump-repair" },
-  { name: "Industrial Equipment", slug: "industrial-equipment" },
+  { name: "Home Cleaning", slug: "home-cleaning" },
+  { name: "Electricians", slug: "electrical-services" },
+  { name: "Plumbers", slug: "plumbing-services" },
+  { name: "AC Repair", slug: "hvac-services" },
+  { name: "Appliance Repair", slug: "appliance-repair" },
+  { name: "Pest Control", slug: "pest-control" },
+  { name: "Painting Services", slug: "painting-services" },
+  { name: "Carpentry", slug: "carpentry-services" },
+  { name: "Waterproofing", slug: "waterproofing" },
+  { name: "CCTV & Security", slug: "cctv-security" },
+  { name: "Solar Panel", slug: "solar-panel-services" },
+  { name: "Fire Safety", slug: "fire-safety-services" },
 ];
 
 const QUICK_LINKS = [
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
-  { label: "List Your Business", href: "/list-business" },
+  { label: "Join as Vendor", href: "/vendor/register" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
   { label: "Sitemap", href: "/sitemap.xml" },
 ];
 
 const SEO_COMBOS = [
-  { label: "Mechanics in Mumbai", href: "/mumbai/auto-mechanics" },
-  { label: "Plumbers in Delhi", href: "/delhi/plumbers" },
-  { label: "Electricians in Bangalore", href: "/bangalore/electricians" },
-  { label: "AC Repair in Hyderabad", href: "/hyderabad/ac-repair" },
-  { label: "Welding in Pune", href: "/pune/welding-services" },
-  { label: "Fabrication in Chennai", href: "/chennai/fabrication" },
-  { label: "Plumbers in Kolkata", href: "/kolkata/plumbers" },
-  { label: "CNC in Ahmedabad", href: "/ahmedabad/cnc-machining" },
-  { label: "Electricians in Jaipur", href: "/jaipur/electricians" },
-  { label: "AC Repair in Pune", href: "/pune/ac-repair" },
-  { label: "Mechanics in Delhi", href: "/delhi/auto-mechanics" },
-  { label: "Plumbers in Mumbai", href: "/mumbai/plumbers" },
+  { label: "Home Cleaning in Mumbai", href: "/services/home-cleaning/mumbai" },
+  { label: "Plumbers in Delhi", href: "/services/plumbing-services/new-delhi" },
+  { label: "Electricians in Bangalore", href: "/services/electrical-services/bangalore" },
+  { label: "AC Repair in Hyderabad", href: "/services/hvac-services/hyderabad" },
+  { label: "Painting in Pune", href: "/services/painting-services/pune" },
+  { label: "Pest Control in Chennai", href: "/services/pest-control/chennai" },
+  { label: "Plumbers in Kolkata", href: "/services/plumbing-services/kolkata" },
+  { label: "Carpentry in Ahmedabad", href: "/services/carpentry-services/ahmedabad" },
+  { label: "Electricians in Jaipur", href: "/services/electrical-services/jaipur" },
+  { label: "AC Repair in Pune", href: "/services/hvac-services/pune" },
+  { label: "Cleaning in Delhi", href: "/services/home-cleaning/new-delhi" },
+  { label: "Plumbers in Mumbai", href: "/services/plumbing-services/mumbai" },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       {/* CTA Bar */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-500">
-        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-emerald-600 to-emerald-500">
+        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <h3 className="text-white font-heading font-bold text-xl">
-              Are you a service provider?
+              Grow your business with MechanicalHub
             </h3>
-            <p className="text-primary-100 text-sm mt-1">
-              List your business for free and reach thousands of customers
+            <p className="text-emerald-100 text-sm mt-1">
+              Register as a vendor, get bookings from thousands of customers, and earn ₹50K+ monthly
             </p>
           </div>
-          <Link
-            href="/list-business"
-            className="btn bg-accent-500 hover:bg-accent-600 text-white font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all"
-          >
-            List Your Business - It&apos;s Free
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/vendor/register"
+              className="bg-white text-emerald-700 font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all text-center hover:bg-emerald-50"
+            >
+              Join as Vendor — Free
+            </Link>
+            <Link
+              href="/vendor/login"
+              className="bg-emerald-700/50 text-white font-semibold px-6 py-3 rounded-xl border border-white/30 hover:bg-emerald-700/70 transition-all text-center backdrop-blur-sm"
+            >
+              Vendor Login
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -169,7 +177,7 @@ export default function Footer() {
               {POPULAR_CATEGORIES.slice(0, 10).map((cat) => (
                 <li key={cat.slug}>
                   <Link
-                    href={`/search?q=${encodeURIComponent(cat.name)}`}
+                    href={`/services/${cat.slug}`}
                     className="text-sm text-gray-400 hover:text-accent-400 transition-colors"
                   >
                     {cat.name}

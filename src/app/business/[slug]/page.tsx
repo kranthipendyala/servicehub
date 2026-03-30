@@ -236,12 +236,15 @@ export default async function BusinessDetailPage({
                   Call Now
                 </a>
               )}
-              <button className="flex-1 md:flex-none btn-enquiry flex items-center justify-center gap-2 rounded-xl py-3">
+              <Link
+                href={`/book/${business.slug}`}
+                className="flex-1 md:flex-none bg-gradient-to-r from-accent-500 to-accent-600 text-white font-bold flex items-center justify-center gap-2 rounded-xl py-3 px-6 hover:from-accent-600 hover:to-accent-700 transition-all shadow-sm hover:shadow-md"
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Send Enquiry
-              </button>
+                Book Now
+              </Link>
               {business.website && (
                 <a
                   href={business.website}
@@ -499,12 +502,15 @@ export default async function BusinessDetailPage({
                       Call Now
                     </a>
                   )}
-                  <button className="btn-enquiry w-full flex items-center justify-center gap-2 py-3 rounded-xl">
+                  <Link
+                    href={`/book/${business.slug}`}
+                    className="w-full bg-gradient-to-r from-accent-500 to-accent-600 text-white font-bold flex items-center justify-center gap-2 py-3.5 rounded-xl hover:from-accent-600 hover:to-accent-700 transition-all shadow-sm hover:shadow-md text-base"
+                  >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    Send Enquiry
-                  </button>
+                    Book Now
+                  </Link>
                 </div>
               </div>
 
