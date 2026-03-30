@@ -11,13 +11,13 @@ interface PageProps {
 async function getCategoryData(slug: string) {
   try {
     // Fetch category info
-    const catRes = await fetchApi<Category>(`/categories/${slug}`, { revalidate: 3600 });
+    const catRes = await fetchApi<any>(`/categories/${slug}`, { revalidate: 3600 });
     if (!catRes.success || !catRes.data) return null;
 
     // Fetch businesses in this category
     let businesses: Business[] = [];
     try {
-      const bizRes = await fetchApi<{ businesses: Business[] } | Business[]>(`/businesses`, {
+      const bizRes = await fetchApi<any>(`/businesses`, {
         params: { category: slug, per_page: "30" },
         revalidate: 3600,
       });
@@ -29,7 +29,7 @@ async function getCategoryData(slug: string) {
     // Fetch cities
     let cities: City[] = [];
     try {
-      const cityRes = await fetchApi<{ cities: City[] } | City[]>(`/cities`, { revalidate: 3600 });
+      const cityRes = await fetchApi<any>(`/cities`, { revalidate: 3600 });
       if (cityRes.success && cityRes.data) {
         cities = Array.isArray(cityRes.data) ? cityRes.data : (cityRes.data as any).cities || [];
       }
@@ -132,7 +132,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <div className="mb-8">
               <h2 className="text-lg font-semibold text-gray-900 mb-3">Popular Services</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {cat.children.map((child) => (
+                {cat.children.map((child: any) => (
                   <Link
                     key={child.id}
                     href={`/services/${child.slug}`}

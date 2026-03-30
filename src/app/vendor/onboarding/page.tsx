@@ -392,10 +392,10 @@ export default function VendorOnboardingPage() {
 
   const isStepComplete = (stepNum: number) => {
     return currentStep > stepNum || (status && (
-      (stepNum === 1 && status.business_profile) ||
+      (stepNum === 1 && status.profile_complete) ||
       (stepNum === 2 && status.services_added) ||
-      (stepNum === 3 && status.kyc_documents) ||
-      (stepNum === 4 && status.bank_details)
+      (stepNum === 3 && status.documents_submitted) ||
+      (stepNum === 4 && status.bank_added)
     ));
   };
 

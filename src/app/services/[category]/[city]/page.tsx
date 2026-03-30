@@ -12,16 +12,16 @@ async function getCategoryCityData(categorySlug: string, citySlug: string) {
   try {
     // Fetch category and city info separately using existing endpoints
     const [catRes, cityRes] = await Promise.all([
-      fetchApi<Category>(`/categories/${categorySlug}`, { revalidate: 3600 }),
-      fetchApi<City>(`/cities/${citySlug}`, { revalidate: 3600 }),
+      fetchApi<any>(`/categories/${categorySlug}`, { revalidate: 3600 }),
+      fetchApi<any>(`/cities/${citySlug}`, { revalidate: 3600 }),
     ]);
 
-    if (!catRes.success || !catRes.data || !cityRes.success || !cityRes.data) return null;
+    if (!catRes?.success || !catRes?.data || !cityRes?.success || !cityRes?.data) return null;
 
     // Fetch businesses filtered by category + city
     let businesses: Business[] = [];
     try {
-      const bizRes = await fetchApi<{ businesses: Business[] } | Business[]>(`/businesses`, {
+      const bizRes = await fetchApi<any>(`/businesses`, {
         params: { category: categorySlug, city: citySlug, per_page: "30" },
         revalidate: 3600,
       });

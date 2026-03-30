@@ -259,7 +259,7 @@ export default async function HomePage() {
       if (Array.isArray(cityData) && cityData.length > 0) cities = cityData;
     }
     if (featRes.status === "fulfilled" && featRes.value.success) {
-      const featData = featRes.value.data;
+      const featData = featRes.value.data as any;
       if (Array.isArray(featData)) featuredBusinesses = featData;
       else if (featData?.businesses) featuredBusinesses = featData.businesses;
     }
