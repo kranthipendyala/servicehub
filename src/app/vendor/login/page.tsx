@@ -3,14 +3,18 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getVendorToken, setVendorAuth, sendVendorOtp, vendorPhoneLogin } from "@/lib/vendor-api";
+import { getVendorToken, setVendorAuth, sendVendorOtp, vendorPhoneLogin, vendorFetch } from "@/lib/vendor-api";
 import PhoneInput from "@/components/auth/PhoneInput";
 import OtpInput from "@/components/auth/OtpInput";
 
 export default function VendorLoginPage() {
   const router = useRouter();
+  const [loginMode, setLoginMode] = useState<"phone" | "email">("email");
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [otpError, setOtpError] = useState("");

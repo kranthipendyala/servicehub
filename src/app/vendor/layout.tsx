@@ -221,23 +221,53 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
   const user = getVendorUser();
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <PlatformProvider>
     <ToastProvider>
       <SidebarCtx.Provider value={{ collapsed, toggle: () => setCollapsed((c) => !c) }}>
         <div className="min-h-screen bg-gray-50">
-          <VendorSidebar />
+          {/* Sidebar — hidden on mobile, visible on md+ */}
+          <div className="hidden md:block">
+            <VendorSidebar />
+          </div>
 
-          {/* Main content area — shifts right based on sidebar */}
-          <div className={`transition-all duration-300 ${collapsed ? "ml-[72px]" : "ml-64"}`}>
+          {/* Mobile sidebar overlay */}
+          {mobileMenuOpen && (
+            <div className="md:hidden fixed inset-0 z-50">
+              <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
+              <div className="relative w-64">
+                <VendorSidebar />
+              </div>
+            </div>
+          )}
+
+          {/* Main content — no margin on mobile, sidebar margin on md+ */}
+          <div className={`transition-all duration-300 md:${collapsed ? "ml-[72px]" : "ml-64"}`} style={{ marginLeft: typeof window !== "undefined" && window.innerWidth >= 768 ? (collapsed ? 72 : 256) : 0 }}>
             {/* Top header bar */}
-            <header className="sticky top-0 z-30 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+            <header className="sticky top-0 z-30 h-14 md:h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6">
               <div className="flex items-center gap-3">
-                <h1 className="text-lg font-semibold text-gray-800 capitalize">
+                {/* Mobile hamburger */}
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="md:hidden p-2 -ml-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+                {/* Mobile logo */}
+                <div className="md:hidden flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-xs">V</div>
+                  <span className="font-bold text-sm text-gray-800">VendorHub</span>
+                </div>
+                {/* Desktop page title */}
+                <h1 className="hidden md:block text-lg font-semibold text-gray-800 capitalize">
                   {pathname.replace("/vendor/", "").replace("/", " / ").replace(/-/g, " ") || "Dashboard"}
                 </h1>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/vendor/subscription"
                   className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors"
@@ -245,20 +275,8 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                   </svg>
-                  Upgrade Plan
+                  Upgrade
                 </Link>
-                <a
-                  href="/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-400 hover:text-emerald-600 transition-colors flex items-center gap-1"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                  </svg>
-                  <span className="hidden sm:inline">View Site</span>
-                </a>
-                <div className="h-5 w-px bg-gray-200" />
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold">
                     {user?.name?.charAt(0)?.toUpperCase() || "V"}
@@ -268,8 +286,8 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
               </div>
             </header>
 
-            {/* Page content */}
-            <main className="p-6">{children}</main>
+            {/* Page content — less padding on mobile */}
+            <main className="p-3 md:p-6">{children}</main>
           </div>
         </div>
       </SidebarCtx.Provider>

@@ -67,7 +67,7 @@ export default function MyBookingsPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Tabs */}
-        <div className="flex gap-1 overflow-x-auto pb-2 mb-6">
+        <div className="flex gap-1 flex-wrap md:flex-nowrap md:overflow-x-auto pb-2 mb-6">
           {TABS.map((t) => (
             <button
               key={t.value}

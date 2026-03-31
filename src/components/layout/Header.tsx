@@ -235,7 +235,7 @@ export default function Header() {
 
             {/* City Dropdown */}
             {cityDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1 w-72 bg-white rounded-xl shadow-lg border border-surface-200 z-50 animate-slide-down overflow-hidden">
+              <div className="absolute top-full left-0 mt-1 w-72 max-w-[90vw] bg-white rounded-xl shadow-lg border border-surface-200 z-50 animate-slide-down overflow-hidden">
                 {/* Detect Location Button */}
                 <button
                   onClick={handleDetectLocation}
