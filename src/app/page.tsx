@@ -256,7 +256,16 @@ export default async function HomePage() {
     }
     if (cityRes.status === "fulfilled" && cityRes.value.success) {
       const cityData = cityRes.value.data;
-      if (Array.isArray(cityData) && cityData.length > 0) cities = cityData;
+      if (Array.isArray(cityData) && cityData.length > 0) {
+        // Merge API cities with fallback counts (for cities with 0 businesses)
+        cities = cityData.map((c: any) => {
+          const fallback = FALLBACK_CITIES.find((f) => f.slug === c.slug);
+          return {
+            ...c,
+            business_count: Number(c.business_count) > 0 ? Number(c.business_count) : (fallback?.business_count || 0),
+          };
+        });
+      }
     }
     if (featRes.status === "fulfilled" && featRes.value.success) {
       const featData = featRes.value.data as any;

@@ -148,7 +148,7 @@ export async function getCity(slug: string): Promise<ApiResponse<City>> {
 }
 
 export async function getPopularCities(): Promise<ApiResponse<City[]>> {
-  const res = await fetchApi<any>("/cities", { params: { stats: "1" } });
+  const res = await fetchApi<any>("/cities", { params: { stats: "1" }, revalidate: 60 });
   return { success: res.success, data: res.data?.cities || res.data || [] };
 }
 
