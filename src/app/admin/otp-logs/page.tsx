@@ -13,6 +13,9 @@ interface OtpLog {
   attempts: string;
   expires_at: string;
   created_at: string;
+  user_name: string | null;
+  user_email: string | null;
+  user_role: string | null;
 }
 
 function timeAgo(date: string) {
@@ -164,9 +167,25 @@ export default function OtpLogsPage() {
                   <span className="text-xs text-gray-400">{timeAgo(otp.created_at)}</span>
                 </div>
 
-                {/* Phone */}
-                <p className="text-sm text-gray-500 mb-1">Phone Number</p>
-                <p className="text-lg font-bold text-gray-900 mb-3">+91 {otp.phone}</p>
+                {/* User info */}
+                {otp.user_name ? (
+                  <div className="mb-3">
+                    <p className="text-lg font-bold text-gray-900">{otp.user_name}</p>
+                    <p className="text-sm text-gray-500">+91 {otp.phone}{otp.user_email ? ` · ${otp.user_email}` : ""}</p>
+                    {otp.user_role && (
+                      <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        otp.user_role === "vendor" || otp.user_role === "business_owner" ? "bg-emerald-100 text-emerald-700" :
+                        otp.user_role === "admin" || otp.user_role === "super_admin" ? "bg-red-100 text-red-700" :
+                        "bg-blue-100 text-blue-700"
+                      }`}>{otp.user_role}</span>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mb-3">
+                    <p className="text-sm text-amber-600 font-medium">New User</p>
+                    <p className="text-lg font-bold text-gray-900">+91 {otp.phone}</p>
+                  </div>
+                )}
 
                 {/* OTP Code */}
                 <div className="flex items-center justify-between bg-white rounded-lg border p-3 mb-3">
