@@ -237,7 +237,7 @@ export default function VendorRegisterPage() {
                 Grow Your Business
               </span>
               <br />
-              <span className="text-white/90 text-3xl xl:text-4xl">with Mechanical Services</span>
+              <span className="text-white/90 text-3xl xl:text-4xl">with Home Services</span>
             </h1>
             <p className="text-slate-400 text-lg mb-10 leading-relaxed">
               Join thousands of service professionals who are scaling their earnings through our platform.
@@ -322,7 +322,7 @@ export default function VendorRegisterPage() {
                 </span>
               </h1>
               <p className="text-slate-400 mt-2 text-sm">
-                Join 25,000+ vendors earning on Mechanical Services
+                Join 25,000+ vendors earning on Home Services
               </p>
               {/* Mobile trust badges */}
               <div className="flex items-center justify-center gap-4 mt-4">
@@ -524,7 +524,7 @@ export default function VendorRegisterPage() {
             </div>
 
             <p className="text-center text-xs text-slate-500 mt-6">
-              Mechanical Services Vendor Portal
+              Home Services Vendor Portal
             </p>
           </div>
         </div>

@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const catName = data.category.name;
   const cityName = data.city.name;
-  const title = `${catName} in ${cityName} - Best ${catName} Services | Mechanical Hub`;
+  const title = `${catName} in ${cityName} - Best ${catName} Services | Service Hub`;
   const description = `Find the best ${catName.toLowerCase()} services in ${cityName}. Browse verified professionals, compare prices, read reviews, and book online instantly.`;
 
   return {

@@ -40,8 +40,8 @@ export async function generateMetadata({
     const cityRes = await getCity(citySlug);
     if (cityRes.success) {
       const city = cityRes.data;
-      const title = `Best Mechanical Services in ${city.name} - ${city.business_count || "1000"}+ Verified Providers`;
-      const description = `Find ${city.business_count || "hundreds of"} verified mechanical service providers in ${city.name}. Compare ratings, read reviews, and hire trusted mechanics, plumbers, electricians near you.`;
+      const title = `Best Home Services in ${city.name} - ${city.business_count || "1000"}+ Verified Providers`;
+      const description = `Find ${city.business_count || "hundreds of"} verified home service providers in ${city.name}. Compare ratings, read reviews, and hire trusted professionals, plumbers, electricians near you.`;
       return {
         title,
         description,
@@ -53,8 +53,8 @@ export async function generateMetadata({
 
   const cityName = slugToTitle(citySlug);
   return {
-    title: `Best Mechanical Services in ${cityName} - ${SITE_NAME}`,
-    description: `Find top rated mechanical service providers in ${cityName}. Browse verified mechanics, plumbers, electricians and more.`,
+    title: `Best Home Services in ${cityName} - ${SITE_NAME}`,
+    description: `Find top rated home service providers in ${cityName}. Browse verified plumbers, electricians, electricians and more.`,
     alternates: { canonical: buildCanonicalUrl(`/${citySlug}`) },
   };
 }
@@ -117,11 +117,11 @@ export default async function CityPage({ params }: CityPageProps) {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-4">
-              Mechanical Services in {cityName}
+              Home Services in {cityName}
             </h1>
             <p className="text-primary-100 text-lg max-w-2xl mx-auto mb-8">
               {cityDescription ||
-                `Find trusted and verified mechanical service providers in ${cityName}. Browse by category or locality to find what you need.`}
+                `Find trusted and verified home service providers in ${cityName}. Browse by category or locality to find what you need.`}
             </p>
             <div className="max-w-xl mx-auto">
               <SearchBar variant="header" defaultCity={cityName} />
@@ -138,7 +138,7 @@ export default async function CityPage({ params }: CityPageProps) {
               Service Categories in {cityName}
             </h2>
             <p className="text-gray-500 mb-8 text-sm">
-              Browse {categories.length}+ categories of mechanical services
+              Browse {categories.length}+ categories of home services
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {categories.map((cat) => (
@@ -225,11 +225,11 @@ export default async function CityPage({ params }: CityPageProps) {
       <section className="section-padding bg-surface-50">
         <div className="container-narrow">
           <h2 className="text-xl font-heading font-bold text-gray-900 mb-4">
-            About Mechanical Services in {cityName}
+            About Home Services in {cityName}
           </h2>
           <div className="text-gray-600 text-sm leading-relaxed space-y-3">
             <p>
-              {cityName} is home to thousands of skilled mechanical service
+              {cityName} is home to thousands of skilled home service
               providers covering a wide range of specializations. From auto
               mechanics and plumbers to electricians and industrial equipment
               suppliers, {SITE_NAME} helps you find the right professional for

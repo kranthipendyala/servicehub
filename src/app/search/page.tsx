@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   return {
     title: `${titleParts.join(" ")} | ${SITE_NAME}`,
-    description: `Search results for mechanical services${query ? ` matching "${query}"` : ""}${city ? ` in ${city}` : ""}. Compare and find the best service providers.`,
+    description: `Search results for home services${query ? ` matching "${query}"` : ""}${city ? ` in ${city}` : ""}. Compare and find the best service providers.`,
     robots: "noindex, follow",
   };
 }
@@ -105,7 +105,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <h1 className="text-2xl font-heading font-bold text-gray-900">
             {query
               ? <>Search results for &ldquo;{query}&rdquo;</>
-              : "Search Mechanical Services"}
+              : "Search Home Services"}
             {cityFilter && (
               <span className="text-primary-500"> in {cityFilter}</span>
             )}
@@ -263,7 +263,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 emptyMessage={
                   query
                     ? `No results found for "${query}". Try different keywords or remove filters.`
-                    : "Enter a search term to find mechanical services."
+                    : "Enter a search term to find home services."
                 }
               />
             </div>

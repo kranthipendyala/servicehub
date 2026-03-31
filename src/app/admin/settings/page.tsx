@@ -21,9 +21,9 @@ interface Settings {
 }
 
 const defaultSettings: Settings = {
-  site_name: "Mechanical Services Directory",
-  site_tagline: "Find the best mechanical services near you",
-  contact_email: "info@mechanical.com",
+  site_name: "Home Services Directory",
+  site_tagline: "Find the best home services near you",
+  contact_email: "info@servicehub.in",
   contact_phone: "",
   contact_address: "",
   default_city: "",

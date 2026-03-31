@@ -209,7 +209,7 @@ export default function AdminSidebar() {
                 {user?.name || "Admin"}
               </p>
               <p className="text-xs text-slate-400 truncate">
-                {user?.email || "admin@mechanical.com"}
+                {user?.email || "admin@servicehub.in"}
               </p>
             </div>
             <button

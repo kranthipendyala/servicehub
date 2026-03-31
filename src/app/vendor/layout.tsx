@@ -66,7 +66,7 @@ function VendorSidebar() {
             </div>
             <div>
               <span className="font-bold text-base tracking-tight">VendorHub</span>
-              <span className="block text-[10px] text-emerald-300/80 -mt-0.5">Mechanical Services</span>
+              <span className="block text-[10px] text-emerald-300/80 -mt-0.5">Home Services</span>
             </div>
           </Link>
         )}

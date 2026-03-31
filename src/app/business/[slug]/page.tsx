@@ -41,7 +41,7 @@ export async function generateMetadata({
       const title = biz.meta_title || `${biz.name}${location ? ` in ${location}` : ""}${ratingStr}${reviewStr}`;
       const description =
         biz.meta_description ||
-        `${biz.name} - ${biz.category_name || "mechanical services"} in ${location}. ${biz.short_description || "View contact details, reviews, ratings, photos and more."}`;
+        `${biz.name} - ${biz.category_name || "home services"} in ${location}. ${biz.short_description || "View contact details, reviews, ratings, photos and more."}`;
 
       return {
         title,

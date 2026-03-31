@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import type { SeoMeta } from "@/types";
 
-export const SITE_NAME = "MechanicalHub";
+export const SITE_NAME = "ServiceHub";
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://mechanical-hub.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://servicehub-beta.vercel.app";
 export const SITE_DESCRIPTION =
-  "India's #1 directory for mechanical services. Find verified mechanics, auto repair shops, plumbers, electricians, AC technicians and more across 500+ cities. Read reviews, compare ratings, get instant quotes.";
-export const SITE_TAGLINE = "Find the Best Mechanical Services Near You";
+  "India's #1 home services marketplace. Book verified plumbers, electricians, AC repair, home cleaning and more. Read reviews, compare prices, book online.";
+export const SITE_TAGLINE = "Find the Best Home Services Near You";
 export const SITE_PHONE = "+91-1800-XXX-XXXX";
 
 export function buildCanonicalUrl(path: string): string {
@@ -77,7 +77,7 @@ export function generateListingMeta(params: {
   const countStr = totalResults ? `${totalResults}+ ` : "";
 
   const title = `Best ${locationStr}${pageStr} | ${SITE_NAME}`;
-  const description = `Find ${countStr}top rated ${category || "mechanical services"} ${locality ? `in ${locality}, ` : ""}${city ? `${city}` : ""}. Compare reviews, ratings, and prices. Book trusted service providers near you.`;
+  const description = `Find ${countStr}top rated ${category || "home services"} ${locality ? `in ${locality}, ` : ""}${city ? `${city}` : ""}. Compare reviews, ratings, and prices. Book trusted service providers near you.`;
 
   return {
     title,

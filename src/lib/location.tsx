@@ -102,7 +102,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<string | null> 
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`,
-      { headers: { "User-Agent": "MechanicalHub/1.0" } }
+      { headers: { "User-Agent": "ServiceHub/1.0" } }
     );
     if (!res.ok) return null;
     const data = await res.json();

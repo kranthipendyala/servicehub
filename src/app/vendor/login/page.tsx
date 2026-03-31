@@ -178,7 +178,7 @@ export default function VendorLoginPage() {
             </div>
             <h1 className="text-2xl font-bold text-white">VendorHub</h1>
             <p className="text-slate-400 mt-1 text-sm">
-              Mechanical Services Vendor Portal
+              Home Services Vendor Portal
             </p>
           </div>
 
@@ -265,7 +265,7 @@ export default function VendorLoginPage() {
           </div>
 
           <p className="text-center text-xs text-slate-500 mt-6">
-            Mechanical Services Vendor Portal
+            Home Services Vendor Portal
           </p>
         </div>
       </div>

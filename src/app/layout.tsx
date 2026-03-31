@@ -31,13 +31,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} - Find Best Mechanical Services Near You`,
+    default: `${SITE_NAME} - Find Best Home Services Near You`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "mechanical services",
-    "mechanics near me",
+    "home services",
+    "services near me",
     "auto repair",
     "plumber",
     "electrician",
@@ -62,14 +62,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} - Find Best Mechanical Services Near You`,
+    title: `${SITE_NAME} - Find Best Home Services Near You`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} - Find Best Mechanical Services Near You`,
+    title: `${SITE_NAME} - Find Best Home Services Near You`,
     description: SITE_DESCRIPTION,
   },
   robots: {

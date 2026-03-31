@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
           </div>
           <h1 className="text-2xl font-bold text-white">MechAdmin</h1>
           <p className="text-slate-400 mt-1 text-sm">
-            Mechanical Services Admin Panel
+            Home Services Admin Panel
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@mechanical.com"
+                placeholder="admin@servicehub.in"
                 autoComplete="email"
                 className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
               />
@@ -138,7 +138,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-xs text-slate-500 mt-6">
-          Mechanical Services Directory Admin Panel
+          Home Services Directory Admin Panel
         </p>
       </div>
     </div>

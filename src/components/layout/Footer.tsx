@@ -63,7 +63,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <h3 className="text-white font-heading font-bold text-xl">
-              Grow your business with MechanicalHub
+              Grow your business with ServiceHub
             </h3>
             <p className="text-emerald-100 text-sm mt-1">
               Register as a vendor, get bookings from thousands of customers, and earn ₹50K+ monthly
@@ -114,11 +114,11 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="text-xl font-heading font-bold text-white">
-                Mechanical<span className="text-accent-400">Hub</span>
+                Service<span className="text-accent-400">Hub</span>
               </span>
             </Link>
             <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              India&apos;s largest directory for mechanical and industrial
+              India&apos;s largest directory for home and professional
               services. Find verified professionals near you.
             </p>
 

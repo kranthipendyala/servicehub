@@ -12,7 +12,7 @@ import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "@/lib/seo";
 import type { Category, City, Business } from "@/types";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} - India's #1 Mechanical Services Directory | Find Verified Pros`,
+  title: `${SITE_NAME} - India's #1 Home Services Directory | Find Verified Pros`,
   description: SITE_DESCRIPTION,
   alternates: { canonical: SITE_URL },
 };
@@ -200,7 +200,7 @@ const TESTIMONIALS = [
     city: "Delhi",
     service: "Electrician",
     rating: 5,
-    text: "Found an excellent electrician through MechanicalHub for complete home rewiring. Fair pricing, skilled work, and they cleaned up after themselves. Highly recommend!",
+    text: "Found an excellent electrician through ServiceHub for complete home rewiring. Fair pricing, skilled work, and they cleaned up after themselves. Highly recommend!",
     initial: "R",
     color: "from-blue-500 to-indigo-500",
   },
@@ -754,7 +754,7 @@ export default async function HomePage() {
               Why Choose {SITE_NAME}?
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto text-lg">
-              The most trusted platform for finding mechanical services in India
+              The most trusted platform for finding home services in India
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
