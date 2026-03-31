@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
 
 const nextConfig = {
   images: {

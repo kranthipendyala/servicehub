@@ -13,7 +13,7 @@ import type {
 } from "@/types";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
 
 const DEFAULT_REVALIDATE = 3600;
 const SHORT_REVALIDATE = 600;
