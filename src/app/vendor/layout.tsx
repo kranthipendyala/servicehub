@@ -221,6 +221,55 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   }
 
   const user = getVendorUser();
+  const [approved, setApproved] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!ready || isStandalonePage) return;
+    // Check approval from vendor stats API
+    const checkApproval = async () => {
+      try {
+        const token = getVendorToken();
+        const res = await fetch("/proxy-api/vendor/stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-Auth-Token": token || "",
+            Accept: "application/json",
+          },
+        });
+        const json = await res.json();
+        if (json.status && json.data) {
+          setApproved(json.data.is_approved === true);
+        } else {
+          setApproved(false);
+        }
+      } catch {
+        setApproved(false);
+      }
+    };
+    checkApproval();
+  }, [ready, isStandalonePage]);
+
+  // Still checking approval
+  if (approved === null && !isStandalonePage) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // If vendor is NOT approved — no sidebar, no navigation, just the page content
+  if (approved === false && !isStandalonePage) {
+    return (
+      <PlatformProvider>
+      <ToastProvider>
+        <div className="min-h-screen bg-gray-50">
+          <main>{children}</main>
+        </div>
+      </ToastProvider>
+      </PlatformProvider>
+    );
+  }
 
   return (
     <PlatformProvider>
