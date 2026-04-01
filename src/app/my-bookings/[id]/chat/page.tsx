@@ -45,7 +45,8 @@ export default function CustomerChatPage() {
       });
       if (!res.ok) throw new Error("Failed to fetch");
       const json = await res.json();
-      setMessages(json.data || []);
+      const data = json.data;
+      setMessages(Array.isArray(data) ? data : data?.messages || []);
       setError("");
     } catch {
       setError("Failed to load messages");
