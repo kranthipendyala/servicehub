@@ -178,6 +178,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   const isOnboardingPage = pathname.startsWith("/vendor/onboarding");
   const isStandalonePage = isLoginPage || isRegisterPage || isOnboardingPage;
 
+  // Auth check
   useEffect(() => {
     if (isLoginPage || isRegisterPage) {
       setReady(true);
@@ -185,16 +186,14 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
     }
 
     const token = getVendorToken();
-    const user = getVendorUser();
+    const u = getVendorUser();
 
-    if (!token || !user || !["vendor", "business_owner"].includes(user.role)) {
+    if (!token || !u || !["vendor", "business_owner"].includes(u.role)) {
       router.replace("/vendor/login");
       return;
     }
 
-    // If vendor hasn't completed onboarding, redirect to onboarding
-    // (unless already on onboarding page)
-    if (!isOnboardingPage && user && (user as Record<string, unknown>).onboarding_completed === false) {
+    if (!isOnboardingPage && u && (u as Record<string, unknown>).onboarding_completed === false) {
       router.replace("/vendor/onboarding");
       return;
     }
@@ -202,30 +201,9 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
     setReady(true);
   }, [pathname, isLoginPage, isRegisterPage, isOnboardingPage, router]);
 
-  if (!ready) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-gray-400">Loading vendor portal...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isStandalonePage) {
-    return (
-      <ToastProvider>
-        <div className="min-h-screen">{children}</div>
-      </ToastProvider>
-    );
-  }
-
-  const user = getVendorUser();
-
+  // Approval check — runs after ready
   useEffect(() => {
     if (!ready || isStandalonePage) return;
-    // Check approval from vendor stats API
     const checkApproval = async () => {
       try {
         const token = getVendorToken();
@@ -249,32 +227,46 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
     checkApproval();
   }, [ready, isStandalonePage]);
 
-  // Still checking approval
-  if (approved === null && !isStandalonePage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  const user = getVendorUser();
+  const showSidebar = ready && !isStandalonePage && approved === true;
 
-  // If vendor is NOT approved — no sidebar, no navigation, just the page content
-  if (approved === false && !isStandalonePage) {
-    return (
-      <PlatformProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-gray-50">
-          <main>{children}</main>
-        </div>
-      </ToastProvider>
-      </PlatformProvider>
-    );
-  }
-
+  // Single return — no conditional returns to break hooks
   return (
     <PlatformProvider>
     <ToastProvider>
       <SidebarCtx.Provider value={{ collapsed, toggle: () => setCollapsed((c) => !c) }}>
+
+        {/* Loading spinner */}
+        {!ready && (
+          <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm text-gray-400">Loading vendor portal...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Standalone pages (login, register, onboarding) */}
+        {ready && isStandalonePage && (
+          <div className="min-h-screen">{children}</div>
+        )}
+
+        {/* Checking approval */}
+        {ready && !isStandalonePage && approved === null && (
+          <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+
+        {/* NOT approved — no sidebar */}
+        {ready && !isStandalonePage && approved === false && (
+          <div className="min-h-screen bg-gray-50">
+            <main>{children}</main>
+          </div>
+        )}
+
+        {/* APPROVED — full layout with sidebar */}
+        {showSidebar && (
         <div className="min-h-screen bg-gray-50">
           {/* Sidebar — hidden on mobile, visible on md+ */}
           <div className="hidden md:block">
@@ -338,6 +330,8 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
             <main className="p-3 md:p-6">{children}</main>
           </div>
         </div>
+        )}
+
       </SidebarCtx.Provider>
     </ToastProvider>
     </PlatformProvider>
