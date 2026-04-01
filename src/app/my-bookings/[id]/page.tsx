@@ -320,21 +320,21 @@ export default function BookingDetailPage() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
-              <span>₹{booking.subtotal.toFixed(2)}</span>
+              <span>₹{Number(booking.subtotal).toFixed(2)}</span>
             </div>
-            {booking.discount_amount > 0 && (
+            {Number(booking.discount_amount) > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Discount</span>
-                <span>-₹{booking.discount_amount.toFixed(2)}</span>
+                <span>-₹{Number(booking.discount_amount).toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-gray-600">
               <span>Tax (GST)</span>
-              <span>₹{booking.tax_amount.toFixed(2)}</span>
+              <span>₹{Number(booking.tax_amount).toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-gray-900 text-base border-t pt-2">
               <span>Total</span>
-              <span>₹{booking.total_amount.toFixed(2)}</span>
+              <span>₹{Number(booking.total_amount).toFixed(2)}</span>
             </div>
           </div>
 
