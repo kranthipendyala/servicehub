@@ -82,6 +82,70 @@ export default function VendorDashboardPage() {
     );
   }
 
+  const isApproved = (stats as any)?.is_approved === true;
+  const businessStatus = (stats as any)?.business_status || "pending";
+
+  // Show "Under Review" banner if not approved
+  if (!isApproved) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4">
+        <div className="bg-white rounded-2xl border border-amber-200 shadow-sm overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-8 py-8 text-center">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-2">Application Under Review</h1>
+            <p className="text-amber-100">Your business profile is being reviewed by our team</p>
+          </div>
+
+          {/* Status */}
+          <div className="p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
+              <span className="text-sm font-semibold text-amber-700">
+                Status: {businessStatus === "pending" ? "Pending Review" : businessStatus === "rejected" ? "Rejected" : businessStatus.toUpperCase()}
+              </span>
+            </div>
+
+            <div className="space-y-4 text-sm text-gray-600">
+              <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
+                <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                <div>
+                  <p className="font-semibold text-blue-900">What happens next?</p>
+                  <ul className="mt-2 space-y-1 text-blue-700">
+                    <li>1. Our team reviews your business details and KYC documents</li>
+                    <li>2. Review typically takes 24-48 hours</li>
+                    <li>3. You will be notified once your business is approved</li>
+                    <li>4. After approval, customers can find and book your services</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                <svg className="w-5 h-5 text-gray-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div>
+                  <p className="font-semibold text-gray-900">While you wait, you can:</p>
+                  <ul className="mt-2 space-y-1">
+                    <li><Link href="/vendor/services" className="text-emerald-600 hover:underline">Add more services</Link> to your listing</li>
+                    <li><Link href="/vendor/documents" className="text-emerald-600 hover:underline">Upload KYC documents</Link> if not done</li>
+                    <li><Link href="/vendor/bank-details" className="text-emerald-600 hover:underline">Add bank details</Link> for payouts</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-400 mt-6 text-center">
+              Need help? Contact support at support@servicehub.in
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const statCards = [
     {
       label: "Total Bookings",
