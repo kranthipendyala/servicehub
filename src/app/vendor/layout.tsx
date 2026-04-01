@@ -170,6 +170,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isLoginPage = pathname === "/vendor/login";
   const isRegisterPage = pathname === "/vendor/register";
@@ -220,8 +221,6 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   }
 
   const user = getVendorUser();
-
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <PlatformProvider>
