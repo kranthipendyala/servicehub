@@ -226,12 +226,15 @@ const CATEGORY_PRICES: Record<string, string> = {
   "carpentry-services": "349",
 };
 
+// Force dynamic rendering — no ISR cache
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   // Fetch platform config to determine geo scope
-  let geoScope = "india";
-  let geoTagline = "Serving 500+ Cities Across India";
+  let geoScope = "telangana";
+  let geoTagline = "Serving Hyderabad & Telangana";
   try {
-    const configRes = await fetchApi<any>("/platform/config", { revalidate: 60 });
+    const configRes = await fetchApi<any>("/platform/config", { revalidate: false });
     if (configRes.success && configRes.data) {
       geoScope = configRes.data.geo_scope || "india";
       geoTagline = configRes.data.geo_tagline || geoTagline;
