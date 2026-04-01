@@ -171,6 +171,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   const [ready, setReady] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [approved, setApproved] = useState<boolean | null>(null);
 
   const isLoginPage = pathname === "/vendor/login";
   const isRegisterPage = pathname === "/vendor/register";
@@ -221,7 +222,6 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   }
 
   const user = getVendorUser();
-  const [approved, setApproved] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!ready || isStandalonePage) return;
