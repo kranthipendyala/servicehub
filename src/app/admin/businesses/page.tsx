@@ -172,19 +172,20 @@ export default function AdminBusinessesPage() {
       label: "Status",
       render: (row) => {
         const colors: Record<string, string> = {
+          approved: "bg-green-100 text-green-700",
           active: "bg-green-100 text-green-700",
           pending: "bg-amber-100 text-amber-700",
           rejected: "bg-red-100 text-red-700",
           suspended: "bg-gray-100 text-gray-600",
-          deleted: "bg-red-50 text-red-500",
         };
+        const status = row.status || "pending";
         return (
           <span
-            className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-              colors[row.status || ""] || "bg-gray-100 text-gray-600"
+            className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full capitalize ${
+              colors[status] || "bg-gray-100 text-gray-600"
             }`}
           >
-            {row.status || "unknown"}
+            {status}
           </span>
         );
       },
