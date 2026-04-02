@@ -164,6 +164,20 @@ export async function verifyPayment(data: {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Reviews                                                              */
+/* ------------------------------------------------------------------ */
+
+export async function submitBookingReview(
+  bookingId: number,
+  data: { rating: number; comment: string }
+): Promise<ApiResponse<any>> {
+  return apiFetch(`/bookings/${bookingId}/review`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/* ------------------------------------------------------------------ */
 /*  Addresses                                                           */
 /* ------------------------------------------------------------------ */
 

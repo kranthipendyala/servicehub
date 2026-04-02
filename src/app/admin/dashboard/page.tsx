@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { usePolling } from "@/hooks/usePolling";
 import {
   getDashboardStats,
   getRecentBusinesses,
@@ -58,6 +59,16 @@ export default function AdminDashboard() {
     }
     load();
   }, [toast]);
+
+  // Auto-refresh every 30 seconds
+  const silentRefresh = useCallback(async () => {
+    try {
+      const [statsRes, bizRes] = await Promise.allSettled([getDashboardStats(), getRecentBusinesses()]);
+      if (statsRes.status === "fulfilled") setStats(statsRes.value.data);
+      if (bizRes.status === "fulfilled") setBusinesses(bizRes.value.data.businesses || []);
+    } catch {}
+  }, []);
+  usePolling(silentRefresh, 30000);
 
   if (loading) {
     return (

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useToast } from "@/components/admin/Toast";
+import { usePolling } from "@/hooks/usePolling";
 import {
   getVendorStats,
   getVendorBookings,
@@ -36,6 +37,19 @@ export default function VendorDashboardPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Auto-refresh dashboard every 10 seconds
+  const silentRefresh = useCallback(async () => {
+    try {
+      const [statsRes, bookingsRes] = await Promise.all([
+        getVendorStats(),
+        getVendorBookings({ status: "pending", per_page: 5 }),
+      ]);
+      setStats(statsRes.data);
+      setPendingBookings(bookingsRes.data.bookings || []);
+    } catch {}
+  }, []);
+  usePolling(silentRefresh, 10000);
 
   const handleAccept = async (id: number) => {
     setActionLoading(id);

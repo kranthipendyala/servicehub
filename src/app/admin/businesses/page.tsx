@@ -65,7 +65,11 @@ export default function AdminBusinessesPage() {
 
   const handleApprove = async (biz: AdminBusiness) => {
     try {
-      await approveBusiness(biz.id);
+      await updateBusiness(biz.id, {
+        status: "approved",
+        is_active: 1,
+        is_verified: 1,
+      } as Partial<AdminBusiness>);
       toast(`"${biz.name}" approved`, "success");
       load(pagination.page);
     } catch (err) {
@@ -110,7 +114,7 @@ export default function AdminBusinessesPage() {
     if (!deleteModal) return;
     try {
       await deleteBusiness(deleteModal.id);
-      toast(`"${deleteModal.name}" deleted`, "success");
+      toast(`"${deleteModal.name}" suspended`, "success");
       setDeleteModal(null);
       load(pagination.page);
     } catch (err) {
@@ -250,7 +254,7 @@ export default function AdminBusinessesPage() {
               className="text-sm rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
             >
               <option value="">All Statuses</option>
-              <option value="active">Active</option>
+              <option value="approved">Approved</option>
               <option value="pending">Pending</option>
               <option value="rejected">Rejected</option>
               <option value="suspended">Suspended</option>
@@ -337,11 +341,11 @@ export default function AdminBusinessesPage() {
       <Modal
         open={!!deleteModal}
         onClose={() => setDeleteModal(null)}
-        title="Delete Business"
+        title="Suspend Business"
       >
         <p className="text-sm text-gray-600 mb-4">
-          Are you sure you want to delete{" "}
-          <strong>{deleteModal?.name}</strong>? This action cannot be undone.
+          Are you sure you want to suspend{" "}
+          <strong>{deleteModal?.name}</strong>? The business will be deactivated and hidden from customers.
         </p>
         <div className="flex justify-end gap-3">
           <button
@@ -354,7 +358,7 @@ export default function AdminBusinessesPage() {
             onClick={handleDelete}
             className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white hover:bg-red-700"
           >
-            Delete
+            Suspend
           </button>
         </div>
       </Modal>

@@ -11,6 +11,7 @@ import {
 import { useToast } from "@/components/admin/Toast";
 import Modal from "@/components/admin/Modal";
 import FormField from "@/components/admin/FormField";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 const emptyForm = {
   name: "",
@@ -37,7 +38,11 @@ export default function AdminCategoriesPage() {
   const load = async () => {
     try {
       const res = await getAdminCategories();
-      setCategories(res.data || []);
+      const cats = res.data || [];
+      setCategories(cats);
+      // Auto-expand all parent categories
+      const parentIds = new Set(cats.filter((c: AdminCategory) => !c.parent_id).map((c: AdminCategory) => c.id));
+      setExpanded(parentIds);
     } catch (err) {
       toast(err instanceof Error ? err.message : "Failed to load", "error");
     } finally {
@@ -174,7 +179,9 @@ export default function AdminCategoriesPage() {
           )}
 
           {cat.icon && (
-            <span className="text-lg">{cat.icon}</span>
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${depth === 0 ? "bg-primary-50 text-primary-600" : "bg-gray-100 text-gray-500"}`}>
+              <CategoryIcon icon={cat.icon} className="w-4 h-4" />
+            </div>
           )}
 
           <div className="flex-1 min-w-0">
@@ -188,20 +195,29 @@ export default function AdminCategoriesPage() {
             )}
           </div>
 
-          <span className="text-xs text-gray-400 tabular-nums">
-            {cat.business_count ?? 0} businesses
-          </span>
+          {depth === 0 && (
+            <span className="text-xs text-gray-400 tabular-nums">
+              {cat.business_count ?? 0} businesses
+            </span>
+          )}
+          {depth > 0 && (
+            <span className="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-500">
+              Service
+            </span>
+          )}
 
           <div className="flex items-center gap-1">
+            {depth === 0 && (
             <button
               onClick={() => openAdd(cat.id)}
               className="p-1.5 rounded-md hover:bg-blue-50 text-blue-600"
-              title="Add child category"
+              title="Add service type"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
             </button>
+            )}
             <button
               onClick={() => openEdit(cat)}
               className="p-1.5 rounded-md hover:bg-gray-100 text-gray-600"
@@ -235,9 +251,14 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">
-          {categories.length} categories total
-        </p>
+        <div>
+          <p className="text-sm text-gray-500">
+            {topLevel.length} categories, {categories.length - topLevel.length} service types
+          </p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Categories = parent groups. Service types = sub-items under each category.
+          </p>
+        </div>
         <button
           onClick={() => openAdd(null)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700"
@@ -269,7 +290,7 @@ export default function AdminCategoriesPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editing ? "Edit Category" : "Add Category"}
+        title={editing ? `Edit ${editing.parent_id ? "Service Type" : "Category"}` : form.parent_id ? "Add Service Type" : "Add Category"}
         maxWidth="max-w-xl"
       >
         <div className="space-y-4">

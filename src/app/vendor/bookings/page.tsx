@@ -13,6 +13,7 @@ import {
   collectPayment,
 } from "@/lib/vendor-api";
 import type { Booking, BookingStatus } from "@/types";
+import { usePolling } from "@/hooks/usePolling";
 
 const TABS: { label: string; value: BookingStatus | "all" }[] = [
   { label: "All", value: "all" },
@@ -71,6 +72,18 @@ export default function VendorBookingsPage() {
   useEffect(() => {
     fetchBookings();
   }, [fetchBookings]);
+
+  // Auto-refresh every 10 seconds for new bookings
+  const silentRefresh = useCallback(async () => {
+    try {
+      const params: Record<string, string | number> = { page, per_page: 10 };
+      if (statusParam !== "all") params.status = statusParam;
+      const res = await getVendorBookings(params as any);
+      setBookings(res.data.bookings || []);
+      setPagination(res.data.pagination);
+    } catch {}
+  }, [page, statusParam]);
+  usePolling(silentRefresh, 10000);
 
   const handleAction = async (
     id: number,

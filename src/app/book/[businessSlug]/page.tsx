@@ -402,8 +402,18 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* ── Step 0: Select Services ─────────────────────────── */}
-        {step === 0 && (
+        {/* ── Step 0: Select Services (grouped by category) ───── */}
+        {step === 0 && (() => {
+          // Group services by category
+          const grouped: Record<string, { name: string; services: typeof services }> = {};
+          services.forEach((svc) => {
+            const key = svc.category_name || "Other";
+            if (!grouped[key]) grouped[key] = { name: key, services: [] };
+            grouped[key].services.push(svc);
+          });
+          const groups = Object.values(grouped);
+
+          return (
           <div>
             <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
               Select Services
@@ -411,8 +421,14 @@ export default function BookingPage() {
             {services.length === 0 ? (
               <p className="text-gray-500">No services available.</p>
             ) : (
-              <div className="space-y-3">
-                {services.map((svc) => (
+              <div className="space-y-6">
+                {groups.map((group) => (
+                <div key={group.name}>
+                  {groups.length > 1 && (
+                    <h3 className="text-sm font-semibold text-[#0d9488] uppercase tracking-wide mb-3">{group.name}</h3>
+                  )}
+                  <div className="space-y-3">
+                {group.services.map((svc) => (
                   <div
                     key={svc.id}
                     className="bg-white rounded-2xl shadow-sm p-5 hover:shadow-md border border-transparent hover:border-[#f97316] transition-all duration-200"
@@ -549,6 +565,9 @@ export default function BookingPage() {
                     )}
                   </div>
                 ))}
+                  </div>
+                </div>
+                ))}
               </div>
             )}
 
@@ -576,7 +595,8 @@ export default function BookingPage() {
               </div>
             )}
           </div>
-        )}
+          );
+        })()}
 
         {/* ── Step 1: Date & Time ─────────────────────────────── */}
         {step === 1 && (

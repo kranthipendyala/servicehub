@@ -20,14 +20,28 @@ interface OtpLog {
 
 function timeAgo(date: string) {
   const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (s < 0) return "just now";
   if (s < 60) return `${s}s ago`;
   if (s < 3600) return `${Math.floor(s / 60)}m ago`;
   if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
   return `${Math.floor(s / 86400)}d ago`;
 }
 
+function timeLeft(date: string) {
+  const s = Math.floor((new Date(date).getTime() - Date.now()) / 1000);
+  if (s <= 0) return "Expired";
+  if (s < 60) return `${s}s left`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s left`;
+  return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m left`;
+}
+
 function isExpired(date: string) {
   return new Date(date).getTime() < Date.now();
+}
+
+function formatDateTime(date: string) {
+  const d = new Date(date);
+  return d.toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 export default function OtpLogsPage() {
@@ -216,12 +230,13 @@ export default function OtpLogsPage() {
                   <div>
                     <span className="text-gray-400">Expires</span>
                     <p className={`font-medium ${expired ? "text-red-500" : "text-green-600"}`}>
-                      {expired ? "Expired" : timeAgo(otp.expires_at).replace("ago", "left")}
+                      {timeLeft(otp.expires_at)}
                     </p>
+                    <p className="text-gray-400 text-[10px]">{formatDateTime(otp.expires_at)}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Created</span>
-                    <p className="font-medium text-gray-700">{new Date(otp.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}</p>
+                    <span className="text-gray-400">Sent at</span>
+                    <p className="font-medium text-gray-700">{formatDateTime(otp.created_at)}</p>
                   </div>
                 </div>
               </div>

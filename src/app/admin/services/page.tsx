@@ -157,17 +157,14 @@ export default function AdminServicesPage() {
     {
       key: "is_active",
       label: "Status",
-      render: (row) => (
-        <span
-          className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-            row.is_active
-              ? "bg-green-100 text-green-700"
-              : "bg-gray-100 text-gray-600"
-          }`}
-        >
-          {row.is_active ? "Active" : "Inactive"}
-        </span>
-      ),
+      render: (row) => {
+        const active = Number(row.is_active) === 1;
+        return (
+          <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+            {active ? "Active" : "Inactive"}
+          </span>
+        );
+      },
     },
   ];
 
@@ -196,7 +193,7 @@ export default function AdminServicesPage() {
               className="text-sm rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
             >
               <option value="">All Categories</option>
-              {categories.map((cat) => (
+              {categories.filter((c) => !c.parent_id).map((cat) => (
                 <option key={cat.id} value={cat.slug}>
                   {cat.name}
                 </option>

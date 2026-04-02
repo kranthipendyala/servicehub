@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchApi, getBusinesses, getCities } from "@/lib/api";
 import type { Category, Business, City } from "@/types";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 interface PageProps {
   params: Promise<{ category: string }>;
@@ -101,8 +102,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
             <div className="flex items-center gap-4 mb-4">
               {cat.icon && (
-                <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center text-3xl">
-                  {cat.icon === 'sparkles' ? '✨' : cat.icon === 'wrench' ? '🔧' : cat.icon === 'zap' ? '⚡' : cat.icon === 'thermometer' ? '❄️' : '🔧'}
+                <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center text-white">
+                  <CategoryIcon icon={cat.icon} className="w-8 h-8" />
                 </div>
               )}
               <div>

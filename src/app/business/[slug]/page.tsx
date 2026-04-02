@@ -10,6 +10,7 @@ import RatingStars from "@/components/common/RatingStars";
 import ReviewSection from "@/components/business/ReviewSection";
 import BusinessCard from "@/components/business/BusinessCard";
 import ContactButton from "@/components/business/ContactButton";
+import BusinessAvatar from "@/components/business/BusinessAvatar";
 import { getBusiness, getStaticParams } from "@/lib/api";
 import { SITE_NAME, SITE_URL, buildCanonicalUrl } from "@/lib/seo";
 import type { BreadcrumbItem } from "@/types";
@@ -136,11 +137,11 @@ export default async function BusinessDetailPage({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100">
-                    <span className="text-3xl font-heading font-bold text-primary-300">
-                      {business.name.charAt(0)}
-                    </span>
-                  </div>
+                  <BusinessAvatar
+                    name={business.name}
+                    categoryIcon={business.categories?.[0]?.icon}
+                    size="lg"
+                  />
                 )}
               </div>
             </div>
@@ -361,8 +362,53 @@ export default async function BusinessDetailPage({
                 </div>
               )}
 
-              {/* Services */}
-              {business.services && business.services.length > 0 && (
+              {/* Services grouped by category */}
+              {business.services_by_category && business.services_by_category.length > 0 && (
+                <div className="card p-6">
+                  <h2 className="text-lg font-heading font-bold text-gray-900 mb-5 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    Services Offered
+                  </h2>
+                  <div className="space-y-6">
+                    {business.services_by_category.map((group) => (
+                      <div key={group.category_id}>
+                        <h3 className="text-sm font-semibold text-primary-600 uppercase tracking-wide mb-3">
+                          {group.category_name}
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {group.services.map((svc) => (
+                            <div key={svc.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-gray-50 border border-surface-100 hover:bg-surface-50 hover:shadow-sm transition-all">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+                                  <svg className="w-4 h-4 text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium text-gray-900 truncate">{svc.name}</p>
+                                  {svc.duration_minutes > 0 && (
+                                    <p className="text-xs text-gray-400">{svc.duration_minutes} min</p>
+                                  )}
+                                </div>
+                              </div>
+                              {svc.base_price > 0 && (
+                                <span className="text-sm font-bold text-gray-900 flex-shrink-0">
+                                  Rs.{Number(svc.base_price).toLocaleString("en-IN")}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Fallback: old flat services list */}
+              {(!business.services_by_category || business.services_by_category.length === 0) && business.services && business.services.length > 0 && (
                 <div className="card p-6">
                   <h2 className="text-lg font-heading font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,7 +418,7 @@ export default async function BusinessDetailPage({
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {business.services.map((service, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 border border-surface-100 transition-all duration-200 hover:bg-surface-50 hover:shadow-sm">
+                      <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 border border-surface-100">
                         <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
                           <svg className="w-5 h-5 text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

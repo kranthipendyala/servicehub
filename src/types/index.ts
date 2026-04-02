@@ -84,7 +84,6 @@ export interface Business {
   category_id: number;
   category_name?: string;
   category_slug?: string;
-  categories?: Category[];
   city_id: number;
   city_name?: string;
   city_slug?: string;
@@ -111,6 +110,9 @@ export interface Business {
   business_hours?: BusinessHours[];
   established_year?: number;
   services?: string[];
+  services_by_category?: ServiceCategory[];
+  service_areas?: { city_id: number; city_name: string; city_slug: string }[];
+  categories?: { id: number; name: string; slug: string; icon?: string; is_primary?: number }[];
   is_verified: boolean;
   is_featured: boolean;
   is_premium?: boolean;
@@ -121,6 +123,14 @@ export interface Business {
   faqs?: FAQ[];
   related_businesses?: Business[];
   related_categories?: Category[];
+}
+
+export interface ServiceCategory {
+  category_id: number;
+  category_name: string;
+  category_slug: string;
+  category_icon?: string;
+  services: Service[];
 }
 
 export interface FAQ {

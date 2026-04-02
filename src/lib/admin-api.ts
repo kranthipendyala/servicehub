@@ -192,6 +192,7 @@ export interface AdminBusiness {
   locality_id?: number;
   locality_name?: string;
   locality_slug?: string;
+  state_id?: number;
   state_name?: string;
   address?: string;
   pin_code?: string;
@@ -206,16 +207,20 @@ export interface AdminBusiness {
   rating?: number;
   review_count?: number;
   opening_hours?: string;
+  business_hours?: string;
   established_year?: number;
   is_verified: boolean | number;
   is_featured: boolean | number;
   is_active?: boolean | number;
   status?: string;
+  owner_user_id?: number;
   meta_title?: string;
   meta_description?: string;
   created_at?: string;
   updated_at?: string;
   user_id?: number;
+  service_areas?: { id: number; city_id: number; city_name: string; city_slug: string; is_active: number }[];
+  categories?: { id: number; name: string; slug: string; icon?: string; is_primary?: number }[];
 }
 
 export interface AdminPagination {
@@ -365,6 +370,18 @@ export async function getLocalities(cityId?: number) {
   return adminFetch<AdminLocality[]>("/admin/localities", {
     params: cityId ? { city_id: cityId } : undefined,
   });
+}
+
+export async function createLocality(data: Partial<AdminLocality>) {
+  return adminFetch("/admin/localities", { method: "POST", body: data });
+}
+
+export async function updateLocality(id: number, data: Partial<AdminLocality>) {
+  return adminFetch(`/admin/localities/${id}`, { method: "PUT", body: data });
+}
+
+export async function deleteLocality(id: number) {
+  return adminFetch(`/admin/localities/${id}`, { method: "DELETE" });
 }
 
 /* ------------------------------------------------------------------ */

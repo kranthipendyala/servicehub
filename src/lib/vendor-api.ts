@@ -16,7 +16,9 @@ export function getVendorUser(): {
   id: number;
   name: string;
   email: string;
+  phone?: string;
   role: string;
+  onboarding_completed?: boolean;
 } | null {
   if (typeof window === "undefined") return null;
   const raw = localStorage.getItem("vendor_user");
@@ -253,6 +255,52 @@ export async function updateVendorService(
 
 export async function deleteVendorService(id: number | string) {
   return vendorFetch(`/vendor/services/${id}`, { method: "DELETE" });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Service Areas                                                      */
+/* ------------------------------------------------------------------ */
+
+export interface ServiceArea {
+  id: number;
+  city_id: number;
+  city_name: string;
+  city_slug: string;
+  is_active: number;
+}
+
+export async function getServiceAreas() {
+  return vendorFetch<ServiceArea[]>("/vendor/service-areas");
+}
+
+export async function updateServiceAreas(cityIds: number[]) {
+  return vendorFetch<ServiceArea[]>("/vendor/service-areas", {
+    method: "POST",
+    body: { city_ids: cityIds },
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Business Categories                                                */
+/* ------------------------------------------------------------------ */
+
+export interface VendorCategory {
+  id: number;
+  name: string;
+  slug: string;
+  icon?: string;
+  is_primary: number;
+}
+
+export async function getVendorCategories() {
+  return vendorFetch<VendorCategory[]>("/vendor/categories");
+}
+
+export async function updateVendorCategories(categoryIds: number[]) {
+  return vendorFetch<VendorCategory[]>("/vendor/categories", {
+    method: "POST",
+    body: { category_ids: categoryIds },
+  });
 }
 
 /* ------------------------------------------------------------------ */
@@ -496,7 +544,6 @@ export async function vendorRegister(data: {
   email: string;
   business_name: string;
   city_id: number;
-  category_id: number;
 }) {
   const res = await vendorFetch<{
     id: number;
@@ -514,7 +561,8 @@ export async function vendorRegister(data: {
   setVendorAuth(res.data.token, {
     id: res.data.id,
     name: res.data.name,
-    email: res.data.email,
+    email: data.email,
+    phone: data.phone,
     role: res.data.role,
     onboarding_completed: res.data.onboarding_completed,
   });

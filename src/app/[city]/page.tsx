@@ -5,6 +5,7 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import BusinessCard from "@/components/business/BusinessCard";
 import SearchBar from "@/components/layout/SearchBar";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 import {
   getCity,
   getCategories,
@@ -147,9 +148,16 @@ export default async function CityPage({ params }: CityPageProps) {
                   href={`/${citySlug}/${cat.slug}`}
                   className="group p-5 rounded-xl border border-surface-200 hover:border-primary-200 hover:shadow-card-hover transition-all duration-300 bg-white"
                 >
-                  <h3 className="font-heading font-semibold text-gray-800 group-hover:text-primary-500 transition-colors text-sm">
-                    {cat.name}
-                  </h3>
+                  <div className="flex items-center gap-2.5 mb-1">
+                    {(cat as any).icon && (
+                      <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
+                        <CategoryIcon icon={(cat as any).icon} className="w-4 h-4" />
+                      </div>
+                    )}
+                    <h3 className="font-heading font-semibold text-gray-800 group-hover:text-primary-500 transition-colors text-sm">
+                      {cat.name}
+                    </h3>
+                  </div>
                   {cat.business_count !== undefined && (
                     <p className="text-xs text-gray-400 mt-1">
                       {cat.business_count} providers

@@ -7,6 +7,7 @@ import type { Booking, BookingStatus } from "@/types";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { getMyBookings } from "@/lib/booking-api";
 import BookingStatusBadge from "@/components/booking/BookingStatusBadge";
+import { usePolling } from "@/hooks/usePolling";
 
 const TABS: { label: string; value: string }[] = [
   { label: "All", value: "" },
@@ -50,6 +51,15 @@ export default function MyBookingsPage() {
   useEffect(() => {
     fetchBookings();
   }, [fetchBookings]);
+
+  // Auto-refresh every 15 seconds
+  const silentRefresh = useCallback(async () => {
+    try {
+      const res = await getMyBookings(page, tab || undefined);
+      if (res.success) { setBookings(res.data); setTotalPages(res.pagination.total_pages); }
+    } catch {}
+  }, [page, tab]);
+  usePolling(silentRefresh, 15000);
 
   const handleTabChange = (value: string) => {
     setTab(value);

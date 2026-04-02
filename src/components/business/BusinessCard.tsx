@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Business } from "@/types";
+import BusinessAvatar from "@/components/business/BusinessAvatar";
 import RatingStars from "@/components/common/RatingStars";
 
 interface BusinessCardProps {
@@ -34,11 +35,11 @@ export default function BusinessCard({
                   sizes="(max-width: 640px) 100vw, 224px"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 min-h-[180px]">
-                  <span className="text-5xl font-heading font-bold text-primary-200">
-                    {business.name.charAt(0)}
-                  </span>
-                </div>
+                <BusinessAvatar
+                  name={business.name}
+                  categoryIcon={business.categories?.[0]?.icon || (business as any).category_icon}
+                  size="card"
+                />
               )}
             </Link>
 
@@ -76,11 +77,19 @@ export default function BusinessCard({
                 </h3>
               </Link>
 
-              {business.category_name && (
+              {business.categories && business.categories.length > 0 ? (
+                <div className="flex flex-wrap gap-1 mt-0.5">
+                  {business.categories.map((cat: any) => (
+                    <span key={cat.id} className="text-xs font-semibold text-primary-500 uppercase tracking-wide">
+                      {cat.name}{business.categories!.indexOf(cat) < business.categories!.length - 1 ? " · " : ""}
+                    </span>
+                  ))}
+                </div>
+              ) : business.category_name ? (
                 <p className="text-xs font-semibold text-primary-500 mt-0.5 uppercase tracking-wide">
                   {business.category_name}
                 </p>
-              )}
+              ) : null}
 
               {business.rating ? (
                 <div className="mt-2">
@@ -194,13 +203,11 @@ export default function BusinessCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 via-primary-50 to-primary-100">
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-5xl font-heading font-bold text-primary-200">
-                  {business.name.charAt(0)}
-                </span>
-              </div>
-            </div>
+            <BusinessAvatar
+              name={business.name}
+              categoryIcon={business.categories?.[0]?.icon || (business as any).category_icon}
+              size="card"
+            />
           )}
 
           {/* Badges overlay */}

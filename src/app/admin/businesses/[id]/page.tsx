@@ -58,6 +58,8 @@ export default function EditBusinessPage() {
   const [hours, setHours] = useState<BusinessHour[]>(parseHours());
   const [categories, setCategories] = useState<AdminCategory[]>([]);
   const [cities, setCities] = useState<AdminCity[]>([]);
+  const [serviceAreaIds, setServiceAreaIds] = useState<Set<number>>(new Set());
+  const [categoryIds, setCategoryIds] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -71,9 +73,17 @@ export default function EditBusinessPage() {
         ]);
         const biz = bizRes.data;
         setForm(biz);
-        setHours(parseHours(biz.opening_hours));
+        setHours(parseHours(biz.business_hours));
         setCategories(catRes.data || []);
         setCities(cityRes.data || []);
+        // Load service areas
+        if (biz.service_areas && Array.isArray(biz.service_areas)) {
+          setServiceAreaIds(new Set(biz.service_areas.map((a: any) => a.city_id)));
+        }
+        // Load categories
+        if (biz.categories && Array.isArray(biz.categories)) {
+          setCategoryIds(new Set(biz.categories.map((c: any) => c.id)));
+        }
       } catch (err) {
         toast(
           err instanceof Error ? err.message : "Failed to load business",
@@ -89,11 +99,19 @@ export default function EditBusinessPage() {
   const onChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const { name: field, value } = e.target;
+    const updates: Partial<AdminBusiness> = { [field]: value };
 
-  const onToggle = (field: string, value: boolean) => {
-    setForm({ ...form, [field]: value ? 1 : 0 });
+    // Auto-set state_id when city changes
+    if (field === "city_id") {
+      const city = cities.find((c) => String(c.id) === value);
+      if (city?.state_id) {
+        updates.state_id = city.state_id;
+        updates.state_name = city.state_name;
+      }
+    }
+
+    setForm({ ...form, ...updates });
   };
 
   const updateHour = (
@@ -112,8 +130,10 @@ export default function EditBusinessPage() {
     try {
       await updateBusiness(id, {
         ...form,
-        opening_hours: JSON.stringify(hours),
-      });
+        business_hours: JSON.stringify(hours),
+        service_area_ids: Array.from(serviceAreaIds),
+        category_ids: Array.from(categoryIds),
+      } as any);
       toast("Business updated successfully", "success");
     } catch (err) {
       toast(err instanceof Error ? err.message : "Failed to save", "error");
@@ -122,15 +142,18 @@ export default function EditBusinessPage() {
     }
   };
 
-  // Flatten categories for select
-  const flatCats: { label: string; value: number }[] = [];
-  const flatten = (cats: AdminCategory[], prefix = "") => {
-    cats.forEach((c) => {
-      flatCats.push({ label: prefix + c.name, value: c.id });
-      if (c.children) flatten(c.children, prefix + "-- ");
+  // Only parent categories are selectable (children = services under them)
+  const parentCategories: { label: string; value: number }[] = [];
+  const hasNested = categories.some((c) => c.children && c.children.length > 0);
+  if (hasNested) {
+    categories.forEach((c) => {
+      parentCategories.push({ label: c.name, value: c.id });
     });
-  };
-  flatten(categories);
+  } else {
+    categories.filter((c) => !c.parent_id).forEach((c) => {
+      parentCategories.push({ label: c.name, value: c.id });
+    });
+  }
 
   if (loading) {
     return (
@@ -148,30 +171,18 @@ export default function EditBusinessPage() {
   return (
     <div className="max-w-4xl space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => router.back()}
-            className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-          </button>
-          <h2 className="text-xl font-bold text-gray-900">
-            Edit: {form.name}
-          </h2>
-        </div>
+      <div className="flex items-center gap-3">
         <button
-          onClick={handleSave}
-          disabled={saving}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-60 transition-colors"
+          onClick={() => router.back()}
+          className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
         >
-          {saving && (
-            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          )}
-          {saving ? "Saving..." : "Save Changes"}
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
         </button>
+        <h2 className="text-xl font-bold text-gray-900">
+          Edit: {form.name}
+        </h2>
       </div>
 
       {/* Basic Info */}
@@ -196,6 +207,53 @@ export default function EditBusinessPage() {
             onChange={onChange}
             helpText="URL-friendly identifier"
           />
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {parentCategories.map((c) => {
+                const isSelected = categoryIds.has(c.value);
+                return (
+                  <label
+                    key={c.value}
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer transition-all ${
+                      isSelected
+                        ? "bg-primary-50 border-primary-300"
+                        : "bg-white border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => {
+                        setCategoryIds((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(c.value)) next.delete(c.value);
+                          else next.add(c.value);
+                          return next;
+                        });
+                      }}
+                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span className={`text-xs font-medium ${isSelected ? "text-primary-700" : "text-gray-600"}`}>
+                      {c.label}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">{categoryIds.size} selected. Services are added under these categories.</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Owner User ID</label>
+            <input
+              type="number"
+              name="owner_user_id"
+              value={form.owner_user_id || ""}
+              onChange={onChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+              placeholder="Vendor user ID"
+            />
+          </div>
           <FormField
             type="textarea"
             label="Description"
@@ -250,13 +308,17 @@ export default function EditBusinessPage() {
             value={form.locality_name || ""}
             onChange={onChange}
           />
-          <FormField
-            type="text"
-            label="State"
-            name="state_name"
-            value={form.state_name || ""}
-            onChange={onChange}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+            <input
+              type="text"
+              value={form.state_name || ""}
+              readOnly
+              className="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2.5 text-sm text-gray-500"
+              placeholder="Auto-set from city"
+            />
+            <p className="text-xs text-gray-400 mt-1">Auto-updated when city changes</p>
+          </div>
           <FormField
             type="text"
             label="PIN Code"
@@ -264,6 +326,42 @@ export default function EditBusinessPage() {
             value={form.pin_code || ""}
             onChange={onChange}
           />
+        </div>
+
+        {/* Service Areas */}
+        <div className="mt-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Service Areas (cities where this business operates)
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {cities.map((city) => {
+              const isSelected = serviceAreaIds.has(city.id);
+              return (
+                <button
+                  key={city.id}
+                  type="button"
+                  onClick={() => {
+                    setServiceAreaIds((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(city.id)) next.delete(city.id);
+                      else next.add(city.id);
+                      return next;
+                    });
+                  }}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-all ${
+                    isSelected
+                      ? "bg-primary-50 border-primary-300 text-primary-700"
+                      : "bg-white border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  {city.name}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-xs text-gray-400 mt-1">
+            {serviceAreaIds.size} {serviceAreaIds.size === 1 ? "city" : "cities"} selected
+          </p>
         </div>
       </div>
 
@@ -304,58 +402,38 @@ export default function EditBusinessPage() {
         </div>
       </div>
 
-      {/* Category & Status */}
+      {/* Status & Approval */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-4">
-          Category & Status
-        </h3>
+        <h3 className="text-base font-semibold text-gray-900 mb-4">Status & Approval</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            type="select"
-            label="Category"
-            name="category_id"
-            value={form.category_id || ""}
-            onChange={onChange}
-            required
-            options={[
-              { label: "-- Select Category --", value: "" },
-              ...flatCats.map((c) => ({ label: c.label, value: c.value })),
-            ]}
-          />
-          <FormField
-            type="select"
-            label="Status"
-            name="status"
-            value={form.status || "pending"}
-            onChange={onChange}
-            options={[
-              { label: "Pending", value: "pending" },
-              { label: "Approved / Active", value: "active" },
-              { label: "Rejected", value: "rejected" },
-              { label: "Suspended", value: "suspended" },
-            ]}
-          />
-          <FormField
-            type="toggle"
-            label="Verified"
-            name="is_verified"
-            checked={!!form.is_verified}
-            onChange={(v) => onToggle("is_verified", v)}
-          />
-          <FormField
-            type="toggle"
-            label="Featured"
-            name="is_featured"
-            checked={!!form.is_featured}
-            onChange={(v) => onToggle("is_featured", v)}
-          />
-          <FormField
-            type="toggle"
-            label="Active"
-            name="is_active"
-            checked={form.is_active !== 0 && form.is_active !== false}
-            onChange={(v) => onToggle("is_active", v)}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Business Status</label>
+            <select
+              name="status"
+              value={form.status || "pending"}
+              onChange={onChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+            >
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-6 mt-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_verified} onChange={() => setForm({ ...form, is_verified: form.is_verified ? 0 : 1 } as any)} className="w-5 h-5 accent-primary-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Verified</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_featured} onChange={() => setForm({ ...form, is_featured: form.is_featured ? 0 : 1 } as any)} className="w-5 h-5 accent-accent-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Featured</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_active} onChange={() => setForm({ ...form, is_active: form.is_active ? 0 : 1 } as any)} className="w-5 h-5 accent-green-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Active</span>
+          </label>
         </div>
       </div>
 
@@ -436,53 +514,7 @@ export default function EditBusinessPage() {
         </div>
       </div>
 
-      {/* Status & Approval */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-4">Status & Approval</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Business Status</label>
-            <select
-              name="status"
-              value={form.status || "pending"}
-              onChange={onChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-            >
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="suspended">Suspended</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Owner User ID</label>
-            <input
-              type="number"
-              name="owner_user_id"
-              value={form.owner_user_id || ""}
-              onChange={onChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-              placeholder="Vendor user ID"
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-6 mt-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={!!form.is_verified} onChange={() => setForm({ ...form, is_verified: form.is_verified ? 0 : 1 } as any)} className="w-5 h-5 accent-primary-500 rounded" />
-            <span className="text-sm font-medium text-gray-700">Verified</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={!!form.is_featured} onChange={() => setForm({ ...form, is_featured: form.is_featured ? 0 : 1 } as any)} className="w-5 h-5 accent-accent-500 rounded" />
-            <span className="text-sm font-medium text-gray-700">Featured</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={!!form.is_active} onChange={() => setForm({ ...form, is_active: form.is_active ? 0 : 1 } as any)} className="w-5 h-5 accent-green-500 rounded" />
-            <span className="text-sm font-medium text-gray-700">Active</span>
-          </label>
-        </div>
-      </div>
-
-      {/* Bottom Save */}
+      {/* Save */}
       <div className="flex justify-end gap-3 pb-8">
         <button
           onClick={() => router.back()}
@@ -493,8 +525,11 @@ export default function EditBusinessPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-60 transition-colors"
         >
+          {saving && (
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          )}
           {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>

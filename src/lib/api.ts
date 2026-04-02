@@ -15,8 +15,8 @@ import type {
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
 
-const DEFAULT_REVALIDATE = 3600;
-const SHORT_REVALIDATE = 600;
+const DEFAULT_REVALIDATE = 3600; // 1 hour
+const SHORT_REVALIDATE = 600;   // 10 minutes
 
 interface FetchOptions extends Omit<RequestInit, "next"> {
   params?: Record<string, string | number | undefined>;
@@ -227,6 +227,7 @@ export async function getBusiness(slug: string): Promise<ApiResponse<Business>> 
 export async function getFeaturedBusinesses(citySlug?: string): Promise<ApiResponse<Business[]>> {
   const res = await fetchApi<any>("/businesses", {
     params: { featured: 1, city: citySlug },
+    timeout: 4000,
   });
   return { success: res.success, data: res.data?.businesses || res.data || [] };
 }
