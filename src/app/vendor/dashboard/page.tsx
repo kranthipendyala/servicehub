@@ -85,62 +85,85 @@ export default function VendorDashboardPage() {
   const isApproved = (stats as any)?.is_approved === true;
   const businessStatus = (stats as any)?.business_status || "pending";
 
-  // Show "Under Review" banner if not approved
+  // Show "Under Review" page if not approved — mobile-first design
   if (!isApproved) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4">
-        <div className="bg-white rounded-2xl border border-amber-200 shadow-sm overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-8 py-8 text-center">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <div className="min-h-[80vh] flex items-center justify-center px-4 py-6">
+        <div className="w-full max-w-md">
+          {/* Status icon */}
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Application Under Review</h1>
-            <p className="text-amber-100">Your business profile is being reviewed by our team</p>
-          </div>
-
-          {/* Status */}
-          <div className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
-              <span className="text-sm font-semibold text-amber-700">
-                Status: {businessStatus === "pending" ? "Pending Review" : businessStatus === "rejected" ? "Rejected" : businessStatus.toUpperCase()}
+            <h1 className="text-xl font-bold text-gray-900">Under Review</h1>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+              <span className="text-sm text-amber-600 font-medium">
+                {businessStatus === "rejected" ? "Rejected" : "Pending Approval"}
               </span>
             </div>
-
-            <div className="space-y-4 text-sm text-gray-600">
-              <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
-                <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
-                <div>
-                  <p className="font-semibold text-blue-900">What happens next?</p>
-                  <ul className="mt-2 space-y-1 text-blue-700">
-                    <li>1. Our team reviews your business details and KYC documents</li>
-                    <li>2. Review typically takes 24-48 hours</li>
-                    <li>3. You will be notified once your business is approved</li>
-                    <li>4. After approval, customers can find and book your services</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                <svg className="w-5 h-5 text-gray-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <div>
-                  <p className="font-semibold text-gray-900">While you wait, you can:</p>
-                  <ul className="mt-2 space-y-1">
-                    <li><Link href="/vendor/services" className="text-emerald-600 hover:underline">Add more services</Link> to your listing</li>
-                    <li><Link href="/vendor/documents" className="text-emerald-600 hover:underline">Upload KYC documents</Link> if not done</li>
-                    <li><Link href="/vendor/bank-details" className="text-emerald-600 hover:underline">Add bank details</Link> for payouts</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-400 mt-6 text-center">
-              Need help? Contact support at support@servicehub.in
-            </p>
           </div>
+
+          {/* Timeline steps */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4">
+            <div className="space-y-4">
+              {[
+                { num: "1", text: "Team reviews your profile & KYC", done: true },
+                { num: "2", text: "Typically takes 24-48 hours", done: false },
+                { num: "3", text: "You get notified on approval", done: false },
+                { num: "4", text: "Start receiving bookings!", done: false },
+              ].map((step) => (
+                <div key={step.num} className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${step.done ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-400"}`}>
+                    {step.done ? (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    ) : step.num}
+                  </div>
+                  <span className={`text-sm ${step.done ? "text-gray-900 font-medium" : "text-gray-500"}`}>{step.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick actions */}
+          <div className="space-y-3">
+            <Link href="/vendor/services" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
+              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-900">Add Services</p>
+                <p className="text-xs text-gray-500">List what you offer</p>
+              </div>
+              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            </Link>
+            <Link href="/vendor/documents" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-900">Upload KYC</p>
+                <p className="text-xs text-gray-500">Aadhaar, PAN, GST</p>
+              </div>
+              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            </Link>
+            <Link href="/vendor/bank-details" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
+              <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-gray-900">Bank Details</p>
+                <p className="text-xs text-gray-500">For receiving payouts</p>
+              </div>
+              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            </Link>
+          </div>
+
+          <p className="text-xs text-gray-400 mt-6 text-center">
+            Need help? Contact support@servicehub.in
+          </p>
         </div>
       </div>
     );
