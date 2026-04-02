@@ -436,6 +436,52 @@ export default function EditBusinessPage() {
         </div>
       </div>
 
+      {/* Status & Approval */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 className="text-base font-semibold text-gray-900 mb-4">Status & Approval</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Business Status</label>
+            <select
+              name="status"
+              value={form.status || "pending"}
+              onChange={onChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+            >
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Owner User ID</label>
+            <input
+              type="number"
+              name="owner_user_id"
+              value={form.owner_user_id || ""}
+              onChange={onChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
+              placeholder="Vendor user ID"
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-6 mt-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_verified} onChange={() => setForm({ ...form, is_verified: form.is_verified ? 0 : 1 } as any)} className="w-5 h-5 accent-primary-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Verified</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_featured} onChange={() => setForm({ ...form, is_featured: form.is_featured ? 0 : 1 } as any)} className="w-5 h-5 accent-accent-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Featured</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={!!form.is_active} onChange={() => setForm({ ...form, is_active: form.is_active ? 0 : 1 } as any)} className="w-5 h-5 accent-green-500 rounded" />
+            <span className="text-sm font-medium text-gray-700">Active</span>
+          </label>
+        </div>
+      </div>
+
       {/* Bottom Save */}
       <div className="flex justify-end gap-3 pb-8">
         <button
