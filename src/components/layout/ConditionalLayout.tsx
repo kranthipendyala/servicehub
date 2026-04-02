@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import { LocationProvider } from "@/lib/location";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { PlatformProvider } from "@/components/platform/PlatformProvider";
+import MobileBottomNav from "./MobileBottomNav";
 
 export default function ConditionalLayout({
   children,
@@ -27,8 +28,9 @@ export default function ConditionalLayout({
       <AuthProvider>
         <LocationProvider>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer />
+          <MobileBottomNav />
         </LocationProvider>
       </AuthProvider>
     </PlatformProvider>
