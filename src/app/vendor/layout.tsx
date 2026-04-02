@@ -54,7 +54,7 @@ function VendorSidebar() {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-gradient-to-b from-[#003366] to-[#002244] text-white transition-all duration-300 ${
+      className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-gradient-to-b from-[#0d9488] to-[#0f766e] text-white transition-all duration-300 ${
         collapsed ? "w-[72px]" : "w-64"
       }`}
     >

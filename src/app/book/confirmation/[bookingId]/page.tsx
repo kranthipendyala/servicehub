@@ -25,7 +25,7 @@ export default function BookingConfirmationPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="animate-spin h-12 w-12 border-4 border-[#003366] border-t-transparent rounded-full" />
+        <div className="animate-spin h-12 w-12 border-4 border-[#0d9488] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -59,7 +59,7 @@ export default function BookingConfirmationPage() {
                 {/* Booking number highlight */}
                 <div className="text-center mb-6">
                   <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Booking Number</p>
-                  <p className="text-2xl font-bold text-[#003366] tracking-wide">{booking.booking_number}</p>
+                  <p className="text-2xl font-bold text-[#0d9488] tracking-wide">{booking.booking_number}</p>
                 </div>
 
                 {/* Info grid */}
@@ -89,7 +89,7 @@ export default function BookingConfirmationPage() {
                 {/* Business */}
                 {booking.business_name && (
                   <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4 mb-4">
-                    <div className="w-12 h-12 bg-[#003366] rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#0d9488] rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                       {booking.business_name.charAt(0)}
                     </div>
                     <div>
@@ -123,7 +123,7 @@ export default function BookingConfirmationPage() {
                 )}
 
                 {/* Total */}
-                <div className="bg-gradient-to-r from-[#003366] to-[#004488] rounded-xl p-5 text-center mb-6">
+                <div className="bg-gradient-to-r from-[#0d9488] to-[#0d9488] rounded-xl p-5 text-center mb-6">
                   <p className="text-blue-200 text-sm mb-1">Total Amount</p>
                   <p className="text-3xl font-bold text-white">&#8377;{Number(booking.total_amount).toFixed(2)}</p>
                   <div className="mt-2 inline-block px-3 py-1 bg-white/20 rounded-full">
@@ -139,7 +139,7 @@ export default function BookingConfirmationPage() {
             <div className="flex flex-col gap-3">
               <Link
                 href="/my-bookings"
-                className="block w-full py-3.5 bg-[#FF6600] text-white rounded-xl font-semibold hover:bg-[#e55b00] transition-all hover:shadow-lg hover:shadow-orange-200 text-center"
+                className="block w-full py-3.5 bg-[#f97316] text-white rounded-xl font-semibold hover:bg-[#ea580c] transition-all hover:shadow-lg hover:shadow-orange-200 text-center"
               >
                 View My Bookings
               </Link>

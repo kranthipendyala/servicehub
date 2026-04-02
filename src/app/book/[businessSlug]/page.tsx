@@ -339,7 +339,7 @@ export default function BookingPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-[#003366] border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-[#0d9488] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -347,7 +347,7 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#003366] text-white py-6">
+      <div className="bg-[#0d9488] text-white py-6">
         <div className="max-w-3xl mx-auto px-4">
           <h1 className="text-2xl font-bold">Book a Service</h1>
           {businessName && (
@@ -365,7 +365,7 @@ export default function BookingPage() {
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
                     i <= step
-                      ? "bg-[#FF6600] text-white"
+                      ? "bg-[#f97316] text-white"
                       : "bg-gray-200 text-gray-500"
                   }`}
                 >
@@ -379,7 +379,7 @@ export default function BookingPage() {
                 </div>
                 <span
                   className={`ml-2 text-sm font-medium hidden sm:inline ${
-                    i <= step ? "text-[#003366]" : "text-gray-400"
+                    i <= step ? "text-[#0d9488]" : "text-gray-400"
                   }`}
                 >
                   {label}
@@ -388,7 +388,7 @@ export default function BookingPage() {
               {i < STEPS.length - 1 && (
                 <div
                   className={`flex-1 h-0.5 mx-3 ${
-                    i < step ? "bg-[#FF6600]" : "bg-gray-200"
+                    i < step ? "bg-[#f97316]" : "bg-gray-200"
                   }`}
                 />
               )}
@@ -405,7 +405,7 @@ export default function BookingPage() {
         {/* ── Step 0: Select Services ─────────────────────────── */}
         {step === 0 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#003366] mb-4">
+            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
               Select Services
             </h2>
             {services.length === 0 ? (
@@ -415,7 +415,7 @@ export default function BookingPage() {
                 {services.map((svc) => (
                   <div
                     key={svc.id}
-                    className="bg-white rounded-lg border p-4 hover:border-[#FF6600] transition-colors"
+                    className="bg-white rounded-lg border p-4 hover:border-[#f97316] transition-colors"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -428,7 +428,7 @@ export default function BookingPage() {
                           </p>
                         )}
                         <div className="flex items-center gap-3 mt-2">
-                          <span className="text-[#FF6600] font-bold">
+                          <span className="text-[#f97316] font-bold">
                             ₹{svc.discounted_price || svc.base_price}
                           </span>
                           {svc.discounted_price && svc.discounted_price < svc.base_price && (
@@ -473,7 +473,7 @@ export default function BookingPage() {
                         ) : (
                           <button
                             onClick={() => addToCart(svc)}
-                            className="px-4 py-2 bg-[#FF6600] text-white rounded-lg text-sm font-medium hover:bg-[#e55b00] transition-colors"
+                            className="px-4 py-2 bg-[#f97316] text-white rounded-lg text-sm font-medium hover:bg-[#ea580c] transition-colors"
                           >
                             Add
                           </button>
@@ -500,7 +500,7 @@ export default function BookingPage() {
                                   <span className="text-sm text-gray-700">
                                     {v.name}
                                   </span>
-                                  <span className="ml-2 text-sm text-[#FF6600] font-medium">
+                                  <span className="ml-2 text-sm text-[#f97316] font-medium">
                                     ₹{v.price}
                                   </span>
                                 </div>
@@ -537,7 +537,7 @@ export default function BookingPage() {
                                 ) : (
                                   <button
                                     onClick={() => addToCart(svc, v)}
-                                    className="px-3 py-1 border border-[#FF6600] text-[#FF6600] rounded text-xs font-medium hover:bg-orange-50 transition-colors"
+                                    className="px-3 py-1 border border-[#f97316] text-[#f97316] rounded text-xs font-medium hover:bg-orange-50 transition-colors"
                                   >
                                     Add
                                   </button>
@@ -581,7 +581,7 @@ export default function BookingPage() {
         {/* ── Step 1: Date & Time ─────────────────────────────── */}
         {step === 1 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#003366] mb-4">
+            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
               Choose Date &amp; Time
             </h2>
 
@@ -599,7 +599,7 @@ export default function BookingPage() {
                       onClick={() => setSelectedDate(ds)}
                       className={`flex-shrink-0 w-20 py-3 rounded-lg border text-center text-sm transition-colors ${
                         selectedDate === ds
-                          ? "border-[#FF6600] bg-orange-50 text-[#FF6600] font-semibold"
+                          ? "border-[#f97316] bg-orange-50 text-[#f97316] font-semibold"
                           : "border-gray-200 hover:border-gray-300 text-gray-700"
                       }`}
                     >
@@ -630,7 +630,7 @@ export default function BookingPage() {
                     onClick={() => setSelectedTime(slot)}
                     className={`py-2 rounded-lg border text-sm transition-colors ${
                       selectedTime === slot
-                        ? "border-[#FF6600] bg-orange-50 text-[#FF6600] font-semibold"
+                        ? "border-[#f97316] bg-orange-50 text-[#f97316] font-semibold"
                         : "border-gray-200 hover:border-gray-300 text-gray-700"
                     }`}
                   >
@@ -645,7 +645,7 @@ export default function BookingPage() {
         {/* ── Step 2: Address ─────────────────────────────────── */}
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#003366] mb-4">
+            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
               Select Address
             </h2>
 
@@ -661,7 +661,7 @@ export default function BookingPage() {
                   key={addr.id}
                   className={`flex items-start gap-3 p-4 bg-white rounded-lg border cursor-pointer transition-colors ${
                     selectedAddressId === addr.id
-                      ? "border-[#FF6600] ring-1 ring-[#FF6600]"
+                      ? "border-[#f97316] ring-1 ring-[#f97316]"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -670,7 +670,7 @@ export default function BookingPage() {
                     name="address"
                     checked={selectedAddressId === addr.id}
                     onChange={() => setSelectedAddressId(addr.id)}
-                    className="mt-1 accent-[#FF6600]"
+                    className="mt-1 accent-[#f97316]"
                   />
                   <div>
                     <div className="font-medium text-gray-900">
@@ -810,7 +810,7 @@ export default function BookingPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleSaveAddress}
-                    className="px-4 py-2 bg-[#FF6600] text-white rounded-lg text-sm font-medium hover:bg-[#e55b00]"
+                    className="px-4 py-2 bg-[#f97316] text-white rounded-lg text-sm font-medium hover:bg-[#ea580c]"
                   >
                     Save Address
                   </button>
@@ -825,7 +825,7 @@ export default function BookingPage() {
             ) : (
               <button
                 onClick={() => setShowNewAddress(true)}
-                className="mt-4 flex items-center gap-2 text-[#FF6600] text-sm font-medium hover:underline"
+                className="mt-4 flex items-center gap-2 text-[#f97316] text-sm font-medium hover:underline"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -839,7 +839,7 @@ export default function BookingPage() {
         {/* ── Step 3: Review & Confirm ────────────────────────── */}
         {step === 3 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#003366] mb-4">
+            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
               Review &amp; Confirm
             </h2>
 
@@ -998,7 +998,7 @@ export default function BookingPage() {
             <button
               onClick={() => setStep((s) => s + 1)}
               disabled={!canProceed()}
-              className="px-6 py-2.5 bg-[#FF6600] text-white rounded-lg font-medium hover:bg-[#e55b00] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2.5 bg-[#f97316] text-white rounded-lg font-medium hover:bg-[#ea580c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Next
             </button>
@@ -1006,7 +1006,7 @@ export default function BookingPage() {
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="px-8 py-2.5 bg-[#003366] text-white rounded-lg font-medium hover:bg-[#002244] disabled:opacity-60 transition-colors"
+              className="px-8 py-2.5 bg-[#0d9488] text-white rounded-lg font-medium hover:bg-[#0f766e] disabled:opacity-60 transition-colors"
             >
               {submitting ? "Placing Order..." : paymentMethod === "cod" ? "Confirm Booking" : "Confirm & Pay"}
             </button>

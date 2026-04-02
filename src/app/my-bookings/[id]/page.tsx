@@ -86,7 +86,7 @@ export default function BookingDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-[#003366] border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-[#0d9488] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default function BookingDetailPage() {
           <p className="text-gray-500 text-lg">Booking not found.</p>
           <Link
             href="/my-bookings"
-            className="text-[#FF6600] hover:underline text-sm mt-2 inline-block"
+            className="text-[#f97316] hover:underline text-sm mt-2 inline-block"
           >
             Back to My Bookings
           </Link>
@@ -112,7 +112,7 @@ export default function BookingDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#003366] text-white py-6">
+      <div className="bg-[#0d9488] text-white py-6">
         <div className="max-w-3xl mx-auto px-4">
           <Link
             href="/my-bookings"
@@ -135,7 +135,7 @@ export default function BookingDetailPage() {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 md:px-4 py-6 space-y-5">
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
             {error}
@@ -144,8 +144,8 @@ export default function BookingDetailPage() {
 
         {/* Status Timeline */}
         {booking.status !== "cancelled" && booking.status !== "refunded" && (
-          <div className="bg-white rounded-lg border p-6">
-            <h2 className="font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="font-bold text-gray-900 mb-5">
               Booking Status
             </h2>
             <div className="flex items-center">
@@ -153,14 +153,14 @@ export default function BookingDetailPage() {
                 <div key={ts.status} className="flex items-center flex-1">
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200 ${
                         i <= timelineIdx
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-200 text-gray-400"
+                          ? "bg-green-500 text-white shadow-sm"
+                          : "bg-gray-100 text-gray-400"
                       }`}
                     >
                       {i <= timelineIdx ? (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       ) : (
@@ -168,9 +168,9 @@ export default function BookingDetailPage() {
                       )}
                     </div>
                     <span
-                      className={`text-xs mt-1 ${
+                      className={`text-xs mt-1.5 font-medium ${
                         i <= timelineIdx
-                          ? "text-green-700 font-medium"
+                          ? "text-green-700"
                           : "text-gray-400"
                       }`}
                     >
@@ -179,8 +179,8 @@ export default function BookingDetailPage() {
                   </div>
                   {i < TIMELINE_STEPS.length - 1 && (
                     <div
-                      className={`flex-1 h-0.5 mx-2 ${
-                        i < timelineIdx ? "bg-green-500" : "bg-gray-200"
+                      className={`flex-1 h-1 mx-2 rounded-full transition-all duration-200 ${
+                        i < timelineIdx ? "bg-green-500" : "bg-gray-100"
                       }`}
                     />
                   )}

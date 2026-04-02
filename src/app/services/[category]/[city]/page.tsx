@@ -84,7 +84,7 @@ export default async function CategoryCityPage({ params }: PageProps) {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero */}
-        <div className="bg-gradient-to-r from-[#003366] via-[#004488] to-[#003366] text-white">
+        <div className="bg-gradient-to-r from-[#0d9488] via-[#0d9488] to-[#0d9488] text-white">
           <div className="max-w-7xl mx-auto px-4 py-12">
             <nav className="flex items-center gap-2 text-sm text-blue-200 mb-4">
               <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -123,7 +123,7 @@ export default async function CategoryCityPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold text-gray-600 mb-2">No providers found</h3>
               <p className="text-gray-400 mb-4">No {cat.name.toLowerCase()} services found in {cityData.name} yet.</p>
-              <Link href={`/services/${category}`} className="text-[#FF6600] hover:underline font-medium">
+              <Link href={`/services/${category}`} className="text-[#f97316] hover:underline font-medium">
                 Browse all {cat.name} services
               </Link>
             </div>
@@ -151,7 +151,7 @@ export default async function CategoryCityPage({ params }: PageProps) {
                     )}
                   </div>
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#003366] transition-colors">{biz.name}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#0d9488] transition-colors">{biz.name}</h3>
                     {biz.short_description && (
                       <p className="text-sm text-gray-500 mt-1 line-clamp-2">{biz.short_description}</p>
                     )}

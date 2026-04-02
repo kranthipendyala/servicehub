@@ -282,7 +282,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero Section ────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-[#001233] via-primary-500 to-[#003366] text-white overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
+      <section className="relative bg-gradient-to-br from-[#042f2e] via-primary-500 to-[#0d9488] text-white overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center">
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-[0.05]">
           <div
@@ -622,7 +622,7 @@ export default async function HomePage() {
       {/* ── Book Now CTA ──────────────────────────────────────── */}
       <section className="relative py-16 md:py-20 overflow-hidden">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-accent-600 via-accent-500 to-[#FF8533]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-accent-600 via-accent-500 to-[#fb923c]" />
         {/* Decorative shapes */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-16 -right-16 w-64 h-64 bg-white rounded-full" />
@@ -824,7 +824,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── App Download Banner ─────────────────────────────────── */}
-      <section className="section-padding bg-gradient-to-br from-[#001233] via-primary-500 to-[#003366] overflow-hidden relative">
+      <section className="section-padding bg-gradient-to-br from-[#042f2e] via-primary-500 to-[#0d9488] overflow-hidden relative">
         {/* Decorative elements */}
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-accent-500/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-primary-300/10 rounded-full blur-3xl" />

@@ -90,7 +90,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero gradient header */}
-        <div className="bg-gradient-to-r from-[#003366] via-[#004488] to-[#003366] text-white">
+        <div className="bg-gradient-to-r from-[#0d9488] via-[#0d9488] to-[#0d9488] text-white">
           <div className="max-w-7xl mx-auto px-4 py-12">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-sm text-blue-200 mb-4">
@@ -136,12 +136,12 @@ export default async function CategoryPage({ params }: PageProps) {
                   <Link
                     key={child.id}
                     href={`/services/${child.slug}`}
-                    className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-[#FF6600] hover:shadow-md transition-all group"
+                    className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-[#f97316] hover:shadow-md transition-all group"
                   >
-                    <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-[#FF6600] group-hover:bg-[#FF6600] group-hover:text-white transition-colors">
+                    <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-[#f97316] group-hover:bg-[#f97316] group-hover:text-white transition-colors">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     </div>
-                    <span className="text-sm font-medium text-gray-800 group-hover:text-[#FF6600] transition-colors">{child.name}</span>
+                    <span className="text-sm font-medium text-gray-800 group-hover:text-[#f97316] transition-colors">{child.name}</span>
                   </Link>
                 ))}
               </div>
@@ -157,7 +157,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   <Link
                     key={city.id}
                     href={`/services/${category}/${city.slug}`}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#FF6600] hover:text-[#FF6600] rounded-full transition-all hover:shadow-sm"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-[#f97316] hover:text-[#f97316] rounded-full transition-all hover:shadow-sm"
                   >
                     {city.name}
                   </Link>
@@ -203,14 +203,14 @@ export default async function CategoryPage({ params }: PageProps) {
                         </span>
                       )}
                       {biz.is_featured && (
-                        <span className="absolute top-3 left-3 px-2 py-1 text-xs font-semibold bg-[#FF6600] text-white rounded-lg shadow-sm">
+                        <span className="absolute top-3 left-3 px-2 py-1 text-xs font-semibold bg-[#f97316] text-white rounded-lg shadow-sm">
                           Featured
                         </span>
                       )}
                     </div>
 
                     <div className="p-5">
-                      <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#003366] transition-colors">
+                      <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#0d9488] transition-colors">
                         {biz.name}
                       </h3>
                       {biz.short_description && (

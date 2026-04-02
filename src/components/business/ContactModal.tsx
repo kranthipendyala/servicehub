@@ -73,7 +73,7 @@ export default function ContactModal({ open, onClose, business }: ContactModalPr
 
       <div className="relative bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden animate-[slideUp_0.3s_ease-out]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#003366] to-[#004488] px-6 py-5 text-white relative">
+        <div className="bg-gradient-to-r from-[#0d9488] to-[#0d9488] px-6 py-5 text-white relative">
           <button onClick={onClose} className="absolute top-3 right-3 p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
