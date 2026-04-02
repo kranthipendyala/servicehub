@@ -86,18 +86,18 @@ const FALLBACK_CATEGORIES = [
 ];
 
 const FALLBACK_CITIES_TELANGANA = [
-  { id: 12, name: "Hyderabad", slug: "hyderabad", business_count: 3100 },
-  { id: 100, name: "Secunderabad", slug: "secunderabad", business_count: 1800 },
-  { id: 101, name: "Warangal", slug: "warangal", business_count: 450 },
-  { id: 102, name: "Nizamabad", slug: "nizamabad", business_count: 320 },
-  { id: 103, name: "Karimnagar", slug: "karimnagar", business_count: 280 },
-  { id: 104, name: "Khammam", slug: "khammam", business_count: 210 },
-  { id: 105, name: "Nalgonda", slug: "nalgonda", business_count: 180 },
-  { id: 106, name: "Rangareddy", slug: "rangareddy", business_count: 950 },
-  { id: 107, name: "Sangareddy", slug: "sangareddy", business_count: 160 },
-  { id: 108, name: "Siddipet", slug: "siddipet", business_count: 140 },
-  { id: 109, name: "Mahabubnagar", slug: "mahabubnagar", business_count: 200 },
-  { id: 110, name: "Adilabad", slug: "adilabad", business_count: 120 },
+  { id: 12, name: "Hyderabad", slug: "hyderabad", business_count: 0 },
+  { id: 100, name: "Secunderabad", slug: "secunderabad", business_count: 0 },
+  { id: 101, name: "Warangal", slug: "warangal", business_count: 0 },
+  { id: 102, name: "Nizamabad", slug: "nizamabad", business_count: 0 },
+  { id: 103, name: "Karimnagar", slug: "karimnagar", business_count: 0 },
+  { id: 104, name: "Khammam", slug: "khammam", business_count: 0 },
+  { id: 105, name: "Nalgonda", slug: "nalgonda", business_count: 0 },
+  { id: 106, name: "Rangareddy", slug: "rangareddy", business_count: 0 },
+  { id: 107, name: "Sangareddy", slug: "sangareddy", business_count: 0 },
+  { id: 108, name: "Siddipet", slug: "siddipet", business_count: 0 },
+  { id: 109, name: "Mahabubnagar", slug: "mahabubnagar", business_count: 0 },
+  { id: 110, name: "Adilabad", slug: "adilabad", business_count: 0 },
 ];
 
 const FALLBACK_CITIES_INDIA = [
@@ -146,10 +146,10 @@ const CITY_TOP_SERVICES: Record<string, string[]> = {
 };
 
 const STATS_TELANGANA = [
-  { label: "Verified Businesses", value: "500+", icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" },
-  { label: "Cities Covered", value: "16+", icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" },
+  { label: "Service Providers", value: "Growing", icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" },
+  { label: "Telangana Districts", value: "16+", icon: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" },
   { label: "Service Categories", value: "50+", icon: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" },
-  { label: "Happy Customers", value: "10,000+", icon: "M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+  { label: "100% Verified", value: "Trusted", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
 ];
 
 const STATS_INDIA = [
@@ -260,14 +260,10 @@ export default async function HomePage() {
     if (cityRes.status === "fulfilled" && cityRes.value.success) {
       const cityData = cityRes.value.data;
       if (Array.isArray(cityData) && cityData.length > 0) {
-        // Merge API cities with fallback counts (for cities with 0 businesses)
-        cities = cityData.map((c: any) => {
-          const fallback = FALLBACK_CITIES.find((f) => f.slug === c.slug);
-          return {
-            ...c,
-            business_count: Number(c.business_count) > 0 ? Number(c.business_count) : (fallback?.business_count || 0),
-          };
-        });
+        cities = cityData.map((c: any) => ({
+          ...c,
+          business_count: Number(c.business_count) || 0,
+        }));
       }
     }
     if (featRes.status === "fulfilled" && featRes.value.success) {
@@ -357,8 +353,8 @@ export default async function HomePage() {
             <p className="text-lg md:text-xl lg:text-2xl text-primary-100/90 mb-10 max-w-2xl mx-auto leading-relaxed">
               Electricians, plumbers, AC repair, home cleaning and more.
               {geoScope === "telangana"
-                ? "500+ verified professionals in Hyderabad & Telangana."
-                : "25,000+ verified professionals across 500+ cities."}
+                ? "Verified professionals in Hyderabad & across Telangana."
+                : "Verified professionals across 500+ cities in India."}
             </p>
           </div>
 
@@ -703,11 +699,11 @@ export default async function HomePage() {
                   <h3 className="text-sm font-heading font-bold text-gray-800 group-hover:text-primary-500 transition-colors mb-1">
                     {city.name}
                   </h3>
-                  {city.business_count !== undefined && (
-                    <p className="text-xs text-gray-400 mb-2">
-                      {city.business_count.toLocaleString()}+ providers
-                    </p>
-                  )}
+                  <p className="text-xs text-gray-400 mb-2">
+                    {Number(city.business_count) > 0
+                      ? `${Number(city.business_count).toLocaleString()}+ providers`
+                      : "Coming Soon"}
+                  </p>
                   <div className="flex flex-wrap justify-center gap-1">
                     {topServices.map((svc) => (
                       <span key={svc} className="text-[10px] bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium">
