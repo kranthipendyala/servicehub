@@ -163,7 +163,7 @@ export default function SearchBar({
           className={`flex w-full items-stretch ${
             isHero
               ? "rounded-2xl shadow-search bg-white border-2 border-white/80 focus-within:border-accent-400 transition-colors"
-              : "rounded-xl bg-white border border-surface-200 shadow-sm focus-within:border-primary-300 focus-within:shadow-md transition-all"
+              : "rounded-full bg-white border border-surface-200 shadow-sm focus-within:border-primary-300 focus-within:shadow-md transition-all"
           }`}
         >
           {/* City selector — auto-detected */}

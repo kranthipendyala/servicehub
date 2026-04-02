@@ -69,16 +69,16 @@ export default function Footer() {
               Register as a vendor, get bookings from thousands of customers, and earn ₹50K+ monthly
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Link
               href="/vendor/register"
-              className="bg-white text-emerald-700 font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all text-center hover:bg-emerald-50"
+              className="bg-white text-emerald-700 font-bold px-8 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 text-center hover:bg-emerald-50 min-h-[48px] flex items-center justify-center"
             >
               Join as Vendor — Free
             </Link>
             <Link
               href="/vendor/login"
-              className="bg-emerald-700/50 text-white font-semibold px-6 py-3 rounded-xl border border-white/30 hover:bg-emerald-700/70 transition-all text-center backdrop-blur-sm"
+              className="bg-emerald-700/50 text-white font-semibold px-6 py-4 rounded-2xl border border-white/30 hover:bg-emerald-700/70 transition-all duration-200 text-center backdrop-blur-sm min-h-[48px] flex items-center justify-center"
             >
               Vendor Login
             </Link>
@@ -87,10 +87,10 @@ export default function Footer() {
       </div>
 
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
           {/* Brand */}
-          <div className="lg:col-span-1">
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-500 rounded-xl flex items-center justify-center">
                 <svg
@@ -187,8 +187,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Top Searches SEO links */}
-          <div>
+          {/* Top Searches SEO links - hidden on mobile */}
+          <div className="hidden md:block">
             <h3 className="text-white font-heading font-semibold mb-4 text-sm uppercase tracking-wider">
               Top Searches
             </h3>

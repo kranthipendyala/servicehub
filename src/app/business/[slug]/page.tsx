@@ -148,7 +148,7 @@ export default async function BusinessDetailPage({
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start gap-2 mb-1.5 flex-wrap">
-                <h1 className="text-2xl md:text-3xl font-heading font-bold text-gray-900">
+                <h1 className="text-2xl md:text-4xl font-heading font-bold text-gray-900">
                   {business.name}
                 </h1>
                 {business.is_verified && (
@@ -175,7 +175,13 @@ export default async function BusinessDetailPage({
               )}
 
               {business.rating ? (
-                <div className="mb-3">
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-600 text-white text-sm font-bold shadow-sm">
+                    {business.rating.toFixed(1)}
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  </span>
                   <RatingStars
                     rating={business.rating}
                     size="md"
@@ -225,7 +231,7 @@ export default async function BusinessDetailPage({
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-row md:flex-col items-stretch gap-2.5 flex-shrink-0 md:min-w-[170px]">
+            <div className="flex flex-col sm:flex-row md:flex-col items-stretch gap-2.5 flex-shrink-0 md:min-w-[170px]">
               {business.phone && (
                 <ContactButton
                   business={{ id: Number(business.id), name: business.name, phone: business.phone, mobile: business.mobile }}
@@ -364,11 +370,16 @@ export default async function BusinessDetailPage({
                     </svg>
                     Services Offered
                   </h2>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {business.services.map((service, idx) => (
-                      <span key={idx} className="tag cursor-default hover:bg-surface-100">
-                        {service}
-                      </span>
+                      <div key={idx} className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 border border-surface-100 transition-all duration-200 hover:bg-surface-50 hover:shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-[#f97316]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">{service}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -563,6 +574,34 @@ export default async function BusinessDetailPage({
           </div>
         </section>
       )}
+
+      {/* Sticky bottom CTA bar for mobile */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-surface-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-4 py-3 safe-area-bottom">
+        <div className="flex gap-3">
+          {business.phone && (
+            <a
+              href={`tel:${business.phone}`}
+              className="flex-1 btn-call flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm min-h-[48px] transition-all duration-200"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Call
+            </a>
+          )}
+          <Link
+            href={`/book/${business.slug}`}
+            className="flex-1 bg-gradient-to-r from-accent-500 to-accent-600 text-white font-bold flex items-center justify-center gap-2 py-3.5 rounded-2xl hover:from-accent-600 hover:to-accent-700 transition-all duration-200 shadow-sm text-sm min-h-[48px]"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Book Now
+          </Link>
+        </div>
+      </div>
+      {/* Spacer for sticky bottom bar on mobile */}
+      <div className="h-20 md:hidden" />
     </>
   );
 }

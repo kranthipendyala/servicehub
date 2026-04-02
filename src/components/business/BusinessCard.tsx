@@ -20,7 +20,7 @@ export default function BusinessCard({
 
   if (layout === "list") {
     return (
-      <article className="bg-white rounded-xl border border-surface-200 hover:shadow-card-hover hover:border-primary-100 transition-all duration-300 overflow-hidden group">
+      <article className="bg-white rounded-2xl border border-surface-200 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200 overflow-hidden group">
         <div className="flex flex-col sm:flex-row">
           {/* Left: Image */}
           <div className="relative w-full sm:w-48 md:w-56 h-48 sm:h-auto flex-shrink-0">
@@ -139,12 +139,12 @@ export default function BusinessCard({
           </div>
 
           {/* Right: Contact CTAs */}
-          <div className="flex sm:flex-col items-stretch sm:items-end justify-end gap-2 p-4 sm:p-5 sm:pl-0 sm:min-w-[160px] border-t sm:border-t-0 sm:border-l border-surface-100">
+          <div className="flex sm:flex-col items-stretch sm:items-end justify-end gap-2.5 p-4 sm:p-5 sm:pl-0 sm:min-w-[160px] border-t sm:border-t-0 sm:border-l border-surface-100">
             {business.phone && (
               <>
                 <a
                   href={`tel:${business.phone}`}
-                  className="flex-1 sm:flex-none btn-call flex items-center justify-center gap-2 rounded-lg"
+                  className="flex-1 sm:flex-none btn-call flex items-center justify-center gap-2 rounded-xl py-3 min-h-[48px] transition-all duration-200"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -158,7 +158,7 @@ export default function BusinessCard({
             )}
             <Link
               href={`/book/${business.slug}`}
-              className="flex-1 sm:flex-none bg-accent-500 hover:bg-accent-600 text-white font-semibold flex items-center justify-center gap-2 rounded-lg px-4 py-2 transition-colors text-sm"
+              className="flex-1 sm:flex-none bg-accent-500 hover:bg-accent-600 text-white font-bold flex items-center justify-center gap-2 rounded-xl px-4 py-3 transition-all duration-200 text-sm min-h-[48px]"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -182,7 +182,7 @@ export default function BusinessCard({
 
   // Grid layout (card)
   return (
-    <article className="bg-white rounded-xl border border-surface-200 hover:shadow-card-hover hover:border-primary-100 transition-all duration-300 overflow-hidden group flex flex-col">
+    <article className="bg-white rounded-2xl border border-surface-200 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200 overflow-hidden group flex flex-col">
       <Link href={`/business/${business.slug}`} className="block">
         <div className="relative h-44 bg-surface-100 overflow-hidden">
           {business.cover_image_url || business.logo_url ? (
@@ -194,10 +194,12 @@ export default function BusinessCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100">
-              <span className="text-4xl font-heading font-bold text-primary-200">
-                {business.name.charAt(0)}
-              </span>
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-50 via-primary-50 to-primary-100">
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-5xl font-heading font-bold text-primary-200">
+                  {business.name.charAt(0)}
+                </span>
+              </div>
             </div>
           )}
 
@@ -228,7 +230,7 @@ export default function BusinessCard({
           {/* Rating badge */}
           {business.rating ? (
             <div className="absolute bottom-3 right-3">
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-green-600 text-white text-xs font-bold shadow-sm">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-600 text-white text-sm font-bold shadow-md">
                 {business.rating.toFixed(1)}
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -293,7 +295,7 @@ export default function BusinessCard({
           {business.phone && (
             <a
               href={`tel:${business.phone}`}
-              className="flex-1 btn-call text-center rounded-lg text-xs py-2"
+              className="flex-1 btn-call text-center rounded-xl text-xs py-3 min-h-[44px] flex items-center justify-center transition-all duration-200"
               onClick={(e) => e.stopPropagation()}
             >
               Call Now
@@ -301,7 +303,7 @@ export default function BusinessCard({
           )}
           <Link
             href={`/book/${business.slug}`}
-            className="flex-1 bg-accent-500 hover:bg-accent-600 text-white text-center rounded-lg text-xs py-2 font-semibold transition-colors"
+            className="flex-1 bg-accent-500 hover:bg-accent-600 text-white text-center rounded-xl text-xs py-3 font-bold transition-all duration-200 min-h-[44px] flex items-center justify-center"
           >
             Book Now
           </Link>

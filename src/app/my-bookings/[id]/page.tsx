@@ -192,7 +192,7 @@ export default function BookingDetailPage() {
 
         {/* Cancelled notice */}
         {(booking.status === "cancelled" || booking.status === "refunded") && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
             <p className="font-medium text-red-800">
               This booking was{" "}
               {booking.status === "cancelled" ? "cancelled" : "refunded"}.
@@ -206,8 +206,8 @@ export default function BookingDetailPage() {
         )}
 
         {/* Service Items */}
-        <div className="bg-white rounded-lg border p-4">
-          <h2 className="font-semibold text-gray-900 mb-3">
+        <div className="bg-white rounded-2xl shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-3">
             Service Items
           </h2>
           <div className="overflow-x-auto">
@@ -256,8 +256,8 @@ export default function BookingDetailPage() {
         </div>
 
         {/* Schedule */}
-        <div className="bg-white rounded-lg border p-4">
-          <h2 className="font-semibold text-gray-900 mb-2">Schedule</h2>
+        <div className="bg-white rounded-2xl shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-3">Schedule</h2>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <p className="text-gray-500">Date</p>
@@ -284,8 +284,8 @@ export default function BookingDetailPage() {
 
         {/* Address */}
         {booking.address && (
-          <div className="bg-white rounded-lg border p-4">
-            <h2 className="font-semibold text-gray-900 mb-2">
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <h2 className="font-bold text-gray-900 mb-3">
               Service Address
             </h2>
             <div className="text-sm text-gray-700">
@@ -304,8 +304,8 @@ export default function BookingDetailPage() {
         )}
 
         {booking.service_address && !booking.address && (
-          <div className="bg-white rounded-lg border p-4">
-            <h2 className="font-semibold text-gray-900 mb-2">
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <h2 className="font-bold text-gray-900 mb-3">
               Service Address
             </h2>
             <p className="text-sm text-gray-700">{booking.service_address}</p>
@@ -313,8 +313,8 @@ export default function BookingDetailPage() {
         )}
 
         {/* Price Breakdown */}
-        <div className="bg-white rounded-lg border p-4">
-          <h2 className="font-semibold text-gray-900 mb-3">
+        <div className="bg-white rounded-2xl shadow-sm p-5">
+          <h2 className="font-bold text-gray-900 mb-3">
             Price Breakdown
           </h2>
           <div className="space-y-2 text-sm">
@@ -367,19 +367,19 @@ export default function BookingDetailPage() {
 
         {/* Customer Notes */}
         {booking.customer_notes && (
-          <div className="bg-white rounded-lg border p-4">
-            <h2 className="font-semibold text-gray-900 mb-2">Your Notes</h2>
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <h2 className="font-bold text-gray-900 mb-2">Your Notes</h2>
             <p className="text-sm text-gray-700">{booking.customer_notes}</p>
           </div>
         )}
 
         {/* Action buttons */}
-        <div className="flex flex-wrap gap-3 pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
           {/* Chat with vendor */}
           {booking.status !== "cancelled" && booking.status !== "refunded" && (
             <Link
               href={`/my-bookings/${bookingId}/chat`}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-all shadow-sm hover:shadow-md"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-emerald-600 text-white rounded-2xl text-base font-bold hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow-md min-h-[48px] flex-1 sm:flex-none"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -392,7 +392,7 @@ export default function BookingDetailPage() {
           {canCancel && (
             <button
               onClick={() => setShowCancelModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 border border-red-300 text-red-600 rounded-xl text-sm font-medium hover:bg-red-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border border-red-300 text-red-600 rounded-2xl text-sm font-semibold hover:bg-red-50 transition-all duration-200 min-h-[48px] flex-1 sm:flex-none"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -406,7 +406,7 @@ export default function BookingDetailPage() {
       {/* Cancel Modal */}
       {showCancelModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+          <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-6">
             <h3 className="text-lg font-bold text-gray-900 mb-2">
               Cancel Booking
             </h3>

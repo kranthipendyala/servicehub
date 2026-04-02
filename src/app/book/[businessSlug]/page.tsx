@@ -363,14 +363,14 @@ export default function BookingPage() {
             <div key={label} className="flex items-center flex-1">
               <div className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                  className={`w-10 h-10 md:w-10 md:h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-200 ${
                     i <= step
-                      ? "bg-[#f97316] text-white"
-                      : "bg-gray-200 text-gray-500"
+                      ? "bg-[#f97316] text-white shadow-sm"
+                      : "bg-gray-100 text-gray-400"
                   }`}
                 >
                   {i < step ? (
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
@@ -378,8 +378,8 @@ export default function BookingPage() {
                   )}
                 </div>
                 <span
-                  className={`ml-2 text-sm font-medium hidden sm:inline ${
-                    i <= step ? "text-[#0d9488]" : "text-gray-400"
+                  className={`ml-2 text-sm font-semibold hidden sm:inline ${
+                    i <= step ? "text-gray-900" : "text-gray-400"
                   }`}
                 >
                   {label}
@@ -387,8 +387,8 @@ export default function BookingPage() {
               </div>
               {i < STEPS.length - 1 && (
                 <div
-                  className={`flex-1 h-0.5 mx-3 ${
-                    i < step ? "bg-[#f97316]" : "bg-gray-200"
+                  className={`flex-1 h-1 mx-3 rounded-full transition-all duration-200 ${
+                    i < step ? "bg-[#f97316]" : "bg-gray-100"
                   }`}
                 />
               )}
@@ -415,20 +415,20 @@ export default function BookingPage() {
                 {services.map((svc) => (
                   <div
                     key={svc.id}
-                    className="bg-white rounded-lg border p-4 hover:border-[#f97316] transition-colors"
+                    className="bg-white rounded-2xl shadow-sm p-5 hover:shadow-md border border-transparent hover:border-[#f97316] transition-all duration-200"
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-bold text-gray-900 text-base">
                           {svc.name}
                         </h3>
                         {svc.short_description && (
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-600 mt-1">
                             {svc.short_description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-2">
-                          <span className="text-[#f97316] font-bold">
+                        <div className="flex items-center gap-3 mt-2.5">
+                          <span className="text-[#f97316] font-bold text-lg">
                             ₹{svc.discounted_price || svc.base_price}
                           </span>
                           {svc.discounted_price && svc.discounted_price < svc.base_price && (
@@ -449,23 +449,23 @@ export default function BookingPage() {
                           (c) => c.service.id === svc.id && !c.variant
                         );
                         return inCart ? (
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-3">
                             <button
                               onClick={() =>
                                 updateQuantity(svc.id, undefined, inCart.quantity - 1)
                               }
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100"
+                              className="w-10 h-10 rounded-full border-2 border-[#f97316] flex items-center justify-center text-[#f97316] font-bold hover:bg-orange-50 transition-all duration-200"
                             >
                               -
                             </button>
-                            <span className="w-6 text-center font-medium">
+                            <span className="w-6 text-center font-bold text-gray-900">
                               {inCart.quantity}
                             </span>
                             <button
                               onClick={() =>
                                 updateQuantity(svc.id, undefined, inCart.quantity + 1)
                               }
-                              className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100"
+                              className="w-10 h-10 rounded-full border-2 border-[#f97316] flex items-center justify-center text-[#f97316] font-bold hover:bg-orange-50 transition-all duration-200"
                             >
                               +
                             </button>
@@ -473,7 +473,7 @@ export default function BookingPage() {
                         ) : (
                           <button
                             onClick={() => addToCart(svc)}
-                            className="px-4 py-2 bg-[#f97316] text-white rounded-lg text-sm font-medium hover:bg-[#ea580c] transition-colors"
+                            className="px-6 py-3 bg-[#f97316] text-white rounded-2xl text-sm font-bold hover:bg-[#ea580c] transition-all duration-200 shadow-sm min-h-[44px]"
                           >
                             Add
                           </button>
@@ -554,8 +554,8 @@ export default function BookingPage() {
 
             {/* Cart summary */}
             {cart.length > 0 && (
-              <div className="mt-6 bg-white rounded-lg border p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <div className="mt-6 bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">
                   Selected ({cart.reduce((s, c) => s + c.quantity, 0)} items)
                 </h3>
                 <div className="text-sm text-gray-600 space-y-1">
@@ -590,23 +590,23 @@ export default function BookingPage() {
               <h3 className="text-sm font-medium text-gray-700 mb-2">
                 Select Date
               </h3>
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                 {calendarDates.map((d) => {
                   const ds = formatDate(d);
                   return (
                     <button
                       key={ds}
                       onClick={() => setSelectedDate(ds)}
-                      className={`flex-shrink-0 w-20 py-3 rounded-lg border text-center text-sm transition-colors ${
+                      className={`flex-shrink-0 w-20 h-24 md:w-20 md:h-24 rounded-2xl border-2 text-center text-sm transition-all duration-200 flex flex-col items-center justify-center ${
                         selectedDate === ds
-                          ? "border-[#f97316] bg-orange-50 text-[#f97316] font-semibold"
-                          : "border-gray-200 hover:border-gray-300 text-gray-700"
+                          ? "border-[#f97316] bg-orange-50 text-[#f97316] font-bold shadow-sm"
+                          : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
                       }`}
                     >
                       <div className="text-xs opacity-70">
                         {d.toLocaleDateString("en-IN", { weekday: "short" })}
                       </div>
-                      <div className="font-medium">
+                      <div className="font-bold text-lg mt-0.5">
                         {d.getDate()}
                       </div>
                       <div className="text-xs opacity-70">
@@ -623,15 +623,15 @@ export default function BookingPage() {
               <h3 className="text-sm font-medium text-gray-700 mb-2">
                 Select Time
               </h3>
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
                 {timeSlots.map((slot) => (
                   <button
                     key={slot}
                     onClick={() => setSelectedTime(slot)}
-                    className={`py-2 rounded-lg border text-sm transition-colors ${
+                    className={`py-3 rounded-2xl border-2 text-sm font-medium transition-all duration-200 min-h-[44px] ${
                       selectedTime === slot
-                        ? "border-[#f97316] bg-orange-50 text-[#f97316] font-semibold"
-                        : "border-gray-200 hover:border-gray-300 text-gray-700"
+                        ? "border-[#f97316] bg-orange-50 text-[#f97316] font-bold shadow-sm"
+                        : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
                     }`}
                   >
                     {slot}
@@ -659,9 +659,9 @@ export default function BookingPage() {
               {addresses.map((addr) => (
                 <label
                   key={addr.id}
-                  className={`flex items-start gap-3 p-4 bg-white rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-start gap-4 p-5 bg-white rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
                     selectedAddressId === addr.id
-                      ? "border-[#f97316] ring-1 ring-[#f97316]"
+                      ? "border-[#f97316] bg-orange-50/50 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -670,7 +670,7 @@ export default function BookingPage() {
                     name="address"
                     checked={selectedAddressId === addr.id}
                     onChange={() => setSelectedAddressId(addr.id)}
-                    className="mt-1 accent-[#f97316]"
+                    className="mt-1 w-5 h-5 accent-[#f97316]"
                   />
                   <div>
                     <div className="font-medium text-gray-900">
@@ -695,7 +695,7 @@ export default function BookingPage() {
 
             {/* New address form */}
             {showNewAddress ? (
-              <div className="mt-4 bg-white rounded-lg border p-4 space-y-3">
+              <div className="mt-4 bg-white rounded-2xl shadow-sm p-5 space-y-3">
                 <h3 className="font-medium text-gray-900">New Address</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -845,8 +845,8 @@ export default function BookingPage() {
 
             <div className="space-y-4">
               {/* Services */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-2">Services</h3>
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">Services</h3>
                 <div className="divide-y">
                   {cart.map((c, idx) => (
                     <div key={idx} className="py-2 flex justify-between text-sm">
@@ -864,8 +864,8 @@ export default function BookingPage() {
               </div>
 
               {/* Schedule */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-2">Schedule</h3>
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">Schedule</h3>
                 <p className="text-sm text-gray-700">
                   {new Date(selectedDate + "T00:00:00").toLocaleDateString(
                     "en-IN",
@@ -881,8 +881,8 @@ export default function BookingPage() {
               </div>
 
               {/* Address */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-2">Address</h3>
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">Address</h3>
                 {(() => {
                   const addr = addresses.find(
                     (a) => a.id === selectedAddressId
@@ -905,8 +905,8 @@ export default function BookingPage() {
               </div>
 
               {/* Notes */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-2">
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">
                   Notes (optional)
                 </h3>
                 <textarea
@@ -919,8 +919,8 @@ export default function BookingPage() {
               </div>
 
               {/* Payment Method */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-3">Payment Method</h3>
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">Payment Method</h3>
                 <div className="space-y-2">
                   {codEnabled && (
                     <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === "cod" ? "border-green-500 bg-green-50" : "border-gray-200 hover:border-gray-300"}`}>
@@ -952,8 +952,8 @@ export default function BookingPage() {
               </div>
 
               {/* Price breakdown */}
-              <div className="bg-white rounded-lg border p-4">
-                <h3 className="font-medium text-gray-900 mb-2">
+              <div className="bg-white rounded-2xl shadow-sm p-5">
+                <h3 className="font-bold text-gray-900 mb-3">
                   Price Summary
                 </h3>
                 <div className="space-y-1 text-sm">
@@ -982,11 +982,11 @@ export default function BookingPage() {
         )}
 
         {/* ── Navigation buttons ──────────────────────────────── */}
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between mt-8 gap-4">
           {step > 0 ? (
             <button
               onClick={() => setStep((s) => s - 1)}
-              className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border-2 border-gray-300 rounded-2xl text-gray-700 font-semibold hover:bg-gray-50 transition-all duration-200 min-h-[48px]"
             >
               Back
             </button>
@@ -998,7 +998,7 @@ export default function BookingPage() {
             <button
               onClick={() => setStep((s) => s + 1)}
               disabled={!canProceed()}
-              className="px-6 py-2.5 bg-[#f97316] text-white rounded-lg font-medium hover:bg-[#ea580c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-8 py-3 bg-[#f97316] text-white rounded-2xl font-bold hover:bg-[#ea580c] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm min-h-[48px]"
             >
               Next
             </button>
@@ -1006,7 +1006,7 @@ export default function BookingPage() {
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="px-8 py-2.5 bg-[#0d9488] text-white rounded-lg font-medium hover:bg-[#0f766e] disabled:opacity-60 transition-colors"
+              className="px-8 py-3 bg-[#0d9488] text-white rounded-2xl font-bold hover:bg-[#0f766e] disabled:opacity-60 transition-all duration-200 shadow-sm min-h-[48px]"
             >
               {submitting ? "Placing Order..." : paymentMethod === "cod" ? "Confirm Booking" : "Confirm & Pay"}
             </button>
