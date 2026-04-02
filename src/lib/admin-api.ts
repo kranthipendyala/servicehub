@@ -438,6 +438,19 @@ export async function updateUser(id: number, data: Partial<AdminUser>) {
   });
 }
 
+export async function createUser(data: {
+  name: string;
+  email: string;
+  phone?: string;
+  password: string;
+  role: string;
+}) {
+  return adminFetch("/admin/users", {
+    method: "POST",
+    body: data,
+  });
+}
+
 /* ------------------------------------------------------------------ */
 /*  SEO                                                                */
 /* ------------------------------------------------------------------ */

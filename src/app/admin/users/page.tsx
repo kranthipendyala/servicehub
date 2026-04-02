@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, ChangeEvent } from "react";
 import {
   getAdminUsers,
   updateUser,
+  createUser,
   AdminUser,
   AdminPagination,
 } from "@/lib/admin-api";
@@ -173,8 +174,46 @@ export default function AdminUsersPage() {
     },
   ];
 
+  const [showCreate, setShowCreate] = useState(false);
+  const [createForm, setCreateForm] = useState({ name: "", email: "", phone: "", password: "", role: "vendor" });
+  const [creating, setCreating] = useState(false);
+
+  const handleCreate = async () => {
+    if (!createForm.name || !createForm.email || !createForm.password) {
+      toast("Name, email and password are required", "warning");
+      return;
+    }
+    setCreating(true);
+    try {
+      await createUser(createForm);
+      toast("User created successfully!", "success");
+      setShowCreate(false);
+      setCreateForm({ name: "", email: "", phone: "", password: "", role: "vendor" });
+      load(1);
+    } catch (err) {
+      toast(err instanceof Error ? err.message : "Failed to create user", "error");
+    } finally {
+      setCreating(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
+      {/* Header with Create button */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Users</h1>
+          <p className="text-sm text-gray-500">Manage customers, vendors, and admin accounts</p>
+        </div>
+        <button
+          onClick={() => setShowCreate(true)}
+          className="px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors flex items-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+          Create User
+        </button>
+      </div>
+
       <DataTable<AdminUser>
         columns={columns}
         data={users}
@@ -274,6 +313,38 @@ export default function AdminUsersPage() {
             className="px-4 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60"
           >
             {saving ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
+      </Modal>
+
+      {/* Create User Modal */}
+      <Modal
+        open={showCreate}
+        onClose={() => setShowCreate(false)}
+        title="Create New User"
+      >
+        <div className="space-y-4">
+          <FormField type="text" label="Full Name" name="name" value={createForm.name} onChange={(v: string) => setCreateForm({ ...createForm, name: v })} required />
+          <FormField type="email" label="Email" name="email" value={createForm.email} onChange={(v: string) => setCreateForm({ ...createForm, email: v })} required />
+          <FormField type="tel" label="Phone" name="phone" value={createForm.phone} onChange={(v: string) => setCreateForm({ ...createForm, phone: v })} />
+          <FormField type="text" label="Password" name="password" value={createForm.password} onChange={(v: string) => setCreateForm({ ...createForm, password: v })} required />
+          <FormField
+            type="select"
+            label="Role"
+            name="role"
+            value={createForm.role}
+            onChange={(v: string) => setCreateForm({ ...createForm, role: v })}
+            options={[
+              { label: "Customer", value: "user" },
+              { label: "Vendor", value: "vendor" },
+              { label: "Admin", value: "admin" },
+            ]}
+          />
+        </div>
+        <div className="flex justify-end gap-3 mt-6">
+          <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50">Cancel</button>
+          <button onClick={handleCreate} disabled={creating} className="px-4 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60">
+            {creating ? "Creating..." : "Create User"}
           </button>
         </div>
       </Modal>
