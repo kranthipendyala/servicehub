@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getVendorToken, getVendorUser, vendorLogout } from "@/lib/vendor-api";
 import { ToastProvider } from "@/components/admin/Toast";
+import VendorBottomNav from "@/components/vendor/VendorBottomNav";
 import LogoutModal from "@/components/common/LogoutModal";
 import { PlatformProvider } from "@/components/platform/PlatformProvider";
 
@@ -327,9 +328,12 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
               </div>
             </header>
 
-            {/* Page content — less padding on mobile */}
-            <main className="p-3 md:p-6">{children}</main>
+            {/* Page content — less padding on mobile, bottom padding for mobile nav */}
+            <main className="p-3 md:p-6 pb-20 md:pb-6">{children}</main>
           </div>
+
+          {/* Mobile bottom navigation */}
+          <VendorBottomNav />
         </div>
         )}
 
