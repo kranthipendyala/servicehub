@@ -11,6 +11,7 @@ import ReviewSection from "@/components/business/ReviewSection";
 import BusinessCard from "@/components/business/BusinessCard";
 import ContactButton from "@/components/business/ContactButton";
 import BusinessAvatar from "@/components/business/BusinessAvatar";
+import ClientBusinessPage from "@/components/business/ClientBusinessPage";
 import { getBusiness, getStaticParams } from "@/lib/api";
 import { SITE_NAME, SITE_URL, buildCanonicalUrl } from "@/lib/seo";
 import type { BreadcrumbItem } from "@/types";
@@ -78,14 +79,13 @@ export default async function BusinessDetailPage({
     const res = await getBusiness(slug);
     if (res.success) {
       business = res.data;
-    } else {
-      notFound();
     }
-  } catch {
-    notFound();
-  }
+  } catch {}
 
-  if (!business) notFound();
+  // If server-side fetch failed (Cloudflare blocking), render client-side fallback
+  if (!business) {
+    return <ClientBusinessPage />;
+  }
 
   const breadcrumbs: BreadcrumbItem[] = [{ label: "Home", href: "/" }];
   if (business.city_slug && business.city_name) {
