@@ -77,14 +77,14 @@ export default async function BusinessDetailPage({
   let business;
   try {
     const res = await getBusiness(slug);
-    if (res.success) {
+    if (res.success && res.data) {
       business = res.data;
     }
   } catch {}
 
-  // If server-side fetch failed (Cloudflare blocking), render client-side fallback
+  // If server-side fetch failed (Cloudflare blocking), render client-side page
   if (!business) {
-    return <BusinessFallback />;
+    return <BusinessFallback slug={slug} />;
   }
 
   const breadcrumbs: BreadcrumbItem[] = [{ label: "Home", href: "/" }];

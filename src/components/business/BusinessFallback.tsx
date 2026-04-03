@@ -6,9 +6,9 @@ import Link from "next/link";
 import BusinessAvatar from "@/components/business/BusinessAvatar";
 import CategoryIcon from "@/components/ui/CategoryIcon";
 
-export default function BusinessFallback() {
+export default function BusinessFallback({ slug: propSlug }: { slug?: string }) {
   const params = useParams();
-  const slug = params.slug as string;
+  const slug = propSlug || (params.slug as string);
   const [biz, setBiz] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
