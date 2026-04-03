@@ -77,12 +77,11 @@ export default async function CityPage({ params }: CityPageProps) {
       getFeaturedBusinesses(citySlug),
     ]);
 
-    if (cityRes.status === "fulfilled" && cityRes.value.success) {
+    if (cityRes.status === "fulfilled" && cityRes.value.success && cityRes.value.data) {
       cityName = cityRes.value.data.name;
       cityDescription = cityRes.value.data.description || "";
-    } else {
-      notFound();
     }
+    // Don't notFound() — Cloudflare might have blocked the request
 
     if (catRes.status === "fulfilled" && catRes.value.success) {
       categories = catRes.value.data;

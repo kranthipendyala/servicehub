@@ -107,16 +107,12 @@ export default async function CategoryCityPage({
       getCategories(),
     ]);
 
-    if (cityRes.status === "fulfilled" && cityRes.value.success) {
+    if (cityRes.status === "fulfilled" && cityRes.value.success && cityRes.value.data) {
       cityName = cityRes.value.data.name;
-    } else {
-      notFound();
     }
 
-    if (catRes.status === "fulfilled" && catRes.value.success) {
+    if (catRes.status === "fulfilled" && catRes.value.success && catRes.value.data) {
       categoryName = catRes.value.data.name;
-    } else {
-      notFound();
     }
 
     if (bizRes.status === "fulfilled" && bizRes.value.success) {

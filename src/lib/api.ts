@@ -88,6 +88,13 @@ export async function fetchApi<T>(
 
     clearTimeout(timeoutId);
 
+    // Detect Cloudflare HTML challenge (not JSON)
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("text/html")) {
+      console.warn(`[API] Cloudflare challenge detected for ${url}`);
+      return { success: false, status: false, data: null, message: "API blocked by Cloudflare" } as T;
+    }
+
     if (!response.ok) {
       throw new ApiError(
         `API Error: ${response.status} ${response.statusText}`,
