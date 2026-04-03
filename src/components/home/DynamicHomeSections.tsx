@@ -28,10 +28,7 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
   const [categories, setCategories] = useState(serverCategories);
   const [featured, setFeatured] = useState(serverFeatured);
 
-  const hasRealData = cities.some((c) => Number(c.business_count) > 0) || featured.length > 0;
-
   useEffect(() => {
-    if (hasRealData) return;
 
     (async () => {
       try {
@@ -55,7 +52,7 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
         }
       } catch {}
     })();
-  }, [hasRealData]);
+  }, []);
 
   return (
     <>
