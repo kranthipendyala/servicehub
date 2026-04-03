@@ -11,7 +11,7 @@ import ReviewSection from "@/components/business/ReviewSection";
 import BusinessCard from "@/components/business/BusinessCard";
 import ContactButton from "@/components/business/ContactButton";
 import BusinessAvatar from "@/components/business/BusinessAvatar";
-import ClientBusinessPage from "@/components/business/ClientBusinessPage";
+import BusinessFallback from "@/components/business/BusinessFallback";
 import { getBusiness, getStaticParams } from "@/lib/api";
 import { SITE_NAME, SITE_URL, buildCanonicalUrl } from "@/lib/seo";
 import type { BreadcrumbItem } from "@/types";
@@ -84,7 +84,7 @@ export default async function BusinessDetailPage({
 
   // If server-side fetch failed (Cloudflare blocking), render client-side fallback
   if (!business) {
-    return <ClientBusinessPage />;
+    return <BusinessFallback />;
   }
 
   const breadcrumbs: BreadcrumbItem[] = [{ label: "Home", href: "/" }];
