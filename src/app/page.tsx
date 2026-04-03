@@ -431,8 +431,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Popular Categories — REMOVED, now handled by DynamicHomeSections ── */}
-      {false && <section id="categories" className="section-padding bg-white">
+      {/* ── Popular Categories ──────────────────────────────────── */}
+      <section id="categories" className="section-padding bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
             <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-500 text-sm font-semibold rounded-full mb-4">Our Services</span>
@@ -509,7 +509,7 @@ export default async function HomePage() {
             })}
           </div>
         </div>
-      </section>}
+      </section>
 
       {/* ── How It Works ────────────────────────────────────────── */}
       <section className="section-padding bg-gradient-to-b from-surface-50 to-white overflow-hidden">
