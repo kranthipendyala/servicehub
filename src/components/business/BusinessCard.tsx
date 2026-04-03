@@ -31,7 +31,7 @@ export default function BusinessCard({
                   src={business.cover_image_url || business.logo_url || ""}
                   alt={business.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 640px) 100vw, 224px"
                 />
               ) : (
@@ -189,17 +189,17 @@ export default function BusinessCard({
     );
   }
 
-  // Grid layout (card)
+  // Grid layout (card) — premium neutral
   return (
-    <article className="bg-white rounded-2xl border border-surface-200 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200 overflow-hidden group flex flex-col">
+    <article className="rounded-2xl overflow-hidden group flex flex-col h-full">
       <Link href={`/business/${business.slug}`} className="block">
-        <div className="relative h-44 bg-surface-100 overflow-hidden">
+        <div className="relative h-40 overflow-hidden">
           {business.cover_image_url || business.logo_url ? (
             <Image
               src={business.cover_image_url || business.logo_url || ""}
               alt={business.name}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
@@ -213,7 +213,7 @@ export default function BusinessCard({
           {/* Badges overlay */}
           <div className="absolute top-3 left-3 flex gap-1.5">
             {business.is_verified && (
-              <span className="badge-verified shadow-sm">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/90 backdrop-blur-sm text-[10px] font-bold text-gray-700 shadow-sm">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
@@ -225,7 +225,7 @@ export default function BusinessCard({
               </span>
             )}
             {business.is_featured && (
-              <span className="badge-premium shadow-sm">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/90 backdrop-blur-sm text-[10px] font-bold text-gray-700 shadow-sm">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
@@ -237,7 +237,7 @@ export default function BusinessCard({
           {/* Rating badge */}
           {business.rating ? (
             <div className="absolute bottom-3 right-3">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-600 text-white text-sm font-bold shadow-md">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/90 backdrop-blur-sm text-xs font-bold text-gray-900 shadow-sm">
                 {business.rating.toFixed(1)}
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -248,70 +248,29 @@ export default function BusinessCard({
         </div>
       </Link>
 
-      {/* Content */}
       <div className="p-4 flex-1 flex flex-col">
         <Link href={`/business/${business.slug}`}>
-          <h3 className="text-base font-heading font-bold text-gray-900 line-clamp-1 group-hover:text-primary-500 transition-colors">
-            {business.name}
-          </h3>
+          <h3 className="text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-teal-700 transition-colors">{business.name}</h3>
         </Link>
 
-        {business.category_name && (
-          <p className="text-xs font-semibold text-primary-500 mt-0.5 uppercase tracking-wide">
-            {business.category_name}
-          </p>
-        )}
-
-        {business.rating ? (
-          <div className="mt-1.5">
-            <RatingStars
-              rating={business.rating}
-              size="xs"
-              reviewCount={business.review_count}
-            />
-          </div>
+        {business.categories && business.categories.length > 0 ? (
+          <p className="text-[11px] text-gray-400 mt-0.5 truncate">{business.categories.map((cat: any) => cat.name).join(" · ")}</p>
+        ) : business.category_name ? (
+          <p className="text-[11px] text-gray-400 mt-0.5">{business.category_name}</p>
         ) : null}
 
         {locationParts.length > 0 && (
-          <div className="flex items-center gap-1 text-sm text-gray-500 mt-2">
-            <svg
-              className="w-3.5 h-3.5 flex-shrink-0 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <span className="truncate text-xs">{locationParts.join(", ")}</span>
-          </div>
+          <p className="text-[11px] text-gray-400 mt-1 truncate">{locationParts.join(", ")}</p>
         )}
 
-        {/* CTA Buttons */}
+        {/* CTA */}
         <div className="flex gap-2 mt-auto pt-3">
           {business.phone && (
-            <a
-              href={`tel:${business.phone}`}
-              className="flex-1 btn-call text-center rounded-xl text-xs py-3 min-h-[44px] flex items-center justify-center transition-all duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Call Now
+            <a href={`tel:${business.phone}`} className="flex-1 text-center rounded-xl text-xs py-2.5 font-semibold border border-gray-200 text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all min-h-[38px] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              Call
             </a>
           )}
-          <Link
-            href={`/book/${business.slug}`}
-            className="flex-1 bg-accent-500 hover:bg-accent-600 text-white text-center rounded-xl text-xs py-3 font-bold transition-all duration-200 min-h-[44px] flex items-center justify-center"
-          >
+          <Link href={`/book/${business.slug}`} className="flex-1 bg-gray-900 hover:bg-gray-800 text-white text-center rounded-xl text-xs py-2.5 font-semibold transition-all min-h-[38px] flex items-center justify-center">
             Book Now
           </Link>
         </div>

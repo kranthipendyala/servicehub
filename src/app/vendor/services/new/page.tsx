@@ -41,6 +41,7 @@ export default function VendorServiceFormPage() {
   const [loading, setLoading] = useState(false);
   const [fetchingEdit, setFetchingEdit] = useState(isEdit);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [allCategories, setAllCategories] = useState<CategoryItem[]>([]);
 
   // Form fields
   const [name, setName] = useState("");
@@ -63,8 +64,13 @@ export default function VendorServiceFormPage() {
         const vendorCats = Array.isArray(vendorRes.data) ? vendorRes.data : [];
 
         if (vendorCats.length > 0) {
-          // Show vendor's selected categories as top-level items
           setCategories(vendorCats.map((c) => ({ id: c.id, name: c.name, slug: c.slug })));
+          // Also fetch all categories for template suggestions
+          try {
+            const res = await fetch("/proxy-api/categories").then((r) => r.json());
+            const catList = res.data?.categories || res.data || [];
+            if (Array.isArray(catList)) setAllCategories(catList);
+          } catch {}
           return;
         }
       } catch {}
@@ -73,7 +79,10 @@ export default function VendorServiceFormPage() {
       try {
         const res = await fetch("/proxy-api/categories").then((r) => r.json());
         const catList = res.data?.categories || res.data || [];
-        setCategories(Array.isArray(catList) ? catList : []);
+        if (Array.isArray(catList)) {
+          setCategories(catList);
+          setAllCategories(catList);
+        }
       } catch {}
     })();
   }, []);
@@ -219,13 +228,6 @@ export default function VendorServiceFormPage() {
           <h3 className="text-base font-semibold text-gray-900">Service Details</h3>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Service Name <span className="text-red-500">*</span>
-            </label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. AC Deep Cleaning" className={inputCls} />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className={`${inputCls} bg-white`}>
               <option value="">Select category</option>
@@ -235,6 +237,41 @@ export default function VendorServiceFormPage() {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Service template suggestions */}
+          {categoryId && (() => {
+            const selectedCat = allCategories.find((c) => String(c.id) === categoryId);
+            const templates = selectedCat?.children || [];
+            if (templates.length === 0) return null;
+            return (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-2">Quick pick a service template:</label>
+                <div className="flex flex-wrap gap-2">
+                  {templates.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => setName(t.name)}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-all ${
+                        name === t.name
+                          ? "bg-emerald-50 border-emerald-300 text-emerald-700"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-emerald-300 hover:text-emerald-600"
+                      }`}
+                    >
+                      {t.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Service Name <span className="text-red-500">*</span>
+            </label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. AC Deep Cleaning, or pick from templates above" className={inputCls} />
           </div>
 
           <div>

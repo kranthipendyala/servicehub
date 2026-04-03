@@ -201,8 +201,8 @@ export default function AdminCategoriesPage() {
             </span>
           )}
           {depth > 0 && (
-            <span className="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-500">
-              Service
+            <span className="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-600">
+              Template
             </span>
           )}
 
@@ -211,7 +211,7 @@ export default function AdminCategoriesPage() {
             <button
               onClick={() => openAdd(cat.id)}
               className="p-1.5 rounded-md hover:bg-blue-50 text-blue-600"
-              title="Add service type"
+              title="Add service template"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -253,10 +253,10 @@ export default function AdminCategoriesPage() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-500">
-            {topLevel.length} categories, {categories.length - topLevel.length} service types
+            {topLevel.length} categories, {categories.length - topLevel.length} service templates
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            Categories = parent groups. Service types = sub-items under each category.
+            Categories = service groups. Templates = suggested services vendors can pick from when adding their services.
           </p>
         </div>
         <button
@@ -290,7 +290,7 @@ export default function AdminCategoriesPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editing ? `Edit ${editing.parent_id ? "Service Type" : "Category"}` : form.parent_id ? "Add Service Type" : "Add Category"}
+        title={editing ? `Edit ${editing.parent_id ? "Service Template" : "Category"}` : form.parent_id ? "Add Service Template" : "Add Category"}
         maxWidth="max-w-xl"
       >
         <div className="space-y-4">

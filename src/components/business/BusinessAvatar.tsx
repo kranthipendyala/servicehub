@@ -77,20 +77,22 @@ export default function BusinessAvatar({ name, categoryIcon, size = "card", clas
   const initials = name.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase();
 
   if (size === "card") {
-    const bgUrl = generatePattern(name, 400, 250);
     return (
-      <div className={`w-full h-full min-h-[180px] relative overflow-hidden ${className}`} style={{ backgroundImage: `url("${bgUrl}")`, backgroundSize: "cover" }}>
-        {/* Category icon + initials overlay */}
+      <div className={`w-full h-full min-h-[160px] relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 ${className}`}>
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%23000'/%3E%3C/svg%3E\")",
+        }} />
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-          <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/10">
+          <div className="w-14 h-14 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center">
             {categoryIcon ? (
-              <CategoryIcon icon={categoryIcon} className="w-8 h-8 text-white" />
+              <CategoryIcon icon={categoryIcon} className="w-7 h-7 text-gray-400" />
             ) : (
-              <span className="text-2xl font-bold text-white">{initials}</span>
+              <span className="text-xl font-black text-gray-300">{initials}</span>
             )}
           </div>
           {categoryIcon && (
-            <span className="text-sm font-bold text-white/80 tracking-wide">{initials}</span>
+            <span className="text-xs font-bold text-gray-400 tracking-wider uppercase">{initials}</span>
           )}
         </div>
       </div>
