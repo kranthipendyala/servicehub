@@ -135,6 +135,7 @@ export default function EditBusinessPage() {
         category_ids: Array.from(categoryIds),
       } as any);
       toast("Business updated successfully", "success");
+      router.push("/admin/businesses");
     } catch (err) {
       toast(err instanceof Error ? err.message : "Failed to save", "error");
     } finally {
