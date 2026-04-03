@@ -161,12 +161,12 @@ export default async function CategoryCityPage({
       </div>
 
       {/* Listing Header */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-500 text-white py-8 md:py-10">
+      <section className="bg-primary-800 text-white py-8 md:py-10">
         <div className="container mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-heading font-bold mb-2">
+          <h1 className="text-2xl md:text-3xl font-heading font-medium mb-2">
             Best {categoryName} in {cityName}
           </h1>
-          <p className="text-primary-100">
+          <p className="text-white/80">
             {totalItems > 0
               ? `${totalItems} verified ${categoryName.toLowerCase()} service providers found in ${cityName}`
               : `Browse ${categoryName.toLowerCase()} service providers in ${cityName}`}
@@ -182,9 +182,9 @@ export default async function CategoryCityPage({
             <aside className="w-full lg:w-72 flex-shrink-0 space-y-5">
               {/* Locality Filter */}
               {localities.length > 0 && (
-                <div className="card p-5">
-                  <h3 className="font-heading font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
-                    <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-white rounded-card shadow-card p-5">
+                  <h3 className="font-heading font-semibold text-primary-700 mb-3 text-sm flex items-center gap-2">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     </svg>
                     Filter by Locality
@@ -194,11 +194,11 @@ export default async function CategoryCityPage({
                       <li key={loc.id}>
                         <Link
                           href={`/${citySlug}/${categorySlug}/${loc.slug}`}
-                          className="flex items-center justify-between text-sm text-gray-600 hover:text-primary-500 py-1.5 px-2 rounded-lg hover:bg-primary-50 transition-all"
+                          className="flex items-center justify-between text-sm text-gray-600 hover:text-primary-600 py-1.5 px-2 rounded-card hover:bg-accent-100 transition-all duration-200 ease-advia"
                         >
                           <span>{loc.name}</span>
                           {loc.business_count !== undefined && (
-                            <span className="text-xs text-gray-400 bg-surface-100 px-1.5 py-0.5 rounded">
+                            <span className="text-xs text-gray-400 bg-accent-100 px-1.5 py-0.5 rounded-card">
                               {loc.business_count}
                             </span>
                           )}
@@ -210,8 +210,8 @@ export default async function CategoryCityPage({
               )}
 
               {/* Rating Filter */}
-              <div className="card p-5">
-                <h3 className="font-heading font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
+              <div className="bg-white rounded-card shadow-card p-5">
+                <h3 className="font-heading font-semibold text-primary-700 mb-3 text-sm flex items-center gap-2">
                   <svg className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
@@ -222,10 +222,10 @@ export default async function CategoryCityPage({
                     <li key={r}>
                       <Link
                         href={`/${citySlug}/${categorySlug}?rating=${r}${sort ? `&sort=${sort}` : ""}`}
-                        className={`flex items-center gap-2 text-sm py-2 px-2 rounded-lg transition-all ${
+                        className={`flex items-center gap-2 text-sm py-2 px-2 rounded-card transition-all duration-200 ease-advia ${
                           rating === String(r)
                             ? "bg-primary-50 text-primary-600 font-semibold"
-                            : "text-gray-600 hover:bg-surface-50 hover:text-primary-500"
+                            : "text-gray-600 hover:bg-accent-100 hover:text-primary-600"
                         }`}
                       >
                         <span>{r}+ Stars</span>
@@ -258,8 +258,8 @@ export default async function CategoryCityPage({
               </div>
 
               {/* Sort */}
-              <div className="card p-5">
-                <h3 className="font-heading font-semibold text-gray-900 mb-3 text-sm flex items-center gap-2">
+              <div className="bg-white rounded-card shadow-card p-5">
+                <h3 className="font-heading font-semibold text-primary-700 mb-3 text-sm flex items-center gap-2">
                   <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
                   </svg>
@@ -274,10 +274,10 @@ export default async function CategoryCityPage({
                     <li key={opt.value}>
                       <Link
                         href={`/${citySlug}/${categorySlug}?sort=${opt.value}${rating ? `&rating=${rating}` : ""}`}
-                        className={`text-sm py-2 px-2 block rounded-lg transition-all ${
+                        className={`text-sm py-2 px-2 block rounded-card transition-all duration-200 ease-advia ${
                           sort === opt.value
                             ? "bg-primary-50 text-primary-600 font-semibold"
-                            : "text-gray-600 hover:bg-surface-50 hover:text-primary-500"
+                            : "text-gray-600 hover:bg-accent-100 hover:text-primary-600"
                         }`}
                       >
                         {opt.label}
@@ -289,7 +289,7 @@ export default async function CategoryCityPage({
 
               {/* Active Filters */}
               {activeFilters > 0 && (
-                <div className="card p-5 bg-primary-50 border-primary-100">
+                <div className="bg-primary-50 border border-primary-100 rounded-card p-5">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-heading font-semibold text-primary-800 text-sm">
                       Active Filters ({activeFilters})
@@ -344,9 +344,9 @@ export default async function CategoryCityPage({
 
       {/* Related Categories */}
       {relatedCategories.length > 0 && (
-        <section className="py-10 bg-surface-50 border-t border-surface-200">
+        <section className="py-10 bg-accent-200 border-t border-accent-300/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-lg font-heading font-bold text-gray-900 mb-4">
+            <h2 className="text-lg font-heading font-medium text-primary-700 mb-4">
               Related Categories in {cityName}
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -354,7 +354,7 @@ export default async function CategoryCityPage({
                 <Link
                   key={cat.id}
                   href={`/${citySlug}/${cat.slug}`}
-                  className="tag"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-primary-400 hover:text-primary-600 rounded-btn transition-all duration-200 ease-advia"
                 >
                   {cat.name} in {cityName}
                 </Link>

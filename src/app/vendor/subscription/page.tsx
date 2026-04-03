@@ -68,7 +68,7 @@ export default function VendorSubscriptionPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -79,10 +79,10 @@ export default function VendorSubscriptionPage() {
 
       {/* Current Plan */}
       {current && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+        <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-emerald-600 font-medium">Current Plan</p>
+              <p className="text-sm text-primary-600 font-medium">Current Plan</p>
               <p className="text-xl font-bold text-gray-900 mt-1">
                 {current.plan_name || "Active Plan"}
               </p>
@@ -127,7 +127,7 @@ export default function VendorSubscriptionPage() {
         <button
           onClick={() => setCycle(cycle === "monthly" ? "annual" : "monthly")}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            cycle === "annual" ? "bg-emerald-600" : "bg-gray-300"
+            cycle === "annual" ? "bg-primary-600" : "bg-gray-300"
           }`}
         >
           <span
@@ -142,7 +142,7 @@ export default function VendorSubscriptionPage() {
           }`}
         >
           Annual{" "}
-          <span className="text-emerald-600 text-xs font-semibold">Save 20%</span>
+          <span className="text-primary-600 text-xs font-semibold">Save 20%</span>
         </span>
       </div>
 
@@ -157,12 +157,12 @@ export default function VendorSubscriptionPage() {
               key={plan.id}
               className={`relative rounded-xl border-2 p-6 transition-shadow hover:shadow-lg ${
                 plan.is_popular
-                  ? "border-emerald-500 shadow-md"
+                  ? "border-primary-500 shadow-md"
                   : "border-gray-200"
-              } ${isCurrentPlan ? "ring-2 ring-emerald-500 ring-offset-2" : ""}`}
+              } ${isCurrentPlan ? "ring-2 ring-primary-500 ring-offset-2" : ""}`}
             >
               {plan.is_popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                   Most Popular
                 </span>
               )}
@@ -179,7 +179,7 @@ export default function VendorSubscriptionPage() {
                 {(plan.features || []).map((feature, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
                     <svg
-                      className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -196,7 +196,7 @@ export default function VendorSubscriptionPage() {
                 ))}
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <svg
-                    className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -213,7 +213,7 @@ export default function VendorSubscriptionPage() {
                 {plan.commission_discount > 0 && (
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <svg
-                      className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -234,7 +234,7 @@ export default function VendorSubscriptionPage() {
                 disabled={actionLoading || isCurrentPlan}
                 className={`mt-6 w-full py-2.5 text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 ${
                   plan.is_popular
-                    ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                    ? "bg-primary-600 text-white hover:bg-primary-700"
                     : "bg-gray-900 text-white hover:bg-gray-800"
                 }`}
               >

@@ -9,37 +9,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /* Advia palette — deep forest green + warm cream */
         primary: {
-          50: "#f0fdfa",
-          100: "#ccfbf1",
-          200: "#99f6e4",
-          300: "#5eead4",
-          400: "#2dd4bf",
-          500: "#0d9488",
-          600: "#0f766e",
-          700: "#115e59",
-          800: "#134e4a",
-          900: "#042f2e",
-          950: "#021a19",
+          50: "#f0faf3",
+          100: "#d9f2e0",
+          200: "#b3e5c1",
+          300: "#7ed39a",
+          400: "#4abb70",
+          500: "#1a7a3a",
+          600: "#145224",  /* main brand */
+          700: "#0E3919",  /* text on light */
+          800: "#0A2912",  /* dark bg / hover */
+          900: "#071f0e",
+          950: "#04130a",
         },
         accent: {
-          50: "#fff7ed",
-          100: "#ffedd5",
-          200: "#fed7aa",
-          300: "#fdba74",
-          400: "#fb923c",
-          500: "#f97316",
-          600: "#ea580c",
-          700: "#c2410c",
-          800: "#9a3412",
-          900: "#7c2d12",
+          50: "#faf8f5",
+          100: "#f5f0ea",
+          200: "#EFEDE7",  /* cream bg */
+          300: "#e5e1d8",
+          400: "#DEDACE",  /* heading underline */
+          500: "#dad6c8",
+          600: "#c4bfb0",
+          700: "#a39e90",
+          800: "#827d70",
+          900: "#615d52",
         },
         surface: {
-          50: "#f8f9fa",
-          100: "#f1f3f5",
-          200: "#e9ecef",
-          300: "#dee2e6",
-          400: "#ced4da",
+          50: "#faf9f7",
+          100: "#f5f3f0",
+          200: "#edece9",
+          300: "#e5e3de",
+          400: "#dad6c8",
         },
       },
       fontFamily: {
@@ -56,23 +57,28 @@ const config: Config = {
           "2xl": "4rem",
         },
       },
+      borderRadius: {
+        "card": "12px",
+        "btn": "24px",
+      },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out",
+        "fade-in-up": "fadeInUp 0.5s ease-out",
         "slide-up": "slideUp 0.5s ease-out",
         "slide-down": "slideDown 0.3s ease-out",
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         shimmer: "shimmer 2s infinite linear",
         "float": "float 6s ease-in-out infinite",
         "float-delayed": "float 6s ease-in-out 2s infinite",
         "float-slow": "float 8s ease-in-out 1s infinite",
-        "gradient-x": "gradientX 6s ease infinite",
-        "pulse-glow": "pulseGlow 2s ease-in-out infinite",
-        "bounce-gentle": "bounceGentle 2s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         slideUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
@@ -90,32 +96,17 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
         },
-        gradientX: {
-          "0%, 100%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-        },
-        pulseGlow: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(255, 102, 0, 0.4)" },
-          "50%": { boxShadow: "0 0 40px rgba(255, 102, 0, 0.8)" },
-        },
-        bounceGentle: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-5px)" },
-        },
       },
       boxShadow: {
-        card: "0 2px 8px rgba(0, 0, 0, 0.08)",
-        "card-hover": "0 8px 30px rgba(0, 0, 0, 0.12)",
-        header: "0 2px 10px rgba(0, 0, 0, 0.08)",
-        search: "0 4px 20px rgba(0, 51, 102, 0.15)",
-        "glass": "0 8px 32px rgba(0, 0, 0, 0.06)",
-        "glass-lg": "0 24px 80px rgba(0, 0, 0, 0.08)",
-        "glow-teal": "0 0 40px rgba(13, 148, 136, 0.15)",
-        "glow-orange": "0 0 40px rgba(249, 115, 22, 0.15)",
-        "premium": "0 20px 60px -12px rgba(0, 0, 0, 0.15)",
+        card: "0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.06)",
+        "card-hover": "0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.04)",
+        header: "0 1px 0 rgba(0,0,0,0.06)",
+        search: "0 4px 20px rgba(20,82,36,0.10)",
+        "glass": "0 8px 32px rgba(0,0,0,0.04)",
+        "premium": "0 20px 60px -12px rgba(0,0,0,0.12)",
       },
-      backdropBlur: {
-        xs: "2px",
+      transitionTimingFunction: {
+        advia: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
       },
     },
   },

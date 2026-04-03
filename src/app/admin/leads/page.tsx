@@ -67,7 +67,7 @@ export default function AdminLeadsPage() {
                   <p className="text-xs text-gray-500">{lead.customer_phone || ""}</p>
                 </td>
                 <td className="px-4 py-3 text-gray-700">{lead.business_name}</td>
-                <td className="px-4 py-3"><span className={`text-xs font-bold px-2 py-0.5 rounded-full ${lead.contact_method === "call" ? "bg-green-100 text-green-700" : lead.contact_method === "whatsapp" ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"}`}>{lead.contact_method}</span></td>
+                <td className="px-4 py-3"><span className={`text-xs font-bold px-2 py-0.5 rounded-full ${lead.contact_method === "call" ? "bg-green-100 text-green-700" : lead.contact_method === "whatsapp" ? "bg-primary-100 text-primary-700" : "bg-blue-100 text-blue-700"}`}>{lead.contact_method}</span></td>
                 <td className="px-4 py-3"><span className={`text-xs font-bold ${lead.status === "new" ? "text-amber-600" : lead.status === "converted" ? "text-green-600" : "text-gray-500"}`}>{lead.status}</span></td>
                 <td className="px-4 py-3 text-gray-600">₹{lead.lead_fee}</td>
                 <td className="px-4 py-3 text-xs text-gray-400">{timeAgo(lead.created_at)}</td>

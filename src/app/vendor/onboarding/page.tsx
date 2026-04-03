@@ -306,29 +306,29 @@ export default function VendorOnboardingPage() {
   /*  Styles                                                           */
   /* ---------------------------------------------------------------- */
 
-  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none";
+  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none";
   const labelCls = "block text-sm font-medium text-gray-700 mb-1";
 
   if (loading) return (
     <div className="flex items-center justify-center py-32">
-      <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+      <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
     </div>
   );
 
   if (showSuccess) return (
     <div className="flex items-center justify-center py-20">
       <div className="bg-white rounded-2xl shadow-2xl p-10 max-w-md w-full text-center">
-        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-xl shadow-emerald-500/30">
+        <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-xl shadow-primary-500/30">
           <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
         </div>
         <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Welcome Aboard!</h2>
         <p className="text-gray-500 mb-3">Your application has been submitted for review.</p>
-        <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 text-sm font-medium px-4 py-2 rounded-full mb-8">
+        <div className="inline-flex items-center gap-2 bg-primary-50 text-primary-700 text-sm font-medium px-4 py-2 rounded-full mb-8">
           Review within 24-48 hours
         </div>
-        <button onClick={() => router.replace("/vendor/dashboard")} className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl">
+        <button onClick={() => router.replace("/vendor/dashboard")} className="w-full py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl">
           Go to Dashboard
         </button>
       </div>
@@ -354,18 +354,18 @@ export default function VendorOnboardingPage() {
       {/* Progress bar */}
       <div className="mb-8">
         <div className="text-center mb-4">
-          <p className="text-sm font-semibold text-emerald-600">Step {currentStep} of {STEPS.length}</p>
+          <p className="text-sm font-semibold text-primary-600">Step {currentStep} of {STEPS.length}</p>
           <p className="text-xs text-gray-500 mt-0.5">{STEPS[currentStep - 1].label}</p>
         </div>
         <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
-          <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
+          <div className="h-full bg-gradient-to-r from-primary-500 to-primary-400 rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
         </div>
         <div className="flex justify-between">
           {STEPS.map((s) => (
             <div key={s.num} className="flex flex-col items-center" style={{ width: `${100 / STEPS.length}%` }}>
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all ${
-                currentStep > s.num ? "bg-emerald-600 border-emerald-600 text-white" :
-                currentStep === s.num ? "bg-white border-emerald-500 text-emerald-600" :
+                currentStep > s.num ? "bg-primary-600 border-primary-600 text-white" :
+                currentStep === s.num ? "bg-white border-primary-500 text-primary-600" :
                 "bg-white border-gray-200 text-gray-400"
               }`}>
                 {currentStep > s.num ? "✓" : s.num}
@@ -425,12 +425,12 @@ export default function VendorOnboardingPage() {
               {allCategories.map((cat) => {
                 const isSelected = selectedCatIds.has(cat.id);
                 return (
-                  <label key={cat.id} className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border cursor-pointer transition-all ${isSelected ? "bg-emerald-50 border-emerald-300" : "bg-white border-gray-200 hover:border-gray-300"}`}>
+                  <label key={cat.id} className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border cursor-pointer transition-all ${isSelected ? "bg-primary-50 border-primary-300" : "bg-white border-gray-200 hover:border-gray-300"}`}>
                     <input type="checkbox" checked={isSelected} onChange={() => {
                       setSelectedCatIds((prev) => { const n = new Set(prev); n.has(cat.id) ? n.delete(cat.id) : n.add(cat.id); return n; });
-                    }} className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                    }} className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                     <div>
-                      <span className={`text-sm font-semibold ${isSelected ? "text-emerald-800" : "text-gray-700"}`}>{cat.name}</span>
+                      <span className={`text-sm font-semibold ${isSelected ? "text-primary-800" : "text-gray-700"}`}>{cat.name}</span>
                       {cat.children && cat.children.length > 0 && (
                         <p className="text-xs text-gray-400 mt-0.5">{cat.children.map((c) => c.name).join(", ")}</p>
                       )}
@@ -455,10 +455,10 @@ export default function VendorOnboardingPage() {
                   {cities.map((city) => {
                     const isSelected = selectedCityIds.has(city.id);
                     return (
-                      <label key={city.id} className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer text-sm transition-all ${isSelected ? "bg-emerald-50 border-emerald-300 text-emerald-700 font-medium" : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                      <label key={city.id} className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer text-sm transition-all ${isSelected ? "bg-primary-50 border-primary-300 text-primary-700 font-medium" : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"}`}>
                         <input type="checkbox" checked={isSelected} onChange={() => {
                           setSelectedCityIds((prev) => { const n = new Set(prev); n.has(city.id) ? n.delete(city.id) : n.add(city.id); return n; });
-                        }} className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                        }} className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                         {city.name}
                       </label>
                     );
@@ -485,14 +485,14 @@ export default function VendorOnboardingPage() {
                   <div key={cat.id} className="border border-gray-200 rounded-xl overflow-hidden">
                     <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-gray-800">{cat.name}</h4>
-                      <button type="button" onClick={() => addService(String(cat.id))} className="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+                      <button type="button" onClick={() => addService(String(cat.id))} className="text-xs font-medium text-primary-600 hover:text-primary-700 flex items-center gap-1">
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                         Add
                       </button>
                     </div>
                     <div className="p-4 space-y-3">
                       {catServices.length === 0 ? (
-                        <button type="button" onClick={() => addService(String(cat.id))} className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-400 hover:border-emerald-300 hover:text-emerald-600 transition-colors">
+                        <button type="button" onClick={() => addService(String(cat.id))} className="w-full py-4 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-400 hover:border-primary-300 hover:text-primary-600 transition-colors">
                           + Add first service under {cat.name}
                         </button>
                       ) : (
@@ -561,13 +561,13 @@ export default function VendorOnboardingPage() {
         </button>
         {currentStep < 6 ? (
           <button type="button" onClick={handleNext} disabled={saving}
-            className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-sm font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 disabled:opacity-60 flex items-center gap-2">
+            className="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-semibold rounded-xl hover:from-primary-700 hover:to-primary-800 disabled:opacity-60 flex items-center gap-2">
             {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {saving ? "Saving..." : "Save & Continue"}
           </button>
         ) : (
           <button type="button" onClick={handleSubmit} disabled={saving}
-            className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-sm font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 disabled:opacity-60 flex items-center gap-2">
+            className="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-semibold rounded-xl hover:from-primary-700 hover:to-primary-800 disabled:opacity-60 flex items-center gap-2">
             {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {saving ? "Submitting..." : "Submit for Review"}
           </button>

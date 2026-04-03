@@ -94,7 +94,7 @@ export default function VendorCategoriesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -115,14 +115,14 @@ export default function VendorCategoriesPage() {
       </div>
 
       {/* Selected count */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center justify-between">
-        <span className="text-sm font-medium text-emerald-800">
+      <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-center justify-between">
+        <span className="text-sm font-medium text-primary-800">
           {selectedIds.size} {selectedIds.size === 1 ? "category" : "categories"} selected
         </span>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-5 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+          className="px-5 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
         >
           {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
           {saving ? "Saving..." : "Save Categories"}
@@ -140,12 +140,12 @@ export default function VendorCategoriesPage() {
             <div
               key={cat.id}
               className={`bg-white rounded-xl border shadow-sm overflow-hidden transition-all ${
-                isSelected ? "border-emerald-300" : "border-gray-200"
+                isSelected ? "border-primary-300" : "border-gray-200"
               }`}
             >
               <label
                 className={`flex items-center justify-between px-5 py-4 cursor-pointer transition-colors ${
-                  isSelected ? "bg-emerald-50" : "hover:bg-gray-50"
+                  isSelected ? "bg-primary-50" : "hover:bg-gray-50"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -153,10 +153,10 @@ export default function VendorCategoriesPage() {
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleCategory(cat.id)}
-                    className="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                    className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                   />
                   <div>
-                    <span className={`text-sm font-semibold ${isSelected ? "text-emerald-800" : "text-gray-700"}`}>
+                    <span className={`text-sm font-semibold ${isSelected ? "text-primary-800" : "text-gray-700"}`}>
                       {cat.name}
                     </span>
                     {hasChildren && (
@@ -172,8 +172,8 @@ export default function VendorCategoriesPage() {
                     onClick={(e) => { e.preventDefault(); setPrimaryId(cat.id); }}
                     className={`px-2.5 py-1 text-xs rounded-full flex-shrink-0 ${
                       isPrimary
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-100 text-gray-500 hover:bg-emerald-100 hover:text-emerald-700"
+                        ? "bg-primary-600 text-white"
+                        : "bg-gray-100 text-gray-500 hover:bg-primary-100 hover:text-primary-700"
                     }`}
                   >
                     {isPrimary ? "Primary" : "Set primary"}
@@ -193,7 +193,7 @@ export default function VendorCategoriesPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
         >
           {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
           {saving ? "Saving..." : "Save Categories"}

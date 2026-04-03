@@ -188,7 +188,7 @@ export default function OtpLogsPage() {
                     <p className="text-sm text-gray-500">+91 {otp.phone}{otp.user_email ? ` · ${otp.user_email}` : ""}</p>
                     {otp.user_role && (
                       <span className={`inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        otp.user_role === "vendor" || otp.user_role === "business_owner" ? "bg-emerald-100 text-emerald-700" :
+                        otp.user_role === "vendor" || otp.user_role === "business_owner" ? "bg-primary-100 text-primary-700" :
                         otp.user_role === "admin" || otp.user_role === "super_admin" ? "bg-red-100 text-red-700" :
                         "bg-blue-100 text-blue-700"
                       }`}>{otp.user_role}</span>

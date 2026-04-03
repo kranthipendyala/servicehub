@@ -89,7 +89,7 @@ export default function VendorDashboardPage() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-gray-400">Loading your dashboard...</p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export default function VendorDashboardPage() {
                 { num: "4", text: "Start receiving bookings!", done: false },
               ].map((step) => (
                 <div key={step.num} className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${step.done ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-400"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${step.done ? "bg-primary-100 text-primary-700" : "bg-gray-100 text-gray-400"}`}>
                     {step.done ? (
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                     ) : step.num}
@@ -143,9 +143,9 @@ export default function VendorDashboardPage() {
 
           {/* Quick actions */}
           <div className="space-y-3">
-            <Link href="/vendor/services" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
-              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+            <Link href="/vendor/services" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary-300 hover:shadow-sm transition-all">
+              <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
               </div>
               <div className="flex-1">
                 <p className="text-sm font-semibold text-gray-900">Add Services</p>
@@ -153,7 +153,7 @@ export default function VendorDashboardPage() {
               </div>
               <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
             </Link>
-            <Link href="/vendor/documents" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
+            <Link href="/vendor/documents" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary-300 hover:shadow-sm transition-all">
               <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
                 <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
               </div>
@@ -163,7 +163,7 @@ export default function VendorDashboardPage() {
               </div>
               <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
             </Link>
-            <Link href="/vendor/bank-details" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all">
+            <Link href="/vendor/bank-details" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 hover:border-primary-300 hover:shadow-sm transition-all">
               <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
                 <svg className="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
               </div>
@@ -204,9 +204,9 @@ export default function VendorDashboardPage() {
       label: "Today's Jobs",
       value: stats?.today ?? 0,
       icon: "M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75",
-      gradient: "from-emerald-500 to-emerald-600",
-      shadowColor: "shadow-emerald-500/20",
-      lightBg: "bg-emerald-500/10",
+      gradient: "from-primary-500 to-primary-600",
+      shadowColor: "shadow-primary-500/20",
+      lightBg: "bg-primary-500/10",
     },
     {
       label: "Total Earnings",
@@ -224,9 +224,9 @@ export default function VendorDashboardPage() {
       desc: "Review pending requests",
       href: "/vendor/bookings?status=pending",
       icon: "M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-      color: "text-emerald-600",
-      bg: "bg-emerald-50",
-      hoverBg: "hover:bg-emerald-100",
+      color: "text-primary-600",
+      bg: "bg-primary-50",
+      hoverBg: "hover:bg-primary-100",
     },
     {
       label: "Add Service",
@@ -275,13 +275,13 @@ export default function VendorDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-emerald-600 via-emerald-600 to-teal-600 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-primary-600 via-primary-600 to-primary-600 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-1/2 w-48 h-48 bg-white/5 rounded-full translate-y-1/2" />
         <div className="relative z-10">
-          <p className="text-emerald-100 text-sm font-medium mb-1">{getGreeting()}!</p>
+          <p className="text-primary-100 text-sm font-medium mb-1">{getGreeting()}!</p>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">Here&apos;s your business overview</h1>
-          <p className="text-emerald-100 text-sm">
+          <p className="text-primary-100 text-sm">
             {stats?.pending ? `You have ${stats.pending} pending booking${stats.pending > 1 ? "s" : ""} to review` : "All caught up! No pending bookings right now."}
           </p>
         </div>
@@ -362,7 +362,7 @@ export default function VendorDashboardPage() {
             </div>
             <Link
               href="/vendor/bookings?status=pending"
-              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+              className="text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
               View all
             </Link>
@@ -417,7 +417,7 @@ export default function VendorDashboardPage() {
                     <button
                       onClick={() => handleAccept(booking.id)}
                       disabled={actionLoading === booking.id}
-                      className="px-3.5 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 shadow-sm"
+                      className="px-3.5 py-1.5 text-xs font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 shadow-sm"
                     >
                       Accept
                     </button>
@@ -441,7 +441,7 @@ export default function VendorDashboardPage() {
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-gray-900">Earnings Progress</h3>
-              <Link href="/vendor/earnings" className="text-xs text-emerald-600 hover:text-emerald-700 font-medium">
+              <Link href="/vendor/earnings" className="text-xs text-primary-600 hover:text-primary-700 font-medium">
                 Details
               </Link>
             </div>
@@ -454,7 +454,7 @@ export default function VendorDashboardPage() {
             <div className="relative">
               <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-1000 ease-out"
+                  className="h-full bg-gradient-to-r from-primary-500 to-primary-400 rounded-full transition-all duration-1000 ease-out"
                   style={{ width: `${earningsPercent}%` }}
                 />
               </div>
@@ -491,8 +491,8 @@ export default function VendorDashboardPage() {
                 href="/vendor/services"
                 className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
               >
-                <div className="w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-                  <svg className="w-4.5 h-4.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <div className="w-9 h-9 bg-primary-50 rounded-lg flex items-center justify-center group-hover:bg-primary-100 transition-colors">
+                  <svg className="w-4.5 h-4.5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.384-3.08A.5.5 0 005.5 12.5v0a.5.5 0 00.536.49l6.293-.54m-.93 2.72l2.08 3.6a.5.5 0 00.836.06l3.327-4.272a.5.5 0 00-.188-.752l-5.126-2.636m-2.929 4l5.08-7.08a.5.5 0 01.768-.077l2.077 1.927a.5.5 0 01.03.745L13.42 15.17a.5.5 0 01-.698.063l-1.302-1.063z" />
                   </svg>
                 </div>

@@ -38,7 +38,7 @@ const PHASES = [
 ];
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string; badge: string; btn: string; light: string }> = {
-  emerald: { bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-700", badge: "bg-emerald-100 text-emerald-700", btn: "bg-emerald-600 hover:bg-emerald-700", light: "bg-emerald-500" },
+  emerald: { bg: "bg-primary-50", border: "border-primary-200", text: "text-primary-700", badge: "bg-primary-100 text-primary-700", btn: "bg-primary-600 hover:bg-primary-700", light: "bg-primary-500" },
   blue: { bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700", badge: "bg-blue-100 text-blue-700", btn: "bg-blue-600 hover:bg-blue-700", light: "bg-blue-500" },
   purple: { bg: "bg-purple-50", border: "border-purple-200", text: "text-purple-700", badge: "bg-purple-100 text-purple-700", btn: "bg-purple-600 hover:bg-purple-700", light: "bg-purple-500" },
   amber: { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-700", badge: "bg-amber-100 text-amber-700", btn: "bg-amber-600 hover:bg-amber-700", light: "bg-amber-500" },

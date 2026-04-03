@@ -16,7 +16,7 @@ import FormField from "@/components/admin/FormField";
 const ROLE_COLORS: Record<string, string> = {
   super_admin: "bg-red-100 text-red-700",
   admin: "bg-purple-100 text-purple-700",
-  vendor: "bg-emerald-100 text-emerald-700",
+  vendor: "bg-primary-100 text-primary-700",
   business_owner: "bg-blue-100 text-blue-700",
   user: "bg-gray-100 text-gray-600",
 };

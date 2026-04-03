@@ -56,78 +56,98 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
 
   return (
     <>
-      {/* ── SERVICE CATEGORIES ─────────────────────────────── */}
+      {/* ── SERVICE CATEGORIES — White bg, Advia card-hover pattern ── */}
       {parentCategories.length > 0 && (
-        <section className="py-10 md:py-16 bg-white relative overflow-hidden">
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-teal-50/40 rounded-full blur-[80px]" />
-          <div className="container mx-auto px-4 relative">
-            <div className="flex items-end justify-between mb-6 md:mb-8">
+        <section className="bg-white section-padding">
+          <div className="container mx-auto px-4">
+            {/* Section header */}
+            <div className="flex items-end justify-between mb-8 md:mb-10">
               <div>
-                <h2 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">
-                  {geoScope === "telangana" ? "Services in Telangana & AP" : "Browse services"}
+                <span className="section-label-badge inline-block mb-3 bg-accent-200 text-primary-800">
+                  Our Services
+                </span>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-medium text-primary-700 leading-tight">
+                  {geoScope === "telangana" ? (
+                    <>Services in <span className="heading-highlight">Telangana &amp; AP</span></>
+                  ) : (
+                    <>Browse our <span className="heading-highlight">services</span></>
+                  )}
                 </h2>
-                <p className="text-gray-400 mt-1">Book verified professionals for any home service</p>
+                <p className="text-primary-600/60 mt-2">Book verified professionals for any home service</p>
               </div>
-              <Link href="/search" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-gray-900 hover:text-teal-700 transition-colors group">
+              <Link href="/search" className="hidden sm:flex items-center gap-1.5 btn-primary text-sm">
                 All services
-                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 lg:gap-4">
-              {parentCategories.slice(0, 15).map((cat, idx) => {
+
+            {/* Service cards grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-5">
+              {parentCategories.slice(0, 15).map((cat) => {
                 const count = Number(cat.business_count) || 0;
                 return (
                   <Link
                     key={cat.id}
                     href={`/services/${cat.slug}`}
-                    className="group relative flex items-center gap-3.5 p-4 lg:p-5 rounded-2xl bg-white/80 backdrop-blur-xl border border-gray-100/80 shadow-glass hover:shadow-glass-lg hover:border-teal-200/60 transition-all duration-500 hover:-translate-y-1 overflow-hidden animate-fade-in"
-                    style={{ animationDelay: `${idx * 50}ms`, animationFillMode: "both" }}
+                    className="card-interactive group p-5 lg:p-6"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-50/0 to-emerald-50/0 group-hover:from-teal-50/40 group-hover:to-emerald-50/20 transition-all duration-500 rounded-2xl" />
-                    <div className="relative w-11 h-11 rounded-xl bg-gray-50 group-hover:bg-teal-50 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110">
-                      <CategoryIcon icon={cat.icon} className="w-5 h-5 text-gray-500 group-hover:text-teal-600 transition-colors duration-300" />
+                    {/* Icon container */}
+                    <div className="w-14 h-14 rounded-card flex items-center justify-center mb-4 bg-accent-200">
+                      <CategoryIcon icon={cat.icon} className="w-6 h-6 text-primary-700" />
                     </div>
-                    <div className="relative min-w-0">
-                      <p className="text-sm font-bold text-gray-900 group-hover:text-teal-700 truncate transition-colors duration-300">{cat.name}</p>
-                      {count > 0 ? (
-                        <p className="text-[11px] text-teal-500 font-medium">{count} providers</p>
-                      ) : (
-                        <p className="text-[11px] text-gray-400">Browse</p>
-                      )}
-                    </div>
+                    <h3 className="text-sm font-heading font-medium text-primary-700 group-hover:text-primary-600 transition-colors duration-200 ease-advia">
+                      {cat.name}
+                    </h3>
+                    {count > 0 ? (
+                      <p className="text-xs text-primary-600/50 mt-1">{count} providers</p>
+                    ) : (
+                      <p className="text-xs text-primary-600/40 mt-1">Browse</p>
+                    )}
                   </Link>
                 );
               })}
+            </div>
+
+            {/* Mobile view all */}
+            <div className="flex sm:hidden justify-center mt-8">
+              <Link href="/search" className="btn-primary text-sm">
+                View all services
+              </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* ── FEATURED PROVIDERS ─────────────────────────────── */}
+      {/* ── FEATURED PROVIDERS — White bg, Advia card grid ─────── */}
       {featured.length > 0 && (
-        <section className="py-10 md:py-16 bg-[#fafafa]">
+        <section className="bg-white section-padding border-t border-surface-200">
           <div className="container mx-auto px-4">
-            <div className="flex items-end justify-between mb-6 md:mb-8">
+            <div className="flex items-end justify-between mb-8 md:mb-10">
               <div>
-                <h2 className="text-2xl md:text-3xl font-black text-gray-900">Featured providers</h2>
-                <p className="text-sm text-gray-400 mt-1">Verified professionals trusted by customers</p>
+                <span className="section-label-badge inline-block mb-3 bg-accent-200 text-primary-800">
+                  Top Rated
+                </span>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-medium text-primary-700">
+                  Featured <span className="heading-highlight">providers</span>
+                </h2>
+                <p className="text-primary-600/60 mt-2">Verified professionals trusted by customers</p>
               </div>
-              <Link href="/search" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors group">
+              <Link href="/search" className="hidden sm:flex items-center gap-1.5 text-sm font-heading font-medium text-primary-600 hover:text-primary-800 transition-colors duration-200 ease-advia group">
                 View all
-                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200 ease-advia" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
               {featured.slice(0, 8).map((biz) => (
-                <div key={biz.id} className="bg-white rounded-2xl border border-gray-200 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.2)] transition-all duration-500 hover:-translate-y-1.5 overflow-hidden ring-1 ring-gray-100">
+                <div key={biz.id} className="card-hover overflow-hidden">
                   <BusinessCard business={biz} layout="grid" />
                 </div>
               ))}
             </div>
 
-            <div className="flex sm:hidden justify-center mt-6">
-              <Link href="/search" className="px-6 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-all">
+            <div className="flex sm:hidden justify-center mt-8">
+              <Link href="/search" className="btn-secondary text-sm">
                 View all providers
               </Link>
             </div>
@@ -135,34 +155,40 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
         </section>
       )}
 
-      {/* ── CITIES ─────────────────────────────────────────── */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-50/30 rounded-full blur-[80px]" />
-        <div className="container mx-auto px-4 relative">
-          <div className="mb-10">
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">
-              {geoScope === "telangana" ? "Cities we serve" : "Available cities"}
+      {/* ── CITIES — Cream bg, Advia style ─────────────────────── */}
+      <section className="bg-accent-200 section-padding">
+        <div className="container mx-auto px-4">
+          <div className="mb-8 md:mb-10">
+            <span className="section-label-badge inline-block mb-3 bg-white text-primary-800">
+              Locations
+            </span>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-medium text-primary-700 leading-tight">
+              {geoScope === "telangana" ? (
+                <>Cities we <span className="heading-highlight">serve</span></>
+              ) : (
+                <>Available <span className="heading-highlight">cities</span></>
+              )}
             </h2>
-            <p className="text-gray-400 mt-1">Find trusted professionals near you</p>
+            <p className="text-primary-600/60 mt-2">Find trusted professionals near you</p>
           </div>
+
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            {cities.filter((c) => Number(c.business_count) > 0 || cities.indexOf(c) < 12).slice(0, 16).map((city, idx) => {
+            {cities.filter((c) => Number(c.business_count) > 0 || cities.indexOf(c) < 12).slice(0, 16).map((city) => {
               const count = Number(city.business_count) || 0;
               return (
                 <Link
                   key={city.id}
                   href={`/${city.slug}`}
-                  className="group text-center p-4 rounded-2xl hover:bg-white hover:shadow-glass transition-all duration-500 animate-fade-in"
-                  style={{ animationDelay: `${idx * 40}ms`, animationFillMode: "both" }}
+                  className="group text-center p-4 rounded-card bg-white hover:shadow-card-hover transition-all duration-200 ease-advia hover:-translate-y-1"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-teal-50 group-hover:to-emerald-50 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-md transition-all duration-500 border border-gray-100 group-hover:border-teal-200">
-                    <span className="text-lg font-black text-gray-400 group-hover:text-teal-600 transition-colors duration-300">{city.name.charAt(0)}</span>
+                  <div className="w-12 h-12 rounded-card bg-accent-200 group-hover:bg-primary-50 flex items-center justify-center mx-auto mb-3 transition-colors duration-200 ease-advia">
+                    <span className="text-lg font-heading font-medium text-primary-600 group-hover:text-primary-700 transition-colors duration-200">{city.name.charAt(0)}</span>
                   </div>
-                  <p className="text-xs font-bold text-gray-800 group-hover:text-teal-700 transition-colors duration-300">{city.name}</p>
+                  <p className="text-xs font-heading font-medium text-primary-700 group-hover:text-primary-600 transition-colors duration-200">{city.name}</p>
                   {count > 0 ? (
-                    <p className="text-[10px] text-teal-500 font-semibold mt-1">{count}+ pros</p>
+                    <p className="text-[10px] text-primary-600/60 font-medium mt-1">{count}+ pros</p>
                   ) : (
-                    <p className="text-[10px] text-gray-400 mt-1">Coming soon</p>
+                    <p className="text-[10px] text-primary-600/40 mt-1">Coming soon</p>
                   )}
                 </Link>
               );

@@ -83,7 +83,7 @@ export default function VendorChatPage() {
       <div className="flex-1 overflow-y-auto bg-gray-50 border-x border-gray-200 px-4 py-4 space-y-3">
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : error && messages.length === 0 ? (
           <p className="text-center text-sm text-red-500">{error}</p>
@@ -103,20 +103,20 @@ export default function VendorChatPage() {
                 <div
                   className={`max-w-[75%] rounded-xl px-4 py-2.5 ${
                     isVendor
-                      ? "bg-emerald-600 text-white"
+                      ? "bg-primary-600 text-white"
                       : "bg-white border border-gray-200 text-gray-900"
                   }`}
                 >
-                  <p className={`text-xs font-medium mb-1 ${isVendor ? "text-emerald-100" : "text-gray-500"}`}>
+                  <p className={`text-xs font-medium mb-1 ${isVendor ? "text-primary-100" : "text-gray-500"}`}>
                     {msg.sender_name}
                   </p>
                   <p className="text-sm">{msg.message}</p>
                   <div className={`flex items-center gap-1 mt-1 ${isVendor ? "justify-end" : ""}`}>
-                    <span className={`text-[10px] ${isVendor ? "text-emerald-200" : "text-gray-400"}`}>
+                    <span className={`text-[10px] ${isVendor ? "text-primary-200" : "text-gray-400"}`}>
                       {msg.created_at}
                     </span>
                     {isVendor && msg.is_read && (
-                      <svg className="w-3 h-3 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-3 h-3 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                     )}
@@ -139,12 +139,12 @@ export default function VendorChatPage() {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
         />
         <button
           type="submit"
           disabled={sending || !newMessage.trim()}
-          className="px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50"
         >
           {sending ? "..." : "Send"}
         </button>

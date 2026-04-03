@@ -96,35 +96,43 @@ export default function CustomerChatPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] max-w-3xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-white border border-gray-200 rounded-t-xl">
+      <div className="flex items-center gap-3 px-4 py-3 bg-white border border-surface-200 rounded-t-card">
         <Link
           href={`/my-bookings/${bookingId}`}
-          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-600"
+          className="p-2 rounded-card hover:bg-surface-50 text-surface-500 hover:text-surface-700 transition-colors duration-200 ease-advia"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </Link>
-        <div>
-          <p className="text-sm font-semibold text-gray-900">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-heading font-bold text-surface-900">
             Booking #{bookingId}
           </p>
-          <p className="text-xs text-gray-500">Chat with vendor</p>
+          <p className="text-xs text-surface-400">Chat with vendor</p>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 bg-primary-600 rounded-full animate-pulse" />
+          <span className="text-[11px] text-surface-400 font-medium">Live</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 border-x border-gray-200 px-4 py-4 space-y-3">
+      <div className="flex-1 overflow-y-auto bg-white border-x border-surface-200 px-4 py-4 space-y-3">
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+            <div className="animate-spin h-6 w-6 border-[2px] border-primary-600 border-t-transparent rounded-full" />
           </div>
         ) : error && messages.length === 0 ? (
           <p className="text-center text-sm text-red-500">{error}</p>
         ) : messages.length === 0 ? (
-          <p className="text-center text-sm text-gray-400 py-8">
-            No messages yet. Start the conversation!
-          </p>
+          <div className="text-center py-12">
+            <div className="w-14 h-14 mx-auto mb-3 bg-accent-200 rounded-card flex items-center justify-center">
+              <svg className="w-7 h-7 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+            </div>
+            <p className="text-sm text-surface-500 font-medium">No messages yet</p>
+            <p className="text-xs text-surface-400 mt-1">Start the conversation!</p>
+          </div>
         ) : (
           messages.map((msg) => {
             const isCustomer = msg.sender_role === "customer";
@@ -134,22 +142,22 @@ export default function CustomerChatPage() {
                 className={`flex ${isCustomer ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[75%] rounded-xl px-4 py-2.5 ${
+                  className={`max-w-[75%] rounded-card px-4 py-3 ${
                     isCustomer
-                      ? "bg-emerald-600 text-white"
-                      : "bg-white border border-gray-200 text-gray-900"
+                      ? "bg-primary-600 text-white"
+                      : "bg-white border border-surface-200 text-surface-900"
                   }`}
                 >
-                  <p className={`text-xs font-medium mb-1 ${isCustomer ? "text-emerald-100" : "text-gray-500"}`}>
+                  <p className={`text-[11px] font-semibold mb-1 ${isCustomer ? "text-primary-100" : "text-surface-400"}`}>
                     {msg.sender_name}
                   </p>
-                  <p className="text-sm">{msg.message}</p>
-                  <div className={`flex items-center gap-1 mt-1 ${isCustomer ? "justify-end" : ""}`}>
-                    <span className={`text-[10px] ${isCustomer ? "text-emerald-200" : "text-gray-400"}`}>
+                  <p className="text-sm leading-relaxed">{msg.message}</p>
+                  <div className={`flex items-center gap-1.5 mt-1.5 ${isCustomer ? "justify-end" : ""}`}>
+                    <span className={`text-[10px] ${isCustomer ? "text-primary-200" : "text-surface-400"}`}>
                       {msg.created_at}
                     </span>
                     {isCustomer && msg.is_read && (
-                      <svg className="w-3 h-3 text-emerald-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-3 h-3 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                     )}
@@ -165,21 +173,25 @@ export default function CustomerChatPage() {
       {/* Input */}
       <form
         onSubmit={handleSend}
-        className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-b-xl"
+        className="flex items-center gap-2 px-4 py-3 bg-white border border-surface-200 rounded-b-card"
       >
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+          className="flex-1 px-4 py-2.5 text-sm rounded-card border border-surface-200 focus:border-primary-400 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200 ease-advia"
         />
         <button
           type="submit"
           disabled={sending || !newMessage.trim()}
-          className="px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50"
+          className="btn-primary !px-5 !py-2.5 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {sending ? "..." : "Send"}
+          {sending ? (
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+          )}
         </button>
       </form>
     </div>

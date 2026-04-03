@@ -129,12 +129,12 @@ export default async function LocalityPage({
       </div>
 
       {/* Header */}
-      <section className="bg-gradient-to-r from-primary-600 to-primary-500 text-white py-8 md:py-10">
+      <section className="bg-primary-800 text-white py-8 md:py-10">
         <div className="container mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-heading font-bold mb-2">
+          <h1 className="text-2xl md:text-3xl font-heading font-medium mb-2">
             {categoryName} in {localityName}, {cityName}
           </h1>
-          <p className="text-primary-100">
+          <p className="text-white/80">
             {totalItems > 0
               ? `${totalItems} ${categoryName.toLowerCase()} service providers found in ${localityName}`
               : `Browse ${categoryName.toLowerCase()} in ${localityName}, ${cityName}`}
@@ -170,21 +170,21 @@ export default async function LocalityPage({
       </section>
 
       {/* Back to city category */}
-      <section className="py-8 bg-surface-50 border-t border-surface-200">
+      <section className="py-8 bg-accent-200 border-t border-accent-300/30">
         <div className="container mx-auto px-4">
-          <h2 className="text-lg font-heading font-bold text-gray-900 mb-3">
+          <h2 className="text-lg font-heading font-medium text-primary-700 mb-3">
             More {categoryName} near {localityName}
           </h2>
           <div className="flex flex-wrap gap-2">
             <Link
               href={`/${citySlug}/${categorySlug}`}
-              className="tag"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-primary-400 hover:text-primary-600 rounded-btn transition-all duration-200 ease-advia"
             >
               All {categoryName} in {cityName}
             </Link>
             <Link
               href={`/${citySlug}`}
-              className="tag"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:border-primary-400 hover:text-primary-600 rounded-btn transition-all duration-200 ease-advia"
             >
               All Services in {cityName}
             </Link>

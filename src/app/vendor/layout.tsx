@@ -57,7 +57,7 @@ function VendorSidebar() {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-gradient-to-b from-[#0d9488] to-[#0f766e] text-white transition-all duration-300 ${
+      className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-primary-800 text-white transition-all duration-300 ${
         collapsed ? "w-[72px]" : "w-64"
       }`}
     >
@@ -65,18 +65,18 @@ function VendorSidebar() {
       <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
         {!collapsed && (
           <Link href="/vendor/dashboard" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-600/20">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-primary-600/20">
               V
             </div>
             <div>
               <span className="font-bold text-base tracking-tight">VendorHub</span>
-              <span className="block text-[10px] text-emerald-300/80 -mt-0.5">Home Services</span>
+              <span className="block text-[10px] text-primary-300/80 -mt-0.5">Home Services</span>
             </div>
           </Link>
         )}
         {collapsed && (
           <div className="mx-auto">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-sm">
               V
             </div>
           </div>
@@ -104,18 +104,18 @@ function VendorSidebar() {
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 isActive
                   ? "bg-white/15 text-white shadow-sm backdrop-blur-sm"
-                  : "text-blue-100/70 hover:bg-white/10 hover:text-white"
+                  : "text-accent-200/70 hover:bg-white/10 hover:text-white"
               } ${collapsed ? "justify-center px-2" : ""}`}
               title={collapsed ? item.label : undefined}
             >
-              <div className={`flex-shrink-0 ${isActive ? "text-emerald-400" : ""}`}>
+              <div className={`flex-shrink-0 ${isActive ? "text-primary-400" : ""}`}>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
                 </svg>
               </div>
               {!collapsed && <span>{item.label}</span>}
               {isActive && !collapsed && (
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-400" />
               )}
             </Link>
           );
@@ -126,16 +126,16 @@ function VendorSidebar() {
       <div className="border-t border-white/10 p-3">
         {!collapsed ? (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-sm font-bold shadow-sm">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-sm font-bold shadow-sm">
               {user?.name?.charAt(0)?.toUpperCase() || "V"}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold truncate">{user?.name || "Vendor"}</p>
-              <p className="text-xs text-blue-200/60 truncate">{user?.email || ""}</p>
+              <p className="text-xs text-accent-300/60 truncate">{user?.email || ""}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 rounded-lg hover:bg-white/10 text-blue-200/60 hover:text-red-400 transition-colors"
+              className="p-2 rounded-lg hover:bg-white/10 text-accent-300/60 hover:text-red-400 transition-colors"
               title="Logout"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -146,7 +146,7 @@ function VendorSidebar() {
         ) : (
           <button
             onClick={handleLogout}
-            className="w-full flex justify-center p-2 rounded-lg hover:bg-white/10 text-blue-200/60 hover:text-red-400 transition-colors"
+            className="w-full flex justify-center p-2 rounded-lg hover:bg-white/10 text-accent-300/60 hover:text-red-400 transition-colors"
             title="Logout"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -244,7 +244,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
         {!ready && (
           <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="flex flex-col items-center gap-3">
-              <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
               <p className="text-sm text-gray-400">Loading vendor portal...</p>
             </div>
           </div>
@@ -258,7 +258,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
         {/* Checking approval */}
         {ready && !isStandalonePage && approved === null && (
           <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
@@ -303,7 +303,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                 </button>
                 {/* Mobile logo */}
                 <div className="md:hidden flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-xs">V</div>
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-xs">V</div>
                   <span className="font-bold text-sm text-gray-800">VendorHub</span>
                 </div>
                 {/* Desktop page title */}
@@ -314,7 +314,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
               <div className="flex items-center gap-2 md:gap-4">
                 <Link
                   href="/vendor/subscription"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary-700 bg-primary-50 border border-primary-200 rounded-full hover:bg-primary-100 transition-colors"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
@@ -322,7 +322,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                   Upgrade
                 </Link>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-bold">
                     {user?.name?.charAt(0)?.toUpperCase() || "V"}
                   </div>
                   <span className="text-sm font-medium text-gray-700 hidden sm:inline">{user?.name || "Vendor"}</span>

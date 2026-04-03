@@ -65,12 +65,12 @@ export default function VendorDocumentsPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none";
+  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none";
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -115,7 +115,7 @@ export default function VendorDocumentsPage() {
         <button
           type="submit"
           disabled={uploading}
-          className="w-full sm:w-auto px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full sm:w-auto px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {uploading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
           {uploading ? "Uploading..." : "Upload Document"}
@@ -142,7 +142,7 @@ export default function VendorDocumentsPage() {
                   <p className="text-sm font-medium text-gray-900">
                     {DOC_TYPES.find((d) => d.value === doc.document_type)?.label || doc.document_type}
                   </p>
-                  <a href={doc.document_url} target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-600 hover:underline truncate block">
+                  <a href={doc.document_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary-600 hover:underline truncate block">
                     {doc.document_url}
                   </a>
                   {doc.rejection_reason && (

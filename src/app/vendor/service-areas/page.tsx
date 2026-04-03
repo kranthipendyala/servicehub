@@ -86,7 +86,7 @@ export default function VendorServiceAreasPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -110,20 +110,20 @@ export default function VendorServiceAreasPage() {
       </div>
 
       {/* Selected count */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center justify-between">
+      <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
           </svg>
-          <span className="text-sm font-medium text-emerald-800">
+          <span className="text-sm font-medium text-primary-800">
             {selectedCities.size} {selectedCities.size === 1 ? "city" : "cities"} selected
           </span>
         </div>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-5 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+          className="px-5 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
         >
           {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
           {saving ? "Saving..." : "Save Areas"}
@@ -146,12 +146,12 @@ export default function VendorServiceAreasPage() {
                   onClick={() => toggleCity(city.id)}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
                     isSelected
-                      ? "bg-emerald-50 border-emerald-300 text-emerald-700"
+                      ? "bg-primary-50 border-primary-300 text-primary-700"
                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
                   }`}
                 >
                   <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
-                    isSelected ? "bg-emerald-600 border-emerald-600" : "border-gray-300"
+                    isSelected ? "bg-primary-600 border-primary-600" : "border-gray-300"
                   }`}>
                     {isSelected && (
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -175,7 +175,7 @@ export default function VendorServiceAreasPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
         >
           {saving && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
           {saving ? "Saving..." : "Save Service Areas"}

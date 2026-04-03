@@ -31,7 +31,7 @@ export default function VendorEarningsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -55,9 +55,9 @@ export default function VendorEarningsPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
-          <p className="text-sm text-emerald-700">Total Earnings</p>
-          <p className="text-2xl font-bold text-emerald-900 mt-1">
+        <div className="bg-primary-50 rounded-xl p-5 border border-primary-100">
+          <p className="text-sm text-primary-700">Total Earnings</p>
+          <p className="text-2xl font-bold text-primary-700 mt-1">
             Rs. {(stats?.total_earnings ?? 0).toLocaleString("en-IN")}
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function VendorEarningsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="text-sm text-gray-500">Net Payout (after commission)</p>
-            <p className="text-3xl font-bold text-emerald-600 mt-1">
+            <p className="text-3xl font-bold text-primary-600 mt-1">
               Rs. {netPayout.toLocaleString("en-IN")}
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function VendorEarningsPage() {
                         ({booking.commission_rate}%)
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right text-emerald-600 font-semibold">
+                    <td className="px-6 py-4 text-right text-primary-600 font-semibold">
                       Rs.{" "}
                       {booking.vendor_payout_amount?.toLocaleString("en-IN")}
                     </td>

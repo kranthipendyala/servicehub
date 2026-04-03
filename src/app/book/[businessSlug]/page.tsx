@@ -12,7 +12,6 @@ import {
   createBooking,
   createPaymentOrder,
 } from "@/lib/booking-api";
-// Business info comes from getBusinessServices response
 
 /* ------------------------------------------------------------------ */
 /*  Types local to booking flow                                         */
@@ -76,15 +75,7 @@ function getCalendarDates(): Date[] {
 }
 
 function formatDate(d: Date): string {
-  return d.toISOString().split("T")[0]; // YYYY-MM-DD
-}
-
-function formatDateDisplay(d: Date): string {
-  return d.toLocaleDateString("en-IN", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
+  return d.toISOString().split("T")[0];
 }
 
 /* ================================================================== */
@@ -96,7 +87,6 @@ export default function BookingPage() {
   const params = useParams();
   const businessSlug = params.businessSlug as string;
 
-  /* --- state --- */
   const [step, setStep] = useState(0);
   const [services, setServices] = useState<Service[]>([]);
   const [businessName, setBusinessName] = useState("");
@@ -118,14 +108,12 @@ export default function BookingPage() {
 
   const { user: authUser } = useAuth();
 
-  /* --- auth check --- */
   useEffect(() => {
     if (!authUser) {
       router.push(`/login?redirect=/book/${businessSlug}`);
     }
   }, [authUser, businessSlug, router]);
 
-  /* --- load services + business info --- */
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -138,7 +126,6 @@ export default function BookingPage() {
             setBusinessId(Number(svcRes.business.id));
           }
         }
-        // Fallback: fetch business info via proxy if not in services response
         if (!svcRes.business) {
           try {
             const bizResp = await fetch(`/proxy-api/businesses/${businessSlug}`);
@@ -158,7 +145,6 @@ export default function BookingPage() {
     if (businessSlug) load();
   }, [businessSlug]);
 
-  /* --- load addresses when reaching step 2 --- */
   useEffect(() => {
     if (step === 2) {
       getAddresses()
@@ -173,7 +159,6 @@ export default function BookingPage() {
     }
   }, [step, selectedAddressId]);
 
-  /* --- cart helpers --- */
   const addToCart = useCallback(
     (service: Service, variant?: ServiceVariant) => {
       setCart((prev) => {
@@ -224,26 +209,19 @@ export default function BookingPage() {
   const tax = Math.round(subtotal * taxRate * 100) / 100;
   const total = subtotal + tax + platformFeeAmount;
 
-  /* --- step validation --- */
   const canProceed = (): boolean => {
     switch (step) {
-      case 0:
-        return cart.length > 0;
-      case 1:
-        return !!selectedDate && !!selectedTime;
-      case 2:
-        return !!selectedAddressId;
-      case 3:
-        return true;
-      default:
-        return false;
+      case 0: return cart.length > 0;
+      case 1: return !!selectedDate && !!selectedTime;
+      case 2: return !!selectedAddressId;
+      case 3: return true;
+      default: return false;
     }
   };
 
   const { cod_enabled: codEnabled, online_payment_enabled: onlineEnabled } = usePlatform();
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "online">("cod");
 
-  // Auto-select payment method based on platform config
   useEffect(() => {
     if (codEnabled && !onlineEnabled) setPaymentMethod("cod");
     else if (onlineEnabled && !codEnabled) setPaymentMethod("online");
@@ -251,7 +229,6 @@ export default function BookingPage() {
     else setPaymentMethod("cod");
   }, [codEnabled, onlineEnabled]);
 
-  /* --- submit booking --- */
   const handleSubmit = async () => {
     setSubmitting(true);
     setError("");
@@ -280,13 +257,10 @@ export default function BookingPage() {
 
       const booking = bookingRes.data;
 
-      // Only try Razorpay if online payment
       if (paymentMethod === "online") {
         try {
           await createPaymentOrder(booking.id);
-        } catch {
-          // Payment order creation may fail — continue to confirmation
-        }
+        } catch {}
       }
 
       router.push(`/book/confirmation/${booking.id}`);
@@ -303,7 +277,6 @@ export default function BookingPage() {
     }
   };
 
-  /* --- save new address --- */
   const handleSaveAddress = async () => {
     try {
       const res = await createAddress({
@@ -338,48 +311,56 @@ export default function BookingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-10 w-10 border-4 border-[#0d9488] border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 rounded-full border-[3px] border-accent-200" />
+            <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-primary-600 animate-spin" />
+          </div>
+          <p className="text-sm text-primary-700/50 font-medium">Loading services...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-[#0d9488] text-white py-6">
-        <div className="max-w-3xl mx-auto px-4">
-          <h1 className="text-2xl font-bold">Book a Service</h1>
+    <div className="min-h-screen bg-white">
+      {/* ── Header ── */}
+      <div className="bg-accent-200">
+        <div className="max-w-3xl mx-auto px-4 py-6">
+          <p className="text-xs font-semibold text-primary-600 uppercase tracking-widest mb-1">Book a Service</p>
           {businessName && (
-            <p className="text-blue-200 mt-1">{businessName}</p>
+            <h1 className="text-xl font-heading font-medium text-primary-700 tracking-tight">{businessName}</h1>
           )}
         </div>
       </div>
 
-      {/* Stepper */}
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      {/* ── Stepper ── */}
+      <div className="max-w-3xl mx-auto px-4 pt-6">
         <div className="flex items-center mb-8">
           {STEPS.map((label, i) => (
             <div key={label} className="flex items-center flex-1">
               <div className="flex items-center">
                 <div
-                  className={`w-10 h-10 md:w-10 md:h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-200 ${
-                    i <= step
-                      ? "bg-[#f97316] text-white shadow-sm"
-                      : "bg-gray-100 text-gray-400"
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                    i < step
+                      ? "bg-primary-600 text-white"
+                      : i === step
+                        ? "bg-primary-600 text-white ring-4 ring-primary-600/20"
+                        : "bg-accent-200 text-primary-700/40"
                   }`}
                 >
                   {i < step ? (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
                     i + 1
                   )}
                 </div>
                 <span
-                  className={`ml-2 text-sm font-semibold hidden sm:inline ${
-                    i <= step ? "text-gray-900" : "text-gray-400"
+                  className={`ml-2 text-sm font-semibold hidden sm:inline transition-colors ${
+                    i <= step ? "text-primary-700" : "text-primary-700/40"
                   }`}
                 >
                   {label}
@@ -387,8 +368,8 @@ export default function BookingPage() {
               </div>
               {i < STEPS.length - 1 && (
                 <div
-                  className={`flex-1 h-1 mx-3 rounded-full transition-all duration-200 ${
-                    i < step ? "bg-[#f97316]" : "bg-gray-100"
+                  className={`flex-1 h-[2px] mx-3 rounded-full transition-all duration-300 ${
+                    i < step ? "bg-primary-600" : "bg-surface-200"
                   }`}
                 />
               )}
@@ -397,14 +378,18 @@ export default function BookingPage() {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-card text-sm font-medium flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+              <svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+            </div>
             {error}
           </div>
         )}
 
-        {/* ── Step 0: Select Services (grouped by category) ───── */}
+        {/* ── Step 0: Select Services ───────────────────── */}
         {step === 0 && (() => {
-          // Group services by category
           const grouped: Record<string, { name: string; services: typeof services }> = {};
           services.forEach((svc) => {
             const key = svc.category_name || "Other";
@@ -415,73 +400,64 @@ export default function BookingPage() {
 
           return (
           <div>
-            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
-              Select Services
-            </h2>
+            <h2 className="text-base font-heading font-medium text-primary-700 mb-4">Select Services</h2>
             {services.length === 0 ? (
-              <p className="text-gray-500">No services available.</p>
+              <p className="text-primary-700/40 text-sm">No services available.</p>
             ) : (
               <div className="space-y-6">
                 {groups.map((group) => (
                 <div key={group.name}>
                   {groups.length > 1 && (
-                    <h3 className="text-sm font-semibold text-[#0d9488] uppercase tracking-wide mb-3">{group.name}</h3>
+                    <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-3">{group.name}</h3>
                   )}
                   <div className="space-y-3">
                 {group.services.map((svc) => (
                   <div
                     key={svc.id}
-                    className="bg-white rounded-2xl shadow-sm p-5 hover:shadow-md border border-transparent hover:border-[#f97316] transition-all duration-200"
+                    className="bg-white rounded-card border border-surface-200 p-5 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
                   >
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
-                        <h3 className="font-bold text-gray-900 text-base">
+                        <h3 className="font-heading font-medium text-primary-700 text-[15px]">
                           {svc.name}
                         </h3>
                         {svc.short_description && (
-                          <p className="text-sm text-gray-600 mt-1">
-                            {svc.short_description}
-                          </p>
+                          <p className="text-sm text-primary-700/50 mt-1 leading-relaxed">{svc.short_description}</p>
                         )}
                         <div className="flex items-center gap-3 mt-2.5">
-                          <span className="text-[#f97316] font-bold text-lg">
-                            ₹{svc.discounted_price || svc.base_price}
+                          <span className="text-primary-600 font-semibold text-lg">
+                            &#8377;{svc.discounted_price || svc.base_price}
                           </span>
                           {svc.discounted_price && svc.discounted_price < svc.base_price && (
-                            <span className="text-gray-400 text-sm line-through">
-                              ₹{svc.base_price}
+                            <span className="text-primary-700/30 text-sm line-through">
+                              &#8377;{svc.base_price}
                             </span>
                           )}
                           {svc.duration_minutes > 0 && (
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-primary-700/50 bg-accent-100 px-2.5 py-1 rounded-full font-medium">
                               ~{svc.duration_minutes} min
                             </span>
                           )}
                         </div>
                       </div>
-                      {/* Add / quantity controls */}
                       {(() => {
                         const inCart = cart.find(
                           (c) => c.service.id === svc.id && !c.variant
                         );
                         return inCart ? (
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2.5">
                             <button
-                              onClick={() =>
-                                updateQuantity(svc.id, undefined, inCart.quantity - 1)
-                              }
-                              className="w-10 h-10 rounded-full border-2 border-[#f97316] flex items-center justify-center text-[#f97316] font-bold hover:bg-orange-50 transition-all duration-200"
+                              onClick={() => updateQuantity(svc.id, undefined, inCart.quantity - 1)}
+                              className="w-9 h-9 rounded-full border-2 border-primary-600 flex items-center justify-center text-primary-600 font-bold hover:bg-accent-100 transition-all"
                             >
                               -
                             </button>
-                            <span className="w-6 text-center font-bold text-gray-900">
+                            <span className="w-5 text-center font-bold text-primary-700">
                               {inCart.quantity}
                             </span>
                             <button
-                              onClick={() =>
-                                updateQuantity(svc.id, undefined, inCart.quantity + 1)
-                              }
-                              className="w-10 h-10 rounded-full border-2 border-[#f97316] flex items-center justify-center text-[#f97316] font-bold hover:bg-orange-50 transition-all duration-200"
+                              onClick={() => updateQuantity(svc.id, undefined, inCart.quantity + 1)}
+                              className="w-9 h-9 rounded-full border-2 border-primary-600 flex items-center justify-center text-primary-600 font-bold hover:bg-accent-100 transition-all"
                             >
                               +
                             </button>
@@ -489,7 +465,7 @@ export default function BookingPage() {
                         ) : (
                           <button
                             onClick={() => addToCart(svc)}
-                            className="px-6 py-3 bg-[#f97316] text-white rounded-2xl text-sm font-bold hover:bg-[#ea580c] transition-all duration-200 shadow-sm min-h-[44px]"
+                            className="btn-primary text-sm min-h-[40px]"
                           >
                             Add
                           </button>
@@ -497,55 +473,34 @@ export default function BookingPage() {
                       })()}
                     </div>
 
-                    {/* Variants */}
                     {svc.variants && svc.variants.length > 0 && (
-                      <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-2">
+                      <div className="mt-4 pl-4 border-l-2 border-accent-200 space-y-2.5">
                         {svc.variants
                           .filter((v) => v.is_active)
                           .map((v) => {
                             const vInCart = cart.find(
-                              (c) =>
-                                c.service.id === svc.id && c.variant?.id === v.id
+                              (c) => c.service.id === svc.id && c.variant?.id === v.id
                             );
                             return (
-                              <div
-                                key={v.id}
-                                className="flex items-center justify-between"
-                              >
+                              <div key={v.id} className="flex items-center justify-between">
                                 <div>
-                                  <span className="text-sm text-gray-700">
-                                    {v.name}
-                                  </span>
-                                  <span className="ml-2 text-sm text-[#f97316] font-medium">
-                                    ₹{v.price}
-                                  </span>
+                                  <span className="text-sm text-primary-700/70">{v.name}</span>
+                                  <span className="ml-2 text-sm text-primary-600 font-semibold">&#8377;{v.price}</span>
                                 </div>
                                 {vInCart ? (
                                   <div className="flex items-center gap-2">
                                     <button
-                                      onClick={() =>
-                                        updateQuantity(
-                                          svc.id,
-                                          v.id,
-                                          vInCart.quantity - 1
-                                        )
-                                      }
-                                      className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 text-xs hover:bg-gray-100"
+                                      onClick={() => updateQuantity(svc.id, v.id, vInCart.quantity - 1)}
+                                      className="w-7 h-7 rounded-full border-2 border-primary-600 flex items-center justify-center text-primary-600 text-xs hover:bg-accent-100 transition-all"
                                     >
                                       -
                                     </button>
-                                    <span className="w-5 text-center text-sm font-medium">
+                                    <span className="w-5 text-center text-sm font-bold text-primary-700">
                                       {vInCart.quantity}
                                     </span>
                                     <button
-                                      onClick={() =>
-                                        updateQuantity(
-                                          svc.id,
-                                          v.id,
-                                          vInCart.quantity + 1
-                                        )
-                                      }
-                                      className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 text-xs hover:bg-gray-100"
+                                      onClick={() => updateQuantity(svc.id, v.id, vInCart.quantity + 1)}
+                                      className="w-7 h-7 rounded-full border-2 border-primary-600 flex items-center justify-center text-primary-600 text-xs hover:bg-accent-100 transition-all"
                                     >
                                       +
                                     </button>
@@ -553,7 +508,7 @@ export default function BookingPage() {
                                 ) : (
                                   <button
                                     onClick={() => addToCart(svc, v)}
-                                    className="px-3 py-1 border border-[#f97316] text-[#f97316] rounded text-xs font-medium hover:bg-orange-50 transition-colors"
+                                    className="btn-primary text-xs px-3.5 py-1.5"
                                   >
                                     Add
                                   </button>
@@ -573,24 +528,31 @@ export default function BookingPage() {
 
             {/* Cart summary */}
             {cart.length > 0 && (
-              <div className="mt-6 bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">
-                  Selected ({cart.reduce((s, c) => s + c.quantity, 0)} items)
-                </h3>
-                <div className="text-sm text-gray-600 space-y-1">
+              <div className="mt-6 bg-accent-100 rounded-card p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-heading font-medium text-primary-700">
+                    Selected ({cart.reduce((s, c) => s + c.quantity, 0)} items)
+                  </h3>
+                  <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-sm text-primary-700/60 space-y-2">
                   {cart.map((c, idx) => (
                     <div key={idx} className="flex justify-between">
                       <span>
                         {c.service.name}
                         {c.variant ? ` - ${c.variant.name}` : ""} x{c.quantity}
                       </span>
-                      <span>₹{getItemPrice(c) * c.quantity}</span>
+                      <span className="font-semibold text-primary-700">&#8377;{getItemPrice(c) * c.quantity}</span>
                     </div>
                   ))}
                 </div>
-                <div className="border-t mt-2 pt-2 flex justify-between font-semibold">
-                  <span>Subtotal</span>
-                  <span>₹{subtotal}</span>
+                <div className="border-t border-primary-700/10 mt-3 pt-3 flex justify-between font-semibold">
+                  <span className="text-primary-700">Subtotal</span>
+                  <span className="text-primary-600 text-lg">&#8377;{subtotal}</span>
                 </div>
               </div>
             )}
@@ -598,38 +560,33 @@ export default function BookingPage() {
           );
         })()}
 
-        {/* ── Step 1: Date & Time ─────────────────────────────── */}
+        {/* ── Step 1: Date & Time ────────────────────────── */}
         {step === 1 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
-              Choose Date &amp; Time
-            </h2>
+            <h2 className="text-base font-heading font-medium text-primary-700 mb-5">Choose Date & Time</h2>
 
-            {/* Date picker */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">
-                Select Date
-              </h3>
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-3">Select Date</h3>
+              <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide">
                 {calendarDates.map((d) => {
                   const ds = formatDate(d);
                   return (
                     <button
                       key={ds}
                       onClick={() => setSelectedDate(ds)}
-                      className={`flex-shrink-0 w-20 h-24 md:w-20 md:h-24 rounded-2xl border-2 text-center text-sm transition-all duration-200 flex flex-col items-center justify-center ${
+                      className={`flex-shrink-0 w-[72px] h-[88px] rounded-card border text-center text-sm transition-all duration-200 flex flex-col items-center justify-center ${
                         selectedDate === ds
-                          ? "border-[#f97316] bg-orange-50 text-[#f97316] font-bold shadow-sm"
-                          : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                          ? "border-primary-600 bg-primary-600 text-white shadow-md"
+                          : "border-accent-200 hover:border-primary-600/30 text-primary-700 bg-white"
                       }`}
                     >
-                      <div className="text-xs opacity-70">
+                      <div className={`text-xs font-medium ${selectedDate === ds ? "text-white/70" : "text-primary-700/40"}`}>
                         {d.toLocaleDateString("en-IN", { weekday: "short" })}
                       </div>
-                      <div className="font-bold text-lg mt-0.5">
+                      <div className={`font-bold text-lg mt-0.5 ${selectedDate === ds ? "text-white" : "text-primary-700"}`}>
                         {d.getDate()}
                       </div>
-                      <div className="text-xs opacity-70">
+                      <div className={`text-xs font-medium ${selectedDate === ds ? "text-white/70" : "text-primary-700/40"}`}>
                         {d.toLocaleDateString("en-IN", { month: "short" })}
                       </div>
                     </button>
@@ -638,20 +595,17 @@ export default function BookingPage() {
               </div>
             </div>
 
-            {/* Time slots */}
             <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-2">
-                Select Time
-              </h3>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+              <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-3">Select Time</h3>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                 {timeSlots.map((slot) => (
                   <button
                     key={slot}
                     onClick={() => setSelectedTime(slot)}
-                    className={`py-3 rounded-2xl border-2 text-sm font-medium transition-all duration-200 min-h-[44px] ${
+                    className={`py-3 rounded-card border text-sm font-semibold transition-all duration-200 min-h-[44px] ${
                       selectedTime === slot
-                        ? "border-[#f97316] bg-orange-50 text-[#f97316] font-bold shadow-sm"
-                        : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                        ? "border-primary-600 bg-primary-600 text-white shadow-md"
+                        : "border-accent-200 hover:border-primary-600/30 text-primary-700/70 bg-white"
                     }`}
                   >
                     {slot}
@@ -662,50 +616,53 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* ── Step 2: Address ─────────────────────────────────── */}
+        {/* ── Step 2: Address ────────────────────────────── */}
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
-              Select Address
-            </h2>
+            <h2 className="text-base font-heading font-medium text-primary-700 mb-5">Select Address</h2>
 
             {addresses.length === 0 && !showNewAddress && (
-              <p className="text-gray-500 mb-4">
-                No saved addresses. Please add one.
-              </p>
+              <p className="text-primary-700/40 text-sm mb-4">No saved addresses. Please add one.</p>
             )}
 
             <div className="space-y-3">
               {addresses.map((addr) => (
                 <label
                   key={addr.id}
-                  className={`flex items-start gap-4 p-5 bg-white rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
+                  className={`flex items-start gap-4 p-5 bg-white rounded-card border cursor-pointer transition-all duration-200 ${
                     selectedAddressId === addr.id
-                      ? "border-[#f97316] bg-orange-50/50 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary-600 ring-2 ring-primary-600/20"
+                      : "border-surface-200 hover:border-primary-600/30"
                   }`}
                 >
+                  <div className={`mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                    selectedAddressId === addr.id ? "border-primary-600" : "border-surface-300"
+                  }`}>
+                    {selectedAddressId === addr.id && (
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary-600" />
+                    )}
+                  </div>
                   <input
                     type="radio"
                     name="address"
                     checked={selectedAddressId === addr.id}
                     onChange={() => setSelectedAddressId(addr.id)}
-                    className="mt-1 w-5 h-5 accent-[#f97316]"
+                    className="sr-only"
                   />
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-semibold text-primary-700 text-sm">
                       {addr.label}
                       {addr.is_default && (
-                        <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                        <span className="ml-2 text-[10px] font-bold text-primary-600 bg-accent-100 px-1.5 py-0.5 rounded uppercase tracking-wider">
                           Default
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mt-0.5">
+                    <p className="text-sm text-primary-700/60 mt-0.5">
                       {addr.address_line1}
                       {addr.address_line2 ? `, ${addr.address_line2}` : ""}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-primary-700/40">
                       {addr.city_name} - {addr.pin_code}
                     </p>
                   </div>
@@ -713,21 +670,16 @@ export default function BookingPage() {
               ))}
             </div>
 
-            {/* New address form */}
             {showNewAddress ? (
-              <div className="mt-4 bg-white rounded-2xl shadow-sm p-5 space-y-3">
-                <h3 className="font-medium text-gray-900">New Address</h3>
+              <div className="mt-4 bg-white rounded-card border border-surface-200 p-5 space-y-3.5">
+                <h3 className="font-heading font-medium text-primary-700 text-sm">New Address</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Label
-                    </label>
+                    <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Label</label>
                     <select
                       value={newAddress.label}
-                      onChange={(e) =>
-                        setNewAddress((p) => ({ ...p, label: e.target.value }))
-                      }
-                      className="w-full border rounded-lg px-3 py-2 text-sm"
+                      onChange={(e) => setNewAddress((p) => ({ ...p, label: e.target.value }))}
+                      className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all bg-white text-primary-700"
                     >
                       <option>Home</option>
                       <option>Office</option>
@@ -735,108 +687,72 @@ export default function BookingPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      Full Name
-                    </label>
+                    <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Full Name</label>
                     <input
                       type="text"
                       value={newAddress.full_name}
-                      onChange={(e) =>
-                        setNewAddress((p) => ({ ...p, full_name: e.target.value }))
-                      }
-                      className="w-full border rounded-lg px-3 py-2 text-sm"
+                      onChange={(e) => setNewAddress((p) => ({ ...p, full_name: e.target.value }))}
+                      className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Phone
-                  </label>
+                  <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Phone</label>
                   <input
                     type="tel"
                     value={newAddress.phone}
-                    onChange={(e) =>
-                      setNewAddress((p) => ({ ...p, phone: e.target.value }))
-                    }
-                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                    onChange={(e) => setNewAddress((p) => ({ ...p, phone: e.target.value }))}
+                    className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Address Line 1
-                  </label>
+                  <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Address Line 1</label>
                   <input
                     type="text"
                     value={newAddress.address_line1}
-                    onChange={(e) =>
-                      setNewAddress((p) => ({
-                        ...p,
-                        address_line1: e.target.value,
-                      }))
-                    }
-                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                    onChange={(e) => setNewAddress((p) => ({ ...p, address_line1: e.target.value }))}
+                    className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Address Line 2 (optional)
-                  </label>
+                  <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Address Line 2 (optional)</label>
                   <input
                     type="text"
                     value={newAddress.address_line2}
-                    onChange={(e) =>
-                      setNewAddress((p) => ({
-                        ...p,
-                        address_line2: e.target.value,
-                      }))
-                    }
-                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                    onChange={(e) => setNewAddress((p) => ({ ...p, address_line2: e.target.value }))}
+                    className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      City
-                    </label>
+                    <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">City</label>
                     <input
                       type="text"
                       value={newAddress.city_name}
-                      onChange={(e) =>
-                        setNewAddress((p) => ({
-                          ...p,
-                          city_name: e.target.value,
-                        }))
-                      }
-                      className="w-full border rounded-lg px-3 py-2 text-sm"
+                      onChange={(e) => setNewAddress((p) => ({ ...p, city_name: e.target.value }))}
+                      className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
-                      PIN Code
-                    </label>
+                    <label className="block text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">PIN Code</label>
                     <input
                       type="text"
                       value={newAddress.pin_code}
-                      onChange={(e) =>
-                        setNewAddress((p) => ({
-                          ...p,
-                          pin_code: e.target.value,
-                        }))
-                      }
-                      className="w-full border rounded-lg px-3 py-2 text-sm"
+                      onChange={(e) => setNewAddress((p) => ({ ...p, pin_code: e.target.value }))}
+                      className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                     />
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 pt-1">
                   <button
                     onClick={handleSaveAddress}
-                    className="px-4 py-2 bg-[#f97316] text-white rounded-lg text-sm font-medium hover:bg-[#ea580c]"
+                    className="btn-primary text-sm"
                   >
                     Save Address
                   </button>
                   <button
                     onClick={() => setShowNewAddress(false)}
-                    className="px-4 py-2 border rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+                    className="btn-secondary text-sm"
                   >
                     Cancel
                   </button>
@@ -845,38 +761,46 @@ export default function BookingPage() {
             ) : (
               <button
                 onClick={() => setShowNewAddress(true)}
-                className="mt-4 flex items-center gap-2 text-[#f97316] text-sm font-medium hover:underline"
+                className="mt-4 flex items-center gap-2 text-primary-600 text-sm font-semibold hover:text-primary-700 transition-colors group"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+                <span className="w-7 h-7 rounded-full bg-accent-100 flex items-center justify-center group-hover:bg-accent-200 transition-colors">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                </span>
                 Add New Address
               </button>
             )}
           </div>
         )}
 
-        {/* ── Step 3: Review & Confirm ────────────────────────── */}
+        {/* ── Step 3: Review & Confirm ───────────────────── */}
         {step === 3 && (
           <div>
-            <h2 className="text-lg font-semibold text-[#0d9488] mb-4">
-              Review &amp; Confirm
-            </h2>
+            <h2 className="text-base font-heading font-medium text-primary-700 mb-5">Review & Confirm</h2>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Services */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">Services</h3>
-                <div className="divide-y">
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest">Services</h3>
+                </div>
+                <div className="divide-y divide-surface-100">
                   {cart.map((c, idx) => (
-                    <div key={idx} className="py-2 flex justify-between text-sm">
-                      <span className="text-gray-700">
+                    <div key={idx} className="py-2.5 first:pt-0 last:pb-0 flex justify-between text-sm">
+                      <span className="text-primary-700/70">
                         {c.service.name}
                         {c.variant ? ` - ${c.variant.name}` : ""}{" "}
-                        <span className="text-gray-400">x{c.quantity}</span>
+                        <span className="text-primary-700/40">x{c.quantity}</span>
                       </span>
-                      <span className="font-medium">
-                        ₹{getItemPrice(c) * c.quantity}
+                      <span className="font-semibold text-primary-600">
+                        &#8377;{getItemPrice(c) * c.quantity}
                       </span>
                     </div>
                   ))}
@@ -884,116 +808,147 @@ export default function BookingPage() {
               </div>
 
               {/* Schedule */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">Schedule</h3>
-                <p className="text-sm text-gray-700">
-                  {new Date(selectedDate + "T00:00:00").toLocaleDateString(
-                    "en-IN",
-                    {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  )}{" "}
-                  at {selectedTime}
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest">Schedule</h3>
+                </div>
+                <p className="text-sm font-medium text-primary-700">
+                  {new Date(selectedDate + "T00:00:00").toLocaleDateString("en-IN", {
+                    weekday: "long", year: "numeric", month: "long", day: "numeric",
+                  })}{" "}
+                  at <span className="text-primary-600 font-semibold">{selectedTime}</span>
                 </p>
               </div>
 
               {/* Address */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">Address</h3>
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest">Address</h3>
+                </div>
                 {(() => {
-                  const addr = addresses.find(
-                    (a) => a.id === selectedAddressId
-                  );
+                  const addr = addresses.find((a) => a.id === selectedAddressId);
                   return addr ? (
-                    <div className="text-sm text-gray-700">
-                      <p className="font-medium">{addr.label}</p>
-                      <p>
+                    <div className="text-sm">
+                      <p className="font-semibold text-primary-700">{addr.label}</p>
+                      <p className="text-primary-700/60">
                         {addr.address_line1}
                         {addr.address_line2 ? `, ${addr.address_line2}` : ""}
                       </p>
-                      <p>
-                        {addr.city_name} - {addr.pin_code}
-                      </p>
+                      <p className="text-primary-700/40">{addr.city_name} - {addr.pin_code}</p>
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-500">-</p>
+                    <p className="text-sm text-primary-700/40">-</p>
                   );
                 })()}
               </div>
 
               {/* Notes */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">
-                  Notes (optional)
-                </h3>
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest">Notes (optional)</h3>
+                </div>
                 <textarea
                   value={customerNotes}
                   onChange={(e) => setCustomerNotes(e.target.value)}
                   rows={3}
                   placeholder="Any special instructions..."
-                  className="w-full border rounded-lg px-3 py-2 text-sm resize-none"
+                  className="w-full border border-surface-200 rounded-card px-3.5 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600 transition-all text-primary-700"
                 />
               </div>
 
               {/* Payment Method */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">Payment Method</h3>
-                <div className="space-y-2">
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest">Payment Method</h3>
+                </div>
+                <div className="space-y-2.5">
                   {codEnabled && (
-                    <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === "cod" ? "border-green-500 bg-green-50" : "border-gray-200 hover:border-gray-300"}`}>
-                      <input type="radio" name="payment" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} className="accent-green-600" />
+                    <label className={`flex items-center gap-3 p-4 rounded-card border cursor-pointer transition-all duration-200 ${
+                      paymentMethod === "cod"
+                        ? "border-primary-600 ring-2 ring-primary-600/20 bg-accent-50"
+                        : "border-surface-200 hover:border-primary-600/30 bg-white"
+                    }`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                        paymentMethod === "cod" ? "border-primary-600" : "border-surface-300"
+                      }`}>
+                        {paymentMethod === "cod" && <div className="w-2.5 h-2.5 rounded-full bg-primary-600" />}
+                      </div>
+                      <input type="radio" name="payment" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} className="sr-only" />
                       <div className="flex-1">
-                        <span className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                          <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75" /></svg>
+                        <span className="text-sm font-semibold text-primary-700 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75" /></svg>
                           Pay After Service
                         </span>
-                        <span className="text-xs text-gray-500 mt-0.5 block">Pay cash or UPI directly to the service provider after work is done</span>
+                        <span className="text-xs text-primary-700/40 mt-0.5 block">Pay cash or UPI directly to the provider</span>
                       </div>
-                      {paymentMethod === "cod" && <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">Selected</span>}
                     </label>
                   )}
                   {onlineEnabled && (
-                    <label className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === "online" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"}`}>
-                      <input type="radio" name="payment" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} className="accent-blue-600" />
+                    <label className={`flex items-center gap-3 p-4 rounded-card border cursor-pointer transition-all duration-200 ${
+                      paymentMethod === "online"
+                        ? "border-primary-600 ring-2 ring-primary-600/20 bg-accent-50"
+                        : "border-surface-200 hover:border-primary-600/30 bg-white"
+                    }`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                        paymentMethod === "online" ? "border-primary-600" : "border-surface-300"
+                      }`}>
+                        {paymentMethod === "online" && <div className="w-2.5 h-2.5 rounded-full bg-primary-600" />}
+                      </div>
+                      <input type="radio" name="payment" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} className="sr-only" />
                       <div className="flex-1">
-                        <span className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                          <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+                        <span className="text-sm font-semibold text-primary-700 flex items-center gap-2">
+                          <svg className="w-4 h-4 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
                           Pay Online Now
                         </span>
-                        <span className="text-xs text-gray-500 mt-0.5 block">UPI, Credit/Debit Card, Net Banking, Wallets</span>
+                        <span className="text-xs text-primary-700/40 mt-0.5 block">UPI, Card, Net Banking, Wallets</span>
                       </div>
-                      {paymentMethod === "online" && <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">Selected</span>}
                     </label>
                   )}
                 </div>
               </div>
 
               {/* Price breakdown */}
-              <div className="bg-white rounded-2xl shadow-sm p-5">
-                <h3 className="font-bold text-gray-900 mb-3">
-                  Price Summary
-                </h3>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between text-gray-600">
+              <div className="bg-white rounded-card border border-surface-200 p-5">
+                <h3 className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-3">Price Summary</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between text-primary-700/60">
                     <span>Subtotal</span>
-                    <span>₹{subtotal.toFixed(2)}</span>
+                    <span>&#8377;{subtotal.toFixed(2)}</span>
                   </div>
                   {platformFeeAmount > 0 && (
-                    <div className="flex justify-between text-gray-600">
+                    <div className="flex justify-between text-primary-700/60">
                       <span>Platform Fee</span>
-                      <span>₹{platformFeeAmount.toFixed(2)}</span>
+                      <span>&#8377;{platformFeeAmount.toFixed(2)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-gray-600">
+                  <div className="flex justify-between text-primary-700/60">
                     <span>Tax (18% GST)</span>
-                    <span>₹{tax.toFixed(2)}</span>
+                    <span>&#8377;{tax.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between font-bold text-gray-900 text-base border-t pt-2 mt-2">
-                    <span>Total</span>
-                    <span>₹{total.toFixed(2)}</span>
+                  <div className="flex justify-between border-t border-surface-200 pt-3 mt-3">
+                    <span className="text-xl font-heading font-medium text-primary-700">Total</span>
+                    <span className="text-xl font-heading font-medium text-primary-700">&#8377;{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -1001,12 +956,12 @@ export default function BookingPage() {
           </div>
         )}
 
-        {/* ── Navigation buttons ──────────────────────────────── */}
-        <div className="flex justify-between mt-8 gap-4">
+        {/* ── Navigation ─────────────────────────────────── */}
+        <div className="flex justify-between mt-8 pb-8 gap-4">
           {step > 0 ? (
             <button
               onClick={() => setStep((s) => s - 1)}
-              className="px-6 py-3 border-2 border-gray-300 rounded-2xl text-gray-700 font-semibold hover:bg-gray-50 transition-all duration-200 min-h-[48px]"
+              className="btn-secondary min-h-[48px]"
             >
               Back
             </button>
@@ -1018,7 +973,7 @@ export default function BookingPage() {
             <button
               onClick={() => setStep((s) => s + 1)}
               disabled={!canProceed()}
-              className="px-8 py-3 bg-[#f97316] text-white rounded-2xl font-bold hover:bg-[#ea580c] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-sm min-h-[48px]"
+              className="btn-primary min-h-[48px] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               Next
             </button>
@@ -1026,7 +981,7 @@ export default function BookingPage() {
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="px-8 py-3 bg-[#0d9488] text-white rounded-2xl font-bold hover:bg-[#0f766e] disabled:opacity-60 transition-all duration-200 shadow-sm min-h-[48px]"
+              className="btn-primary min-h-[48px] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               {submitting ? "Placing Order..." : paymentMethod === "cod" ? "Confirm Booking" : "Confirm & Pay"}
             </button>

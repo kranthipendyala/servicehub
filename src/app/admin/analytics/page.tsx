@@ -67,7 +67,7 @@ export default function AdminAnalyticsPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-emerald-50 rounded-xl p-5 border border-gray-100">
+        <div className="bg-primary-50 rounded-xl p-5 border border-gray-100">
           <p className="text-sm text-gray-500">Total Revenue</p>
           <p className="text-2xl font-bold text-gray-900">
             Rs. {(data.total_revenue || 0).toLocaleString("en-IN")}

@@ -17,7 +17,7 @@ const STATUS_BADGE: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
   confirmed: "bg-blue-100 text-blue-700",
   assigned: "bg-indigo-100 text-indigo-700",
-  in_progress: "bg-emerald-100 text-emerald-700",
+  in_progress: "bg-primary-100 text-primary-700",
   completed: "bg-green-100 text-green-700",
   cancelled: "bg-red-100 text-red-700",
   refunded: "bg-gray-100 text-gray-700",
@@ -86,7 +86,7 @@ export default function VendorBookingDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -97,7 +97,7 @@ export default function VendorBookingDetailPage() {
         <p className="text-gray-400 text-sm">Booking not found</p>
         <Link
           href="/vendor/bookings"
-          className="text-emerald-600 hover:text-emerald-700 text-sm font-medium mt-2 inline-block"
+          className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
         >
           Back to bookings
         </Link>
@@ -138,7 +138,7 @@ export default function VendorBookingDetailPage() {
               <button
                 onClick={() => handleAction("accept")}
                 disabled={actionLoading}
-                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50"
               >
                 Accept Booking
               </button>
@@ -244,7 +244,7 @@ export default function VendorBookingDetailPage() {
                   Rs. {booking.total_amount?.toLocaleString("en-IN")}
                 </span>
               </div>
-              <div className="flex justify-between text-sm text-emerald-600 font-medium">
+              <div className="flex justify-between text-sm text-primary-600 font-medium">
                 <span>Your Payout</span>
                 <span>
                   Rs. {booking.vendor_payout_amount?.toLocaleString("en-IN")}
@@ -266,7 +266,7 @@ export default function VendorBookingDetailPage() {
                 onChange={(e) => setVendorNotes(e.target.value)}
                 rows={3}
                 placeholder="Add notes about this booking..."
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all resize-none"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all resize-none"
               />
               {booking.customer_notes && (
                 <div className="mt-4 p-3 bg-amber-50 rounded-lg">

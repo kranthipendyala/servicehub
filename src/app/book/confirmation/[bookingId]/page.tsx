@@ -24,146 +24,169 @@ export default function BookingConfirmationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="animate-spin h-12 w-12 border-4 border-[#0d9488] border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="w-12 h-12 border-[3px] border-accent-200 rounded-full" />
+            <div className="absolute inset-0 w-12 h-12 border-[3px] border-primary-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <p className="text-sm text-primary-700/50 font-medium">Loading confirmation...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center px-4 py-12">
-      <div className="max-w-lg w-full">
-        {/* Celebration card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-          {/* Green gradient header */}
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-10 text-center relative overflow-hidden">
-            {/* Decorative circles */}
-            <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-24 h-24 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3" />
+    <div className="min-h-screen bg-white">
+      <div className="flex items-center justify-center min-h-screen px-4 py-12">
+        <div className="max-w-lg w-full">
+          {/* Main confirmation card */}
+          <div className="bg-white rounded-card border border-surface-200 overflow-hidden">
 
-            {/* Animated check */}
-            <div className="relative mx-auto w-20 h-20 bg-white rounded-full flex items-center justify-center mb-5 shadow-lg animate-[bounceIn_0.6s_ease-out]">
-              <svg className="w-10 h-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-              </svg>
+            {/* Success header */}
+            <div className="px-8 pt-10 pb-8 text-center">
+              {/* Check icon */}
+              <div className="relative mx-auto w-20 h-20 mb-6 animate-[bounceIn_0.6s_ease-out]">
+                <div className="w-20 h-20 bg-primary-600 text-white rounded-card flex items-center justify-center shadow-lg">
+                  <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                      className="animate-[drawCheck_0.5s_0.3s_ease-out_both]"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <h1 className="text-2xl font-heading font-medium text-primary-700 mb-2">Booking Confirmed!</h1>
+              <p className="text-primary-700/50 text-sm">Your service has been booked successfully. We&apos;ll notify you once the provider confirms.</p>
             </div>
 
-            <h1 className="text-3xl font-bold text-white mb-2">Booking Confirmed!</h1>
-            <p className="text-green-100 text-lg">Your service has been booked successfully</p>
-          </div>
-
-          {/* Booking details */}
-          <div className="px-8 py-8">
             {booking && (
-              <>
-                {/* Booking number highlight */}
-                <div className="text-center mb-6">
-                  <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Booking Number</p>
-                  <p className="text-2xl font-bold text-[#0d9488] tracking-wide">{booking.booking_number}</p>
+              <div className="px-8 pb-8 space-y-4">
+                {/* Booking number */}
+                <div className="text-center py-4 bg-accent-100 rounded-card">
+                  <p className="text-xs font-semibold text-primary-700/50 uppercase tracking-widest mb-1.5">Booking Number</p>
+                  <p className="text-2xl font-heading font-medium text-primary-600 tracking-wide">
+                    {booking.booking_number}
+                  </p>
                 </div>
 
-                {/* Info grid */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 text-center">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                {/* Info grid: Date + Time */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white rounded-card border border-surface-200 p-4 text-center">
+                    <div className="w-10 h-10 bg-accent-100 rounded-card flex items-center justify-center mx-auto mb-2.5">
+                      <svg className="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                       </svg>
                     </div>
-                    <p className="text-xs text-gray-500 mb-0.5">Date</p>
-                    <p className="text-sm font-semibold text-gray-800">
+                    <p className="text-[11px] font-semibold text-primary-700/40 uppercase tracking-wider mb-0.5">Date</p>
+                    <p className="text-sm font-semibold text-primary-700">
                       {new Date(booking.scheduled_date + "T00:00:00").toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" })}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4 text-center">
-                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                      <svg className="w-5 h-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <div className="bg-white rounded-card border border-surface-200 p-4 text-center">
+                    <div className="w-10 h-10 bg-accent-100 rounded-card flex items-center justify-center mx-auto mb-2.5">
+                      <svg className="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <p className="text-xs text-gray-500 mb-0.5">Time</p>
-                    <p className="text-sm font-semibold text-gray-800">{booking.scheduled_time}</p>
+                    <p className="text-[11px] font-semibold text-primary-700/40 uppercase tracking-wider mb-0.5">Time</p>
+                    <p className="text-sm font-semibold text-primary-700">{booking.scheduled_time}</p>
                   </div>
                 </div>
 
-                {/* Business */}
+                {/* Business info */}
                 {booking.business_name && (
-                  <div className="flex items-center gap-3 bg-gray-50 rounded-xl p-4 mb-4">
-                    <div className="w-12 h-12 bg-[#0d9488] rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  <div className="bg-white rounded-card border border-surface-200 p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 bg-primary-600 rounded-card flex items-center justify-center text-white font-heading font-medium text-lg flex-shrink-0">
                       {booking.business_name.charAt(0)}
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-400">Service Provider</p>
-                      <p className="font-semibold text-gray-900">{booking.business_name}</p>
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-semibold text-primary-700/40 uppercase tracking-wider">Service Provider</p>
+                      <p className="font-semibold text-primary-700 truncate">{booking.business_name}</p>
                     </div>
                   </div>
                 )}
 
-                {/* Services */}
+                {/* Services list */}
                 {booking.items && booking.items.length > 0 && (
-                  <div className="border rounded-xl p-4 mb-4">
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">Services Booked</p>
-                    <div className="space-y-2">
+                  <div className="bg-white rounded-card border border-surface-200 p-5">
+                    <p className="text-[11px] font-semibold text-primary-700/40 uppercase tracking-widest mb-4">Services Booked</p>
+                    <div className="space-y-3">
                       {booking.items.map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-sm">
-                          <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xs font-bold">
+                        <div key={idx} className="flex justify-between items-center">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="w-7 h-7 bg-accent-100 text-primary-600 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0">
                               {item.quantity}
                             </span>
-                            <span className="text-gray-700">
+                            <span className="text-sm text-primary-700/70 truncate">
                               {item.service_name}
-                              {item.variant_name ? <span className="text-gray-400"> ({item.variant_name})</span> : ""}
+                              {item.variant_name ? <span className="text-primary-700/40 ml-1">({item.variant_name})</span> : ""}
                             </span>
                           </div>
-                          <span className="font-semibold text-gray-900">&#8377;{item.total_price}</span>
+                          <span className="text-sm font-semibold text-primary-700 flex-shrink-0 ml-3">&#8377;{item.total_price}</span>
                         </div>
                       ))}
                     </div>
+                    {booking.items.length > 1 && (
+                      <div className="mt-3 pt-3 border-t border-surface-100" />
+                    )}
                   </div>
                 )}
 
-                {/* Total */}
-                <div className="bg-gradient-to-r from-[#0d9488] to-[#0d9488] rounded-xl p-5 text-center mb-6">
-                  <p className="text-blue-200 text-sm mb-1">Total Amount</p>
-                  <p className="text-3xl font-bold text-white">&#8377;{Number(booking.total_amount).toFixed(2)}</p>
-                  <div className="mt-2 inline-block px-3 py-1 bg-white/20 rounded-full">
-                    <span className="text-xs text-green-200 font-medium">
-                      {booking.payment_status === "paid" ? "Paid" : "Payment Pending"}
+                {/* Total amount - dark green card */}
+                <div className="bg-primary-800 rounded-card p-5 text-center">
+                  <p className="text-white/60 text-sm mb-1">Total Amount</p>
+                  <p className="text-3xl font-heading font-medium text-white tracking-tight">&#8377;{Number(booking.total_amount).toFixed(2)}</p>
+                  <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 rounded-full">
+                    <div className={`w-2 h-2 rounded-full ${booking.payment_status === "paid" ? "bg-green-400" : "bg-amber-400"} animate-pulse`} />
+                    <span className="text-xs text-white/80 font-medium">
+                      {booking.payment_status === "paid" ? "Payment Successful" : "Payment Pending"}
                     </span>
                   </div>
                 </div>
-              </>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col gap-3 pt-1">
+                  <Link
+                    href="/my-bookings"
+                    className="btn-primary block w-full text-center min-h-[48px] flex items-center justify-center"
+                  >
+                    View My Bookings
+                  </Link>
+                  <Link
+                    href="/"
+                    className="btn-secondary block w-full text-center min-h-[48px] flex items-center justify-center"
+                  >
+                    Back to Home
+                  </Link>
+                </div>
+              </div>
             )}
-
-            {/* Action buttons */}
-            <div className="flex flex-col gap-3">
-              <Link
-                href="/my-bookings"
-                className="block w-full py-3.5 bg-[#f97316] text-white rounded-xl font-semibold hover:bg-[#ea580c] transition-all hover:shadow-lg hover:shadow-orange-200 text-center"
-              >
-                View My Bookings
-              </Link>
-              <Link
-                href="/"
-                className="block w-full py-3.5 border-2 border-gray-200 text-gray-600 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all text-center"
-              >
-                Back to Home
-              </Link>
-            </div>
           </div>
-        </div>
 
-        {/* Help text */}
-        <p className="text-center text-gray-400 text-sm mt-6">
-          You will receive a notification when the vendor confirms your booking.
-        </p>
+          {/* Help text below card */}
+          <p className="text-center text-primary-700/40 text-sm mt-6 px-4">
+            You will receive a notification when the vendor confirms your booking. Need help?{" "}
+            <Link href="/contact" className="text-primary-600 hover:text-primary-700 font-medium transition-colors">
+              Contact Support
+            </Link>
+          </p>
+        </div>
       </div>
 
       <style jsx>{`
         @keyframes bounceIn {
           0% { transform: scale(0); opacity: 0; }
-          50% { transform: scale(1.2); }
+          50% { transform: scale(1.08); }
+          70% { transform: scale(0.95); }
           100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes drawCheck {
+          0% { stroke-dasharray: 40; stroke-dashoffset: 40; }
+          100% { stroke-dasharray: 40; stroke-dashoffset: 0; }
         }
       `}</style>
     </div>

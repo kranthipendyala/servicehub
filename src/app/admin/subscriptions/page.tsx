@@ -138,7 +138,7 @@ export default function AdminSubscriptionsPage() {
                     <td className="px-4 py-3 font-medium text-gray-900">
                       {plan.name}
                       {plan.is_popular && (
-                        <span className="ml-2 inline-flex px-1.5 py-0.5 text-[10px] font-semibold rounded bg-emerald-100 text-emerald-700">
+                        <span className="ml-2 inline-flex px-1.5 py-0.5 text-[10px] font-semibold rounded bg-primary-100 text-primary-700">
                           Popular
                         </span>
                       )}

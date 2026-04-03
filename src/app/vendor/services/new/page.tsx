@@ -195,12 +195,12 @@ export default function VendorServiceFormPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none";
+  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none";
 
   if (fetchingEdit) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -255,8 +255,8 @@ export default function VendorServiceFormPage() {
                       onClick={() => setName(t.name)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-all ${
                         name === t.name
-                          ? "bg-emerald-50 border-emerald-300 text-emerald-700"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-emerald-300 hover:text-emerald-600"
+                          ? "bg-primary-50 border-primary-300 text-primary-700"
+                          : "bg-white border-gray-200 text-gray-600 hover:border-primary-300 hover:text-primary-600"
                       }`}
                     >
                       {t.name}
@@ -326,7 +326,7 @@ export default function VendorServiceFormPage() {
             <button
               type="button"
               onClick={addVariant}
-              className="px-3 py-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors flex items-center gap-1"
+              className="px-3 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors flex items-center gap-1"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -364,7 +364,7 @@ export default function VendorServiceFormPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
           >
             {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {loading ? "Saving..." : isEdit ? "Update Service" : "Create Service"}

@@ -75,7 +75,7 @@ export default function VendorReviewsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -116,8 +116,8 @@ export default function VendorReviewsPage() {
 
               {/* Existing Reply */}
               {review.vendor_reply && (
-                <div className="bg-emerald-50 rounded-lg p-4 ml-6">
-                  <p className="text-xs font-semibold text-emerald-700 mb-1">
+                <div className="bg-primary-50 rounded-lg p-4 ml-6">
+                  <p className="text-xs font-semibold text-primary-700 mb-1">
                     Your Reply
                   </p>
                   <p className="text-sm text-gray-700">{review.vendor_reply}</p>
@@ -131,7 +131,7 @@ export default function VendorReviewsPage() {
                     setReplyingTo(review.id);
                     setReplyText("");
                   }}
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
                 >
                   Reply
                 </button>
@@ -144,13 +144,13 @@ export default function VendorReviewsPage() {
                     onChange={(e) => setReplyText(e.target.value)}
                     placeholder="Write your reply..."
                     rows={3}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleReply(review.id)}
                       disabled={replySaving}
-                      className="px-4 py-1.5 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50"
+                      className="px-4 py-1.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50"
                     >
                       {replySaving ? "Posting..." : "Post Reply"}
                     </button>

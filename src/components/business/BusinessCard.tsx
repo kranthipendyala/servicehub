@@ -250,7 +250,7 @@ export default function BusinessCard({
 
       <div className="p-4 flex-1 flex flex-col">
         <Link href={`/business/${business.slug}`}>
-          <h3 className="text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-teal-700 transition-colors">{business.name}</h3>
+          <h3 className="text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-primary-700 transition-colors">{business.name}</h3>
         </Link>
 
         {business.categories && business.categories.length > 0 ? (

@@ -11,7 +11,7 @@ const TYPE_CONFIG: Record<string, { icon: string; color: string; bg: string }> =
   booking_created: { icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z", color: "text-blue-600", bg: "bg-blue-50" },
   booking_confirmed: { icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z", color: "text-green-600", bg: "bg-green-50" },
   booking_started: { icon: "M13 10V3L4 14h7v7l9-11h-7z", color: "text-indigo-600", bg: "bg-indigo-50" },
-  booking_completed: { icon: "M5 13l4 4L19 7", color: "text-emerald-600", bg: "bg-emerald-50" },
+  booking_completed: { icon: "M5 13l4 4L19 7", color: "text-primary-600", bg: "bg-primary-50" },
   booking_cancelled: { icon: "M6 18L18 6M6 6l12 12", color: "text-red-600", bg: "bg-red-50" },
   payment_received: { icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z", color: "text-purple-600", bg: "bg-purple-50" },
   new_chat_message: { icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z", color: "text-cyan-600", bg: "bg-cyan-50" },

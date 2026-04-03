@@ -111,16 +111,13 @@ export default async function CityPage({ params }: CityPageProps) {
       </div>
 
       {/* City Banner */}
-      <section className="relative bg-gradient-to-r from-primary-600 via-primary-500 to-primary-700 text-white py-12 md:py-16 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.15),transparent_70%)]" />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="bg-primary-800 text-white py-12 md:py-16">
+        <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-4">
-              Home Services in {cityName}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-medium mb-4">
+              Home Services in <span className="heading-highlight-dark">{cityName}</span>
             </h1>
-            <p className="text-primary-100 text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
               {cityDescription ||
                 `Find trusted and verified home service providers in ${cityName}. Browse by category or locality to find what you need.`}
             </p>
@@ -140,9 +137,9 @@ export default async function CityPage({ params }: CityPageProps) {
       />
 
       {/* SEO Content */}
-      <section className="section-padding bg-surface-50">
+      <section className="py-12 md:py-16 bg-accent-200">
         <div className="container-narrow">
-          <h2 className="text-xl font-heading font-bold text-gray-900 mb-4">
+          <h2 className="text-xl font-heading font-medium text-primary-700 mb-4">
             About Home Services in {cityName}
           </h2>
           <div className="text-gray-600 text-sm leading-relaxed space-y-3">

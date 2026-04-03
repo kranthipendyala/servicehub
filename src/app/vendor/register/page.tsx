@@ -134,7 +134,7 @@ export default function VendorRegisterPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none";
+  const inputCls = "w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none";
 
   const benefits = [
     { icon: "M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z", title: "Get More Customers", desc: "Access customers searching for services near you" },
@@ -153,12 +153,12 @@ export default function VendorRegisterPage() {
       <div className="flex min-h-screen">
         {/* LEFT - Value Prop */}
         <div className="hidden lg:flex lg:w-1/2 xl:w-[55%] flex-col justify-center px-12 xl:px-20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
           <div className="relative z-10 max-w-lg">
             <div className="flex items-center gap-3 mb-10">
-              <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-600/30">
+              <div className="w-12 h-12 rounded-xl bg-primary-600 flex items-center justify-center shadow-lg shadow-primary-600/30">
                 <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.384-3.08A.5.5 0 005.5 12.5v0a.5.5 0 00.536.49l6.293-.54m-.93 2.72l2.08 3.6a.5.5 0 00.836.06l3.327-4.272a.5.5 0 00-.188-.752l-5.126-2.636m-2.929 4l5.08-7.08a.5.5 0 01.768-.077l2.077 1.927a.5.5 0 01.03.745L13.42 15.17a.5.5 0 01-.698.063l-1.302-1.063z" />
                 </svg>
@@ -167,7 +167,7 @@ export default function VendorRegisterPage() {
             </div>
 
             <h1 className="text-4xl xl:text-5xl font-extrabold mb-4 leading-tight">
-              <span className="bg-gradient-to-r from-white via-emerald-200 to-emerald-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white via-primary-200 to-primary-400 bg-clip-text text-transparent">
                 Grow Your Business
               </span>
               <br />
@@ -180,8 +180,8 @@ export default function VendorRegisterPage() {
             <div className="space-y-4 mb-10">
               {benefits.map((b) => (
                 <div key={b.title} className="flex items-start gap-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all">
-                  <div className="w-11 h-11 rounded-lg bg-emerald-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <div className="w-11 h-11 rounded-lg bg-primary-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-6 h-6 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d={b.icon} />
                     </svg>
                   </div>
@@ -196,7 +196,7 @@ export default function VendorRegisterPage() {
             <div className="flex items-center gap-6">
               {trustBadges.map((badge) => (
                 <div key={badge.label} className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={badge.icon} />
                   </svg>
                   <span className="text-xs text-slate-400 font-medium">{badge.label}</span>
@@ -211,13 +211,13 @@ export default function VendorRegisterPage() {
           <div className="w-full max-w-md">
             {/* Mobile hero */}
             <div className="lg:hidden text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-600 shadow-lg shadow-emerald-600/30 mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600 shadow-lg shadow-primary-600/30 mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.384-3.08A.5.5 0 005.5 12.5v0a.5.5 0 00.536.49l6.293-.54m-.93 2.72l2.08 3.6a.5.5 0 00.836.06l3.327-4.272a.5.5 0 00-.188-.752l-5.126-2.636m-2.929 4l5.08-7.08a.5.5 0 01.768-.077l2.077 1.927a.5.5 0 01.03.745L13.42 15.17a.5.5 0 01-.698.063l-1.302-1.063z" />
                 </svg>
               </div>
               <h1 className="text-2xl font-extrabold">
-                <span className="bg-gradient-to-r from-white via-emerald-200 to-emerald-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-white via-primary-200 to-primary-400 bg-clip-text text-transparent">
                   Grow Your Business
                 </span>
               </h1>
@@ -235,7 +235,7 @@ export default function VendorRegisterPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                       <PhoneInput value={phone} onChange={(v) => { setPhone(v); setPhoneError(""); }} error={phoneError} autoFocus />
                     </div>
-                    <button type="button" onClick={handleSendOtp} disabled={loading || phone.length !== 10} className="w-full py-3 px-4 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2">
+                    <button type="button" onClick={handleSendOtp} disabled={loading || phone.length !== 10} className="w-full py-3 px-4 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 focus:ring-4 focus:ring-primary-500/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2">
                       {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
                       {loading ? "Sending OTP..." : "Verify Phone Number"}
                     </button>
@@ -258,12 +258,12 @@ export default function VendorRegisterPage() {
               {step === "register" && (
                 <>
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
-                      <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <div className="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                     </div>
-                    <span className="text-xs font-medium text-emerald-600">Phone verified: +91 {phone}</span>
+                    <span className="text-xs font-medium text-primary-600">Phone verified: +91 {phone}</span>
                   </div>
 
                   <h2 className="text-xl font-semibold text-gray-900 mb-1 mt-3">Complete Registration</h2>
@@ -302,7 +302,7 @@ export default function VendorRegisterPage() {
                       {loadingData && <p className="mt-1 text-xs text-gray-400">Loading cities...</p>}
                     </div>
 
-                    <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-sm font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 focus:ring-4 focus:ring-emerald-500/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2 mt-2">
+                    <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-semibold rounded-xl hover:from-primary-700 hover:to-primary-800 focus:ring-4 focus:ring-primary-500/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2 mt-2">
                       {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
                       {loading ? "Creating Account..." : "Create Account & Start Onboarding"}
                     </button>
@@ -313,7 +313,7 @@ export default function VendorRegisterPage() {
               <div className="mt-6 pt-5 border-t border-gray-100 text-center">
                 <p className="text-sm text-gray-500">
                   Already have an account?{" "}
-                  <Link href="/vendor/login" className="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">Sign in</Link>
+                  <Link href="/vendor/login" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors">Sign in</Link>
                 </p>
               </div>
             </div>

@@ -28,7 +28,7 @@ const STATUS_BADGE: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
   confirmed: "bg-blue-100 text-blue-700",
   assigned: "bg-indigo-100 text-indigo-700",
-  in_progress: "bg-emerald-100 text-emerald-700",
+  in_progress: "bg-primary-100 text-primary-700",
   completed: "bg-green-100 text-green-700",
   cancelled: "bg-red-100 text-red-700",
   refunded: "bg-gray-100 text-gray-700",
@@ -148,7 +148,7 @@ export default function VendorBookingsPage() {
               onClick={() => switchTab(tab.value)}
               className={`whitespace-nowrap pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${
                 statusParam === tab.value
-                  ? "border-emerald-600 text-emerald-600"
+                  ? "border-primary-600 text-primary-600"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
@@ -161,7 +161,7 @@ export default function VendorBookingsPage() {
       {/* Bookings List */}
       {loading ? (
         <div className="flex items-center justify-center h-48">
-          <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : bookings.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
@@ -179,7 +179,7 @@ export default function VendorBookingsPage() {
                   <div className="flex items-center gap-3 mb-2">
                     <Link
                       href={`/vendor/bookings/${booking.id}`}
-                      className="text-sm font-semibold text-gray-900 hover:text-emerald-600 transition-colors"
+                      className="text-sm font-semibold text-gray-900 hover:text-primary-600 transition-colors"
                     >
                       #{booking.booking_number}
                     </Link>
@@ -223,7 +223,7 @@ export default function VendorBookingsPage() {
                         <button
                           onClick={() => handleAction(booking.id, "accept")}
                           disabled={actionLoading === booking.id}
-                          className="px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors disabled:opacity-50"
+                          className="px-3 py-1.5 text-xs font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50"
                         >
                           Accept
                         </button>
