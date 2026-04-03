@@ -12,8 +12,14 @@ import type {
   EnquiryForm,
 } from "@/types";
 
-const API_BASE_URL =
+const EXTERNAL_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
+
+// Server-side: use internal proxy to bypass Cloudflare
+// Client-side: use external API directly (browser won't be challenged)
+const IS_SERVER = typeof window === "undefined";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (IS_SERVER ? "http://localhost:3000" : "");
+const API_BASE_URL = IS_SERVER ? `${SITE_URL}/api/proxy` : EXTERNAL_API_URL;
 
 const DEFAULT_REVALIDATE = 3600; // 1 hour
 const SHORT_REVALIDATE = 600;   // 10 minutes
