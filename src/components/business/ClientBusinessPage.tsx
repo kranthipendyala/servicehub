@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import type { Business } from "@/types";
-import RatingStars from "@/components/common/RatingStars";
-import ReviewSection from "@/components/business/ReviewSection";
 import BusinessAvatar from "@/components/business/BusinessAvatar";
-import ContactButton from "@/components/business/ContactButton";
 import CategoryIcon from "@/components/ui/CategoryIcon";
 
 /**
@@ -82,10 +79,7 @@ export default function ClientBusinessPage() {
               <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                 {biz.city_name && <span>{biz.city_name}{biz.state_name ? `, ${biz.state_name}` : ""}</span>}
                 {Number(biz.avg_rating) > 0 && (
-                  <div className="flex items-center gap-1">
-                    <RatingStars rating={Number(biz.avg_rating)} size="sm" />
-                    <span>({biz.total_reviews} reviews)</span>
-                  </div>
+                  <span>{Number(biz.avg_rating).toFixed(1)} rating ({biz.total_reviews} reviews)</span>
                 )}
               </div>
               <div className="flex items-center gap-3 mt-4">
@@ -156,7 +150,16 @@ export default function ClientBusinessPage() {
         {/* Reviews */}
         {biz.reviews && biz.reviews.length > 0 && (
           <div className="bg-white rounded-2xl p-6">
-            <ReviewSection reviews={biz.reviews} averageRating={Number(biz.avg_rating)} totalReviews={Number(biz.total_reviews)} />
+            <h2 className="text-lg font-bold text-gray-900 mb-3">Reviews</h2>
+            {biz.reviews.map((r: any) => (
+              <div key={r.id} className="border-b border-gray-100 py-3 last:border-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-medium text-gray-900">{r.reviewer_name || "User"}</span>
+                  <span className="text-xs text-amber-500">{"★".repeat(Number(r.rating))}</span>
+                </div>
+                {r.comment && <p className="text-sm text-gray-600">{r.comment}</p>}
+              </div>
+            ))}
           </div>
         )}
 
