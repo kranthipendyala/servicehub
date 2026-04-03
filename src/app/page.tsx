@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SearchBar from "@/components/layout/SearchBar";
 import BusinessCard from "@/components/business/BusinessCard";
+import DynamicHomeSections from "@/components/home/DynamicHomeSections";
 import {
   fetchApi,
   getPopularCategories,
@@ -669,89 +670,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Top Cities ──────────────────────────────────────────── */}
-      <section id="cities" className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
-            <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full mb-4">{geoScope === "telangana" ? "Telangana" : "Pan India"}</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-gray-900 mb-4">
-              {geoScope === "telangana" ? "Explore Services in Telangana" : "Explore Services by City"}
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-              {geoTagline}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {cities.map((city, idx) => {
-              const colorClass = CITY_COLORS[idx % CITY_COLORS.length];
-              const topServices = CITY_TOP_SERVICES[city.slug] || ["Cleaning", "Electrician"];
-              return (
-                <Link
-                  key={city.id}
-                  href={`/${city.slug}`}
-                  className="group flex flex-col items-center p-5 rounded-2xl bg-surface-50 border border-transparent hover:bg-white hover:border-primary-200 hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center mb-3 transition-all group-hover:scale-110 duration-300 shadow-md group-hover:shadow-lg`}>
-                    <span className="text-white font-heading font-bold text-lg">
-                      {city.name.charAt(0)}
-                    </span>
-                  </div>
-                  <h3 className="text-sm font-heading font-bold text-gray-800 group-hover:text-primary-500 transition-colors mb-1">
-                    {city.name}
-                  </h3>
-                  <p className="text-xs text-gray-400 mb-2">
-                    {Number(city.business_count) > 0
-                      ? `${Number(city.business_count).toLocaleString()}+ providers`
-                      : "Coming Soon"}
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-1">
-                    {topServices.map((svc) => (
-                      <span key={svc} className="text-[10px] bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium">
-                        {svc}
-                      </span>
-                    ))}
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Businesses ─────────────────────────────────── */}
-      {featuredBusinesses.length > 0 && (
-        <section className="section-padding bg-gradient-to-b from-surface-50 to-white">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-              <div>
-                <span className="inline-block px-4 py-1.5 bg-green-50 text-green-600 text-sm font-semibold rounded-full mb-4">Top Rated</span>
-                <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-gray-900 mb-2">
-                  Featured Service Providers
-                </h2>
-                <p className="text-gray-500 text-lg">
-                  Top-rated and verified businesses trusted by thousands
-                </p>
-              </div>
-              <Link
-                href="/search"
-                className="inline-flex items-center gap-2 text-sm font-bold text-white bg-primary-500 hover:bg-primary-600 px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
-              >
-                View All Providers
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {featuredBusinesses.slice(0, 8).map((biz) => (
-                <div key={biz.id} className="group relative">
-                  <BusinessCard business={biz} layout="grid" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* ── Dynamic Sections (cities + categories + featured) ── */}
+      <DynamicHomeSections
+        serverCities={cities as any}
+        serverCategories={categories as any}
+        serverFeatured={featuredBusinesses}
+        geoScope={geoScope}
+      />
 
       {/* ── Why Choose Us ───────────────────────────────────────── */}
       <section className="section-padding bg-white">
