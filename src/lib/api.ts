@@ -1,3 +1,4 @@
+import { serverFetch } from "@/lib/server-fetch";
 import type {
   ApiResponse,
   PaginatedResponse,
@@ -15,11 +16,9 @@ import type {
 const EXTERNAL_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
 
-// Server-side: use internal proxy to bypass Cloudflare
-// Client-side: use external API directly (browser won't be challenged)
-const IS_SERVER = typeof window === "undefined";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (IS_SERVER ? "http://localhost:3000" : "");
-const API_BASE_URL = IS_SERVER ? `${SITE_URL}/api/proxy` : EXTERNAL_API_URL;
+// Server-side: call the external API directly but with browser headers
+// The /api/proxy route self-reference doesn't work reliably on Vercel
+const API_BASE_URL = EXTERNAL_API_URL;
 
 const DEFAULT_REVALIDATE = 3600; // 1 hour
 const SHORT_REVALIDATE = 600;   // 10 minutes
@@ -73,17 +72,19 @@ export async function fetchApi<T>(
   }
 
   try {
-    const response = await fetch(url, {
+    const IS_SERVER = typeof window === "undefined";
+    const fetcher = IS_SERVER ? serverFetch : fetch;
+
+    const response = await fetcher(url, {
       ...fetchOptions,
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         ...fetchOptions.headers,
       },
       next: nextOptions as any,
-    });
+    } as any);
 
     clearTimeout(timeoutId);
 
