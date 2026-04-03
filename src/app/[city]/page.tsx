@@ -6,6 +6,7 @@ import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import BusinessCard from "@/components/business/BusinessCard";
 import SearchBar from "@/components/layout/SearchBar";
 import CategoryIcon from "@/components/ui/CategoryIcon";
+import DynamicCityData from "@/components/home/DynamicCityData";
 import {
   getCity,
   getCategories,
@@ -130,103 +131,13 @@ export default async function CityPage({ params }: CityPageProps) {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      {categories.length > 0 && (
-        <section className="section-padding bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-2">
-              Service Categories in {cityName}
-            </h2>
-            <p className="text-gray-500 mb-8 text-sm">
-              Browse {categories.length}+ categories of home services
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/${citySlug}/${cat.slug}`}
-                  className="group p-5 rounded-xl border border-surface-200 hover:border-primary-200 hover:shadow-card-hover transition-all duration-300 bg-white"
-                >
-                  <div className="flex items-center gap-2.5 mb-1">
-                    {(cat as any).icon && (
-                      <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center text-primary-500 flex-shrink-0">
-                        <CategoryIcon icon={(cat as any).icon} className="w-4 h-4" />
-                      </div>
-                    )}
-                    <h3 className="font-heading font-semibold text-gray-800 group-hover:text-primary-500 transition-colors text-sm">
-                      {cat.name}
-                    </h3>
-                  </div>
-                  {cat.business_count !== undefined && (
-                    <p className="text-xs text-gray-400 mt-1">
-                      {cat.business_count} providers
-                    </p>
-                  )}
-                  <div className="mt-2 flex items-center gap-1 text-xs text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Browse
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Popular Localities */}
-      {localities.length > 0 && (
-        <section className="section-padding bg-surface-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-heading font-bold text-gray-900 mb-2">
-              Popular Localities in {cityName}
-            </h2>
-            <p className="text-gray-500 mb-8 text-sm">
-              Find services near your area
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {localities.slice(0, 24).map((loc) => (
-                <Link
-                  key={loc.id}
-                  href={`/${citySlug}/auto-mechanics/${loc.slug}`}
-                  className="px-4 py-3 rounded-lg bg-white border border-surface-200 hover:border-primary-200 hover:shadow-sm text-sm text-gray-700 hover:text-primary-500 transition-all text-center group"
-                >
-                  <span className="font-medium">{loc.name}</span>
-                  {loc.business_count !== undefined && (
-                    <span className="block text-xs text-gray-400 mt-0.5 group-hover:text-primary-400 transition-colors">
-                      {loc.business_count} listings
-                    </span>
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Featured Businesses */}
-      {featured.length > 0 && (
-        <section className="section-padding bg-white">
-          <div className="container mx-auto px-4">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-heading font-bold text-gray-900 mb-1">
-                  Top Rated in {cityName}
-                </h2>
-                <p className="text-gray-500 text-sm">
-                  Highly recommended service providers
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {featured.slice(0, 8).map((biz) => (
-                <BusinessCard key={biz.id} business={biz} layout="grid" />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Dynamic Categories + Featured — fetched client-side to bypass Cloudflare */}
+      <DynamicCityData
+        citySlug={citySlug}
+        cityName={cityName}
+        serverCategories={categories as any}
+        serverFeatured={featured as any}
+      />
 
       {/* SEO Content */}
       <section className="section-padding bg-surface-50">
