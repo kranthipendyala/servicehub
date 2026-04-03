@@ -87,31 +87,22 @@ export default async function LocalityPage({
       }),
     ]);
 
-    if (cityRes.status === "fulfilled" && cityRes.value.success) {
+    if (cityRes.status === "fulfilled" && cityRes.value.success && cityRes.value.data) {
       cityName = cityRes.value.data.name;
-    } else {
-      notFound();
     }
-
-    if (catRes.status === "fulfilled" && catRes.value.success) {
+    if (catRes.status === "fulfilled" && catRes.value.success && catRes.value.data) {
       categoryName = catRes.value.data.name;
-    } else {
-      notFound();
     }
-
-    if (locRes.status === "fulfilled" && locRes.value.success) {
+    if (locRes.status === "fulfilled" && locRes.value.success && locRes.value.data) {
       localityName = locRes.value.data.name;
-    } else {
-      notFound();
     }
-
     if (bizRes.status === "fulfilled" && bizRes.value.success) {
       businesses = bizRes.value.data;
       totalPages = bizRes.value.pagination.total_pages;
       totalItems = bizRes.value.pagination.total_items;
     }
   } catch {
-    notFound();
+    // Cloudflare may have blocked
   }
 
   const breadcrumbs: BreadcrumbItem[] = [

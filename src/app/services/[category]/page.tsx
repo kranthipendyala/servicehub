@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
   const data = await getCategoryData(category);
-  if (!data) notFound();
+  if (!data) data = { cat: { name: category.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()), slug: category, description: "" } as any, businesses: [], cities: [] };
 
   const { category: cat, businesses, cities } = data;
 

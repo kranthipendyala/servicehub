@@ -94,7 +94,7 @@ export default async function CityPage({ params }: CityPageProps) {
       featured = featRes.value.data;
     }
   } catch {
-    notFound();
+    // Don't notFound() — Cloudflare may have blocked
   }
 
   const breadcrumbs: BreadcrumbItem[] = [

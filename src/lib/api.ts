@@ -16,8 +16,7 @@ import type {
 const EXTERNAL_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
 
-// Server-side: call the external API directly but with browser headers
-// The /api/proxy route self-reference doesn't work reliably on Vercel
+// All fetch calls go to external API with browser headers via serverFetch
 const API_BASE_URL = EXTERNAL_API_URL;
 
 const DEFAULT_REVALIDATE = 3600; // 1 hour

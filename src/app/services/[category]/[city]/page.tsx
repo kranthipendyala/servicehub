@@ -58,9 +58,11 @@ export const revalidate = 3600;
 export default async function CategoryCityPage({ params }: PageProps) {
   const { category, city } = await params;
   const data = await getCategoryCityData(category, city);
-  if (!data) notFound();
+  // Don't notFound() — Cloudflare may block server-side requests
 
-  const { category: cat, city: cityData, businesses } = data;
+  const toTitle = (s: string) => s.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  const fallback = { category: { name: toTitle(category), slug: category } as any, city: { name: toTitle(city), slug: city } as any, businesses: [] };
+  const { category: cat, city: cityData, businesses } = data || fallback;
 
   const schemaOrg = {
     "@context": "https://schema.org",

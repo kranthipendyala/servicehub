@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
+import ClientBusinessList from "@/components/business/ClientBusinessList";
 import BusinessList from "@/components/business/BusinessList";
 import {
   getCity,
@@ -131,7 +132,7 @@ export default async function CategoryCityPage({
         .slice(0, 8);
     }
   } catch {
-    notFound();
+    // Don't notFound() — Cloudflare may have blocked, client will refetch
   }
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -317,15 +318,25 @@ export default async function CategoryCityPage({
 
             {/* Listings */}
             <div className="flex-1 min-w-0">
-              <BusinessList
-                businesses={businesses}
-                currentPage={page}
-                totalPages={totalPages}
-                totalItems={totalItems}
-                basePath={`/${citySlug}/${categorySlug}`}
-                queryParams={queryParams}
-                layout="list"
-              />
+              {businesses.length > 0 ? (
+                <BusinessList
+                  businesses={businesses}
+                  currentPage={page}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  basePath={`/${citySlug}/${categorySlug}`}
+                  queryParams={queryParams}
+                  layout="list"
+                />
+              ) : (
+                <ClientBusinessList
+                  serverBusinesses={businesses}
+                  citySlug={citySlug}
+                  categorySlug={categorySlug}
+                  cityName={cityName}
+                  categoryName={categoryName}
+                />
+              )}
             </div>
           </div>
         </div>
