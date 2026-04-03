@@ -431,19 +431,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Popular Categories ──────────────────────────────────── */}
-      <section id="categories" className="section-padding bg-white">
+      {/* ── Popular Categories — now rendered inside DynamicHomeSections ── */}
+      {false && <section id="categories" className="section-padding bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
             <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-500 text-sm font-semibold rounded-full mb-4">Our Services</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-gray-900 mb-4">
-              {geoScope === "telangana" ? "Services Available in Telangana" : "Browse by Service Category"}
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-              {geoScope === "telangana"
-                ? "Book verified service providers in Hyderabad & across Telangana"
-                : "Find specialized service providers across all major categories"}
-            </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-6">
             {categories.map((cat, idx) => {
@@ -509,7 +501,7 @@ export default async function HomePage() {
             })}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── How It Works ────────────────────────────────────────── */}
       <section className="section-padding bg-gradient-to-b from-surface-50 to-white overflow-hidden">

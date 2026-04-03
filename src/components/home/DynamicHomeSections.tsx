@@ -96,31 +96,41 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
       </section>
 
       {/* Categories Section */}
-      {categories.filter((c) => !c.children || c.children === undefined).length > 0 && (
+      {categories.filter((c: any) => !c.parent_id).length > 0 && (
         <section className="section-padding bg-white">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-10">
-              <span className="inline-block px-4 py-1.5 bg-accent-50 text-accent-600 text-sm font-semibold rounded-full mb-4">Services</span>
+            <div className="text-center mb-14">
+              <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-500 text-sm font-semibold rounded-full mb-4">Our Services</span>
               <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-gray-900 mb-4">
-                Popular Service Categories
+                {geoScope === "telangana" ? "Services Available in Telangana" : "Browse by Service Category"}
               </h2>
+              <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+                {geoScope === "telangana"
+                  ? "Book verified service providers in Hyderabad & across Telangana"
+                  : "Find specialized service providers across all major categories"}
+              </p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 md:gap-6">
               {categories.filter((c: any) => !c.parent_id).slice(0, 15).map((cat) => (
                 <Link
                   key={cat.id}
                   href={`/services/${cat.slug}`}
-                  className="group p-5 rounded-2xl border border-surface-200 hover:border-primary-200 hover:shadow-card-hover transition-all duration-300 bg-white text-center"
+                  className="group relative flex flex-col items-center p-7 rounded-2xl border border-surface-200 hover:border-transparent hover:shadow-card-hover transition-all duration-500 bg-white hover:bg-gradient-to-br hover:from-white hover:to-primary-50/60 overflow-hidden"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mx-auto mb-3 text-primary-500 group-hover:scale-110 transition-transform">
-                    <CategoryIcon icon={cat.icon} className="w-6 h-6" />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-all duration-300 group-hover:shadow-lg text-primary-500">
+                    <CategoryIcon icon={cat.icon} className="w-8 h-8" />
                   </div>
-                  <h3 className="font-heading font-semibold text-gray-800 group-hover:text-primary-500 transition-colors text-sm">
+                  <h3 className="text-base font-heading font-bold text-gray-800 group-hover:text-primary-600 text-center transition-colors mb-1">
                     {cat.name}
                   </h3>
-                  {Number(cat.business_count) > 0 && (
-                    <p className="text-xs text-gray-400 mt-1">{cat.business_count} providers</p>
+                  {Number(cat.business_count) > 0 ? (
+                    <p className="text-xs text-gray-400 mb-3">{cat.business_count} providers</p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mb-3">Browse</p>
                   )}
+                  <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </div>
                 </Link>
               ))}
             </div>
