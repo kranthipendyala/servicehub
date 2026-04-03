@@ -7,8 +7,14 @@ export async function GET() {
 User-agent: *
 Allow: /
 Disallow: /search
-Disallow: /dashboard
-Disallow: /auth
+Disallow: /admin
+Disallow: /vendor
+Disallow: /my-bookings
+Disallow: /my-addresses
+Disallow: /notifications
+Disallow: /book/
+Disallow: /login
+Disallow: /register
 Disallow: /api/
 Disallow: /_next/
 

@@ -1,20 +1,33 @@
-import { getSitemapUrls } from "@/lib/api";
 import { SITE_URL } from "@/lib/seo";
-import type { SitemapUrl } from "@/types";
+import { fetchApi } from "@/lib/api";
 
-function buildSitemapXml(urls: SitemapUrl[]): string {
+interface SitemapEntry {
+  loc: string;
+  lastmod?: string;
+  changefreq?: string;
+  priority?: number;
+}
+
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function buildSitemapXml(urls: SitemapEntry[]): string {
   const urlEntries = urls
     .map(
-      (url) => `  <url>
-    <loc>${escapeXml(url.loc)}</loc>${
-        url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ""
+      (u) => `  <url>
+    <loc>${escapeXml(u.loc)}</loc>${
+        u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ""
       }${
-        url.changefreq
-          ? `\n    <changefreq>${url.changefreq}</changefreq>`
-          : ""
+        u.changefreq ? `\n    <changefreq>${u.changefreq}</changefreq>` : ""
       }${
-        url.priority !== undefined
-          ? `\n    <priority>${url.priority.toFixed(1)}</priority>`
+        u.priority !== undefined
+          ? `\n    <priority>${u.priority.toFixed(1)}</priority>`
           : ""
       }
   </url>`
@@ -27,100 +40,112 @@ ${urlEntries}
 </urlset>`;
 }
 
-function buildSitemapIndexXml(pages: number): string {
-  const sitemaps = Array.from({ length: pages }, (_, i) => i + 1)
-    .map(
-      (page) => `  <sitemap>
-    <loc>${SITE_URL}/sitemap.xml?page=${page}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
-  </sitemap>`
-    )
-    .join("\n");
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemaps}
-</sitemapindex>`;
-}
-
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
-// Static fallback URLs
-function getStaticUrls(): SitemapUrl[] {
-  const cities = [
-    "mumbai", "delhi", "bangalore", "hyderabad", "chennai",
-    "pune", "kolkata", "ahmedabad", "jaipur", "lucknow",
-  ];
-  const categories = [
-    "auto-mechanics", "plumbers", "electricians", "ac-repair",
-    "welding-services", "cnc-machining", "fabrication",
-  ];
+export async function GET() {
   const today = new Date().toISOString().split("T")[0];
-
-  const urls: SitemapUrl[] = [
-    { loc: SITE_URL, changefreq: "daily", priority: 1.0, lastmod: today },
-  ];
-
-  // City pages
-  cities.forEach((city) => {
-    urls.push({
-      loc: `${SITE_URL}/${city}`,
-      changefreq: "weekly",
-      priority: 0.8,
-      lastmod: today,
-    });
-
-    // City + category pages
-    categories.forEach((cat) => {
-      urls.push({
-        loc: `${SITE_URL}/${city}/${cat}`,
-        changefreq: "weekly",
-        priority: 0.7,
-        lastmod: today,
-      });
-    });
-  });
-
-  return urls;
-}
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const page = searchParams.get("page");
+  const urls: SitemapEntry[] = [];
 
   try {
-    const res = await getSitemapUrls(page ? parseInt(page, 10) : undefined);
+    // Try fetching from API
+    const res = await fetchApi<any>("/sitemap/urls", { revalidate: 3600 });
 
-    if (res.success && res.data.length > 0) {
-      // Ensure all URLs are absolute
-      const urls = res.data.map((url) => ({
-        ...url,
-        loc: url.loc.startsWith("http") ? url.loc : `${SITE_URL}${url.loc}`,
-      }));
+    if (res.success && res.data) {
+      const apiUrls = res.data.urls || res.data || [];
 
-      const xml = buildSitemapXml(urls);
+      if (Array.isArray(apiUrls) && apiUrls.length > 0) {
+        for (const entry of apiUrls) {
+          // API may use "url" or "loc" key
+          const rawUrl = entry.loc || entry.url || "";
+          if (!rawUrl) continue;
 
-      return new Response(xml, {
-        headers: {
-          "Content-Type": "application/xml",
-          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
-        },
-      });
+          // Fix: replace any localhost/wrong base URL with actual SITE_URL
+          let loc = rawUrl;
+          if (!loc.startsWith("http")) {
+            loc = `${SITE_URL}${loc.startsWith("/") ? "" : "/"}${loc}`;
+          } else if (loc.includes("localhost") || !loc.includes(new URL(SITE_URL).hostname)) {
+            // Extract the path portion and rebuild with correct domain
+            try {
+              const parsed = new URL(loc);
+              loc = `${SITE_URL}${parsed.pathname}`;
+            } catch {
+              loc = `${SITE_URL}/${loc.replace(/^https?:\/\/[^/]+\/?/, "")}`;
+            }
+          }
+
+          // Fix: /categories/slug → /services/slug (correct Next.js route)
+          loc = loc.replace(/\/categories\/([^/]+)$/, "/services/$1");
+
+          urls.push({
+            loc,
+            lastmod: entry.lastmod || today,
+            changefreq: entry.changefreq || "weekly",
+            priority: entry.priority !== undefined ? Number(entry.priority) : 0.7,
+          });
+        }
+      }
     }
   } catch {
-    // Fallback to static sitemap
+    // API failed — use fallback
   }
 
-  // If no page specified and API unavailable, return static sitemap
-  const fallbackUrls = getStaticUrls();
-  const xml = buildSitemapXml(fallbackUrls);
+  // If API returned no valid URLs, generate from known data
+  if (urls.length === 0) {
+    // Homepage
+    urls.push({ loc: SITE_URL, changefreq: "daily", priority: 1.0, lastmod: today });
+
+    // Try to fetch cities and categories for fallback
+    try {
+      const [citiesRes, catsRes] = await Promise.allSettled([
+        fetchApi<any>("/cities", { revalidate: 3600 }),
+        fetchApi<any>("/categories", { revalidate: 3600 }),
+      ]);
+
+      const cities: { slug: string }[] =
+        citiesRes.status === "fulfilled" && citiesRes.value.success
+          ? (Array.isArray(citiesRes.value.data) ? citiesRes.value.data : [])
+          : [];
+
+      const categories: { slug: string }[] =
+        catsRes.status === "fulfilled" && catsRes.value.success
+          ? (Array.isArray(catsRes.value.data) ? catsRes.value.data : [])
+          : [];
+
+      // City pages
+      for (const city of cities) {
+        urls.push({
+          loc: `${SITE_URL}/${city.slug}`,
+          changefreq: "weekly",
+          priority: 0.8,
+          lastmod: today,
+        });
+      }
+
+      // Category pages (/services/[category])
+      for (const cat of categories) {
+        urls.push({
+          loc: `${SITE_URL}/services/${cat.slug}`,
+          changefreq: "weekly",
+          priority: 0.8,
+          lastmod: today,
+        });
+      }
+
+      // City + Category combos
+      for (const city of cities) {
+        for (const cat of categories) {
+          urls.push({
+            loc: `${SITE_URL}/${city.slug}/${cat.slug}`,
+            changefreq: "weekly",
+            priority: 0.7,
+            lastmod: today,
+          });
+        }
+      }
+    } catch {
+      // Total fallback — at least have the homepage
+    }
+  }
+
+  const xml = buildSitemapXml(urls);
 
   return new Response(xml, {
     headers: {
