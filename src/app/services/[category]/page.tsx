@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { fetchApi, getBusinesses, getCities } from "@/lib/api";
 import type { Category, Business, City } from "@/types";
 import CategoryIcon from "@/components/ui/CategoryIcon";
+import ClientBusinessList from "@/components/business/ClientBusinessList";
 
 interface PageProps {
   params: Promise<{ category: string }>;
@@ -168,15 +169,13 @@ export default async function CategoryPage({ params }: PageProps) {
           )}
 
           {/* Business Cards Grid */}
-          {businesses.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">No providers found yet</h3>
-              <p className="text-gray-400">We&apos;re adding new service providers daily. Check back soon!</p>
-            </div>
-          ) : (
+          <ClientBusinessList
+            serverBusinesses={businesses}
+            categorySlug={category}
+            cityName=""
+            categoryName={cat.name}
+          />
+          {businesses.length > 0 && (
             <>
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Top {cat.name} Providers
@@ -242,6 +241,7 @@ export default async function CategoryPage({ params }: PageProps) {
               </div>
             </>
           )}
+          {/* End server-rendered businesses */}
         </div>
       </div>
     </>
