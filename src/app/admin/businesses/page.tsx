@@ -140,19 +140,53 @@ export default function AdminBusinessesPage() {
     },
     {
       key: "city_name",
-      label: "City",
+      label: "Cities",
       sortable: true,
-      render: (row) => (
-        <span className="text-gray-600">{row.city_name || "-"}</span>
-      ),
+      render: (row) => {
+        const areas = row.service_areas;
+        if (areas && areas.length > 0) {
+          return (
+            <div className="flex flex-wrap gap-1 max-w-[220px]">
+              {areas.slice(0, 3).map((a) => (
+                <span key={a.city_id || a.id} className="inline-flex px-2 py-0.5 text-xs font-medium bg-primary-50 text-primary-700 rounded-btn">
+                  {a.city_name}
+                </span>
+              ))}
+              {areas.length > 3 && (
+                <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-500 rounded-btn">
+                  +{areas.length - 3} more
+                </span>
+              )}
+            </div>
+          );
+        }
+        return <span className="text-gray-400 text-sm">{row.city_name || "-"}</span>;
+      },
     },
     {
       key: "category_name",
-      label: "Category",
+      label: "Categories",
       sortable: true,
-      render: (row) => (
-        <span className="text-gray-600">{row.category_name || "-"}</span>
-      ),
+      render: (row) => {
+        const cats = row.categories;
+        if (cats && cats.length > 0) {
+          return (
+            <div className="flex flex-wrap gap-1 max-w-[220px]">
+              {cats.slice(0, 3).map((c) => (
+                <span key={c.id} className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-btn ${c.is_primary ? "bg-accent-200 text-primary-800" : "bg-gray-50 text-gray-600"}`}>
+                  {c.name}
+                </span>
+              ))}
+              {cats.length > 3 && (
+                <span className="inline-flex px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-500 rounded-btn">
+                  +{cats.length - 3} more
+                </span>
+              )}
+            </div>
+          );
+        }
+        return <span className="text-gray-400 text-sm">{row.category_name || "-"}</span>;
+      },
     },
     {
       key: "rating",
