@@ -107,20 +107,10 @@ export async function GET() {
     }
   }
 
-  // Fallback: minimal static list if API is unreachable
+  // Fallback: only homepage if API is unreachable (don't list pages without businesses)
   if (urls.length === 0) {
-    console.warn("[Sitemap] Using hardcoded fallback — API unreachable");
-    const cities = ["hyderabad", "secunderabad", "warangal", "nizamabad", "karimnagar", "khammam"];
-    const cats = [
-      "plumbing-services", "electrical-services", "hvac-services",
-      "auto-mechanic", "painting-services", "carpentry-services",
-      "appliance-repair", "home-cleaning",
-    ];
-
+    console.warn("[Sitemap] Using fallback — API unreachable");
     urls.push({ loc: BASE, changefreq: "daily", priority: 1.0, lastmod: today });
-    for (const s of cities) urls.push({ loc: `${BASE}/${s}`, changefreq: "weekly", priority: 0.8, lastmod: today });
-    for (const s of cats) urls.push({ loc: `${BASE}/services/${s}`, changefreq: "weekly", priority: 0.8, lastmod: today });
-    for (const c of cities) for (const s of cats) urls.push({ loc: `${BASE}/${c}/${s}`, changefreq: "weekly", priority: 0.7, lastmod: today });
   }
 
   return new Response(buildSitemapXml(urls), {
