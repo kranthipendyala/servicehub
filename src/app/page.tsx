@@ -89,8 +89,8 @@ export default async function HomePage() {
               </span>
 
               {/* Headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-heading font-medium text-white leading-[1.15] mb-5 md:mb-6">
-                Home services{" "}
+              <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-heading font-bold text-white leading-[1.15] mb-5 md:mb-6">
+                Book services{" "}
                 <br className="hidden sm:block" />
                 at your{" "}
                 <span className="heading-highlight-dark">doorstep</span>
@@ -137,7 +137,7 @@ export default async function HomePage() {
             <div className="md:col-span-5">
               {/* Search card */}
               <div className="bg-white rounded-card p-5 md:p-6 shadow-card mb-5">
-                <p className="text-sm font-heading font-medium text-primary-700 mb-3">What service do you need?</p>
+                <h2 className="text-lg font-heading font-bold text-primary-800 mb-4">What service do you need?</h2>
                 <SearchBar variant="hero" />
               </div>
 

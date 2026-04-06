@@ -96,9 +96,9 @@ export default async function CategoryPage({ params }: PageProps) {
           <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] rounded-full bg-white/[0.03]" />
           <div className="absolute bottom-[-40%] left-[-5%] w-[300px] h-[300px] rounded-full bg-white/[0.02]" />
 
-          <div className="max-w-7xl mx-auto px-4 py-14 md:py-16 relative">
-            <nav className="flex items-center gap-2 text-sm text-white/50 mb-6">
-              <Link href="/" className="hover:text-white transition-colors duration-200 ease-advia">Home</Link>
+          <div className="max-w-7xl mx-auto px-4 py-10 md:py-14 relative">
+            <nav className="flex items-center gap-2 text-sm text-white/50 mb-5">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               <span className="text-white/80 font-medium">{cat.name}</span>
             </nav>
@@ -117,12 +117,12 @@ export default async function CategoryPage({ params }: PageProps) {
                   <p className="mt-3 text-white/70 max-w-2xl text-lg leading-relaxed">{cat.description}</p>
                 )}
 
-                <div className="flex items-center gap-4 mt-5 text-sm text-white/50">
-                  <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                <div className="flex items-center gap-3 mt-5 text-sm">
+                  <span className="flex items-center gap-1.5 bg-white/10 text-white/70 px-3 py-1.5 rounded-full font-medium">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Verified Professionals
                   </span>
-                  <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                  <span className="flex items-center gap-1.5 bg-white/10 text-white/70 px-3 py-1.5 rounded-full font-medium">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Instant Booking
                   </span>

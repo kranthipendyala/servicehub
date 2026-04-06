@@ -273,16 +273,21 @@ export async function searchBusinesses(
     params: params as Record<string, string | undefined>,
     revalidate: false,
   });
+  const pg = res.data?.pagination || {};
+  const currentPage = pg.page || pg.current_page || 1;
+  const perPage = pg.per_page || 20;
+  const total = pg.total || pg.total_items || 0;
+  const totalPages = pg.pages || pg.total_pages || (total > 0 ? Math.ceil(total / perPage) : 1);
   return {
     success: res.success,
     data: res.data?.businesses || res.data || [],
-    pagination: res.data?.pagination || {
-      current_page: 1,
-      per_page: 20,
-      total_items: 0,
-      total_pages: 1,
-      has_next: false,
-      has_prev: false,
+    pagination: {
+      current_page: currentPage,
+      per_page: perPage,
+      total_items: total,
+      total_pages: totalPages,
+      has_next: currentPage < totalPages,
+      has_prev: currentPage > 1,
     },
   };
 }
