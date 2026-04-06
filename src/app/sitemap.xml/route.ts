@@ -14,6 +14,10 @@ const API_URL =
 /** Strip trailing slash to prevent double-slash URLs */
 const BASE = SITE_URL.replace(/\/+$/, "");
 
+/** Force dynamic rendering — never serve a stale cached sitemap */
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function escapeXml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -53,14 +57,18 @@ async function fetchSitemapUrls(): Promise<any[] | null> {
   try {
     const res = await fetch(`${API_URL}/sitemap/urls`, {
       signal: controller.signal,
+      cache: "no-store",
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
         Accept: "application/json",
         "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "cross-site",
       },
-      next: { revalidate: 3600 },
-    } as any);
+    });
 
     clearTimeout(timeout);
 
