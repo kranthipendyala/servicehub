@@ -45,8 +45,8 @@ export async function GET() {
   const urls: SitemapEntry[] = [];
 
   try {
-    // Try fetching from API
-    const res = await fetchApi<any>("/sitemap/urls", { revalidate: 3600 });
+    // Try fetching from API — use longer timeout for sitemap
+    const res = await fetchApi<any>("/sitemap/urls", { revalidate: 3600, timeout: 30000 });
 
     if (res.success && res.data) {
       const apiUrls = res.data.urls || res.data || [];
@@ -83,8 +83,8 @@ export async function GET() {
         }
       }
     }
-  } catch {
-    // API failed — use fallback
+  } catch (e) {
+    console.error("[Sitemap] Primary API /sitemap/urls failed:", e instanceof Error ? e.message : e);
   }
 
   // If API returned no valid URLs, generate from known data
@@ -95,22 +95,37 @@ export async function GET() {
     // Try to fetch cities and categories for fallback
     try {
       const [citiesRes, catsRes] = await Promise.allSettled([
-        fetchApi<any>("/cities", { revalidate: 3600 }),
-        fetchApi<any>("/categories", { revalidate: 3600 }),
+        fetchApi<any>("/cities", { revalidate: 3600, timeout: 30000 }),
+        fetchApi<any>("/categories", { revalidate: 3600, timeout: 30000 }),
       ]);
 
-      const cities: { slug: string }[] =
+      // Cities API returns { data: { cities: [...] } }
+      const citiesData =
         citiesRes.status === "fulfilled" && citiesRes.value.success
-          ? (Array.isArray(citiesRes.value.data) ? citiesRes.value.data : [])
-          : [];
+          ? citiesRes.value.data
+          : null;
+      const cities: { slug: string }[] =
+        Array.isArray(citiesData) ? citiesData
+        : citiesData?.cities && Array.isArray(citiesData.cities) ? citiesData.cities
+        : [];
 
-      const categories: { slug: string }[] =
+      // Categories API returns { data: { categories: [...] } }
+      const catsData =
         catsRes.status === "fulfilled" && catsRes.value.success
-          ? (Array.isArray(catsRes.value.data) ? catsRes.value.data : [])
-          : [];
+          ? catsRes.value.data
+          : null;
+      const categories: { slug: string }[] =
+        Array.isArray(catsData) ? catsData
+        : catsData?.categories && Array.isArray(catsData.categories) ? catsData.categories
+        : [];
+
+      if (cities.length === 0 && categories.length === 0) {
+        console.warn("[Sitemap] Fallback: no cities or categories returned from API");
+      }
 
       // City pages
       for (const city of cities) {
+        if (!city.slug) continue;
         urls.push({
           loc: `${SITE_URL}/${city.slug}`,
           changefreq: "weekly",
@@ -121,6 +136,7 @@ export async function GET() {
 
       // Category pages (/services/[category])
       for (const cat of categories) {
+        if (!cat.slug) continue;
         urls.push({
           loc: `${SITE_URL}/services/${cat.slug}`,
           changefreq: "weekly",
@@ -132,6 +148,7 @@ export async function GET() {
       // City + Category combos
       for (const city of cities) {
         for (const cat of categories) {
+          if (!city.slug || !cat.slug) continue;
           urls.push({
             loc: `${SITE_URL}/${city.slug}/${cat.slug}`,
             changefreq: "weekly",
@@ -140,8 +157,8 @@ export async function GET() {
           });
         }
       }
-    } catch {
-      // Total fallback — at least have the homepage
+    } catch (e) {
+      console.error("[Sitemap] Fallback API calls failed:", e instanceof Error ? e.message : e);
     }
   }
 
