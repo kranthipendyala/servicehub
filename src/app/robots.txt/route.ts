@@ -1,46 +1,44 @@
 import { SITE_URL } from "@/lib/seo";
 
-export async function GET() {
-  const robotsTxt = `# Robots.txt for ${SITE_URL}
-# Generated dynamically
+const BASE = SITE_URL.replace(/\/+$/, "");
 
-User-agent: *
+export async function GET() {
+  const body = `User-agent: *
 Allow: /
-Disallow: /search
 Disallow: /admin
+Disallow: /admin/*
 Disallow: /vendor
+Disallow: /vendor/*
+Disallow: /search
+Disallow: /book/*
 Disallow: /my-bookings
 Disallow: /my-addresses
 Disallow: /notifications
-Disallow: /book/
 Disallow: /login
 Disallow: /register
 Disallow: /api/
+Disallow: /proxy-api/
 Disallow: /_next/
 
-# Sitemaps
-Sitemap: ${SITE_URL}/sitemap.xml
-
-# Crawl-delay (optional, respected by some bots)
-Crawl-delay: 1
-
-# Google-specific
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /vendor
 Disallow: /search
-Disallow: /dashboard
-Disallow: /auth
+Disallow: /book/*
 
-# Bing-specific
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
+Disallow: /vendor
 Disallow: /search
-Disallow: /dashboard
-Disallow: /auth
+Disallow: /book/*
 Crawl-delay: 2
+
+Sitemap: ${BASE}/sitemap.xml
 `;
 
-  return new Response(robotsTxt, {
+  return new Response(body, {
     headers: {
       "Content-Type": "text/plain",
       "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=3600",
