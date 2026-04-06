@@ -1,130 +1,91 @@
 import { SITE_URL } from "@/lib/seo";
 
-interface SitemapEntry {
-  loc: string;
-  lastmod?: string;
-  changefreq?: string;
-  priority?: number;
-}
-
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://obesityworldconference.com/api/m2/index.php/api";
 
-/** Strip trailing slash to prevent double-slash URLs */
 const BASE = SITE_URL.replace(/\/+$/, "");
 
-/** Force dynamic rendering — never serve a stale cached sitemap */
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
+/**
+ * Fetch the complete sitemap XML from the PHP API.
+ * The PHP endpoint generates XML with only active data from the DB.
+ * Tries direct API first, then the proxy-api rewrite path.
+ */
+async function fetchSitemapXml(): Promise<string | null> {
+  const urls = [
+    `${API_URL}/sitemap/xml?base=${encodeURIComponent(BASE)}`,
+    `${BASE}/proxy-api/sitemap/xml?base=${encodeURIComponent(BASE)}`,
+  ];
 
-function buildSitemapXml(urls: SitemapEntry[]): string {
-  const urlEntries = urls
-    .map(
-      (u) => `  <url>
-    <loc>${escapeXml(u.loc)}</loc>${
-        u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ""
-      }${
-        u.changefreq ? `\n    <changefreq>${u.changefreq}</changefreq>` : ""
-      }${
-        u.priority !== undefined
-          ? `\n    <priority>${u.priority.toFixed(1)}</priority>`
-          : ""
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+
+      const res = await fetch(url, {
+        signal: controller.signal,
+        cache: "no-store",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+          Accept: "application/xml, text/xml, */*",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Accept-Encoding": "gzip, deflate, br",
+        },
+      });
+
+      clearTimeout(timeout);
+
+      const contentType = res.headers.get("content-type") || "";
+      const body = await res.text();
+
+      // Check it's actual XML (not a Cloudflare HTML challenge)
+      if (res.ok && body.includes("<urlset") && !body.includes("<!DOCTYPE html")) {
+        console.log(`[Sitemap] Fetched XML from ${url} (${body.length} bytes)`);
+        return body;
       }
-  </url>`
-    )
-    .join("\n");
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urlEntries}
-</urlset>`;
-}
-
-async function fetchSitemapUrls(): Promise<any[] | null> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000);
-
-  try {
-    const res = await fetch(`${API_URL}/sitemap/urls`, {
-      signal: controller.signal,
-      cache: "no-store",
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-        Accept: "application/json",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "cross-site",
-      },
-    });
-
-    clearTimeout(timeout);
-
-    const contentType = res.headers.get("content-type") || "";
-    if (!res.ok || contentType.includes("text/html")) {
-      console.error(`[Sitemap] API returned ${res.status}, content-type: ${contentType}`);
-      return null;
+      console.warn(`[Sitemap] ${url} returned ${res.status}, type=${contentType}, isXml=${body.includes("<urlset")}`);
+    } catch (e) {
+      console.warn(`[Sitemap] ${url} failed:`, e instanceof Error ? e.message : e);
     }
-
-    const json = await res.json();
-    const data = json.data || json;
-    const urls = data.urls || data;
-
-    return Array.isArray(urls) && urls.length > 0 ? urls : null;
-  } catch (e) {
-    clearTimeout(timeout);
-    console.error("[Sitemap] Fetch failed:", e instanceof Error ? e.message : e);
-    return null;
   }
+
+  return null;
 }
 
 export async function GET() {
+  const xml = await fetchSitemapXml();
+
+  if (xml) {
+    return new Response(xml, {
+      headers: {
+        "Content-Type": "application/xml",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
+      },
+    });
+  }
+
+  // Ultimate fallback — only homepage
+  console.error("[Sitemap] All fetch attempts failed, returning homepage only");
   const today = new Date().toISOString().split("T")[0];
-  const urls: SitemapEntry[] = [];
+  const fallback = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${BASE}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
 
-  const apiUrls = await fetchSitemapUrls();
-
-  if (apiUrls) {
-    for (const entry of apiUrls) {
-      const rawUrl = entry.loc || entry.url || "";
-      if (!rawUrl) continue;
-
-      let loc = rawUrl;
-      if (!loc.startsWith("http")) {
-        loc = `${BASE}${loc.startsWith("/") ? "" : "/"}${loc}`;
-      }
-
-      urls.push({
-        loc,
-        lastmod: entry.lastmod || today,
-        changefreq: entry.changefreq || "weekly",
-        priority: entry.priority !== undefined ? Number(entry.priority) : 0.7,
-      });
-    }
-  }
-
-  // Fallback: only homepage if API is unreachable (don't list pages without businesses)
-  if (urls.length === 0) {
-    console.warn("[Sitemap] Using fallback — API unreachable");
-    urls.push({ loc: BASE, changefreq: "daily", priority: 1.0, lastmod: today });
-  }
-
-  return new Response(buildSitemapXml(urls), {
+  return new Response(fallback, {
     headers: {
       "Content-Type": "application/xml",
-      "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
+      "Cache-Control": "public, s-maxage=300",
     },
   });
 }
