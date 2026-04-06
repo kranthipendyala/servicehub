@@ -8,31 +8,21 @@ interface SitemapEntry {
   priority?: number;
 }
 
-// Hardcoded fallback data — used when API is unreachable (e.g. Cloudflare blocks Vercel)
+// Active Telangana cities (matches current geo_scope)
 const FALLBACK_CITIES = [
-  "hyderabad", "secunderabad", "warangal", "nizamabad", "karimnagar",
-  "khammam", "nalgonda", "adilabad", "mahabubnagar", "medak",
-  "rangareddy", "sangareddy", "siddipet", "mancherial", "suryapet",
-  "ramagundam", "vijayawada", "visakhapatnam",
-  "mumbai", "pune", "nagpur", "thane", "nashik",
-  "bangalore", "mysore", "chennai", "coimbatore", "madurai",
-  "new-delhi", "noida", "gurgaon", "faridabad",
-  "ahmedabad", "surat", "vadodara",
-  "jaipur", "jodhpur", "udaipur",
-  "lucknow", "kanpur", "varanasi",
-  "kolkata", "indore", "bhopal", "kochi", "thiruvananthapuram",
-  "chandigarh", "ludhiana", "patna", "bhubaneswar", "panaji",
+  "hyderabad", "secunderabad", "warangal", "nizamabad",
+  "karimnagar", "khammam",
 ];
 
+// Active service categories
 const FALLBACK_CATEGORIES = [
   "plumbing-services", "electrical-services", "hvac-services",
-  "auto-mechanic", "welding-services", "carpentry-services",
-  "painting-services", "appliance-repair", "elevator-lift-services",
-  "generator-services", "pump-services", "industrial-machinery",
-  "cnc-machining", "fabrication-services", "solar-panel-services",
-  "fire-safety-services", "pest-control", "waterproofing",
-  "ro-water-purifier", "cctv-security", "home-cleaning",
+  "auto-mechanic", "painting-services", "carpentry-services",
+  "appliance-repair", "home-cleaning",
 ];
+
+/** Strip trailing slash from base URL to prevent double slashes */
+const BASE = SITE_URL.replace(/\/+$/, "");
 
 function escapeXml(str: string): string {
   return str
@@ -71,7 +61,6 @@ export async function GET() {
   const urls: SitemapEntry[] = [];
 
   try {
-    // Try fetching from API — use longer timeout for sitemap
     const res = await fetchApi<any>("/sitemap/urls", { revalidate: 3600, timeout: 30000 });
 
     if (res.success && res.data) {
@@ -84,13 +73,13 @@ export async function GET() {
 
           let loc = rawUrl;
           if (!loc.startsWith("http")) {
-            loc = `${SITE_URL}${loc.startsWith("/") ? "" : "/"}${loc}`;
-          } else if (loc.includes("localhost") || !loc.includes(new URL(SITE_URL).hostname)) {
+            loc = `${BASE}${loc.startsWith("/") ? "" : "/"}${loc}`;
+          } else if (loc.includes("localhost") || !loc.includes(new URL(BASE).hostname)) {
             try {
               const parsed = new URL(loc);
-              loc = `${SITE_URL}${parsed.pathname}`;
+              loc = `${BASE}${parsed.pathname}`;
             } catch {
-              loc = `${SITE_URL}/${loc.replace(/^https?:\/\/[^/]+\/?/, "")}`;
+              loc = `${BASE}/${loc.replace(/^https?:\/\/[^/]+\/?/, "")}`;
             }
           }
 
@@ -106,43 +95,24 @@ export async function GET() {
       }
     }
   } catch (e) {
-    console.error("[Sitemap] Primary API failed:", e instanceof Error ? e.message : e);
+    console.error("[Sitemap] API failed:", e instanceof Error ? e.message : e);
   }
 
-  // If API returned no URLs, build from hardcoded data
+  // Fallback: use hardcoded active cities + categories
   if (urls.length === 0) {
-    // Homepage
-    urls.push({ loc: SITE_URL, changefreq: "daily", priority: 1.0, lastmod: today });
+    urls.push({ loc: BASE, changefreq: "daily", priority: 1.0, lastmod: today });
 
-    // City pages
     for (const slug of FALLBACK_CITIES) {
-      urls.push({
-        loc: `${SITE_URL}/${slug}`,
-        changefreq: "weekly",
-        priority: 0.8,
-        lastmod: today,
-      });
+      urls.push({ loc: `${BASE}/${slug}`, changefreq: "weekly", priority: 0.8, lastmod: today });
     }
 
-    // Category pages
     for (const slug of FALLBACK_CATEGORIES) {
-      urls.push({
-        loc: `${SITE_URL}/services/${slug}`,
-        changefreq: "weekly",
-        priority: 0.8,
-        lastmod: today,
-      });
+      urls.push({ loc: `${BASE}/services/${slug}`, changefreq: "weekly", priority: 0.8, lastmod: today });
     }
 
-    // City + Category combos
     for (const city of FALLBACK_CITIES) {
       for (const cat of FALLBACK_CATEGORIES) {
-        urls.push({
-          loc: `${SITE_URL}/${city}/${cat}`,
-          changefreq: "weekly",
-          priority: 0.7,
-          lastmod: today,
-        });
+        urls.push({ loc: `${BASE}/${city}/${cat}`, changefreq: "weekly", priority: 0.7, lastmod: today });
       }
     }
   }
