@@ -92,37 +92,42 @@ export default async function CategoryPage({ params }: PageProps) {
 
       <div className="min-h-screen bg-accent-200">
         {/* Hero */}
-        <div className="bg-primary-800 text-white">
-          <div className="max-w-7xl mx-auto px-4 py-12">
-            <nav className="flex items-center gap-2 text-sm text-white/60 mb-4">
+        <div className="bg-primary-800 text-white relative overflow-hidden">
+          <div className="absolute top-[-30%] right-[-10%] w-[400px] h-[400px] rounded-full bg-white/[0.03]" />
+          <div className="absolute bottom-[-40%] left-[-5%] w-[300px] h-[300px] rounded-full bg-white/[0.02]" />
+
+          <div className="max-w-7xl mx-auto px-4 py-14 md:py-16 relative">
+            <nav className="flex items-center gap-2 text-sm text-white/50 mb-6">
               <Link href="/" className="hover:text-white transition-colors duration-200 ease-advia">Home</Link>
-              <span>/</span>
-              <span className="text-white font-medium">{cat.name}</span>
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              <span className="text-white/80 font-medium">{cat.name}</span>
             </nav>
 
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-start gap-5">
               {cat.icon && (
-                <div className="w-16 h-16 bg-white/10 backdrop-blur-sm border border-white/20 rounded-card flex items-center justify-center text-white">
-                  <CategoryIcon icon={cat.icon} className="w-8 h-8" />
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl flex items-center justify-center text-white flex-shrink-0">
+                  <CategoryIcon icon={cat.icon} className="w-8 h-8 md:w-10 md:h-10" />
                 </div>
               )}
               <div>
-                <h1 className="text-3xl md:text-4xl font-heading font-medium">{cat.name}</h1>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold tracking-tight leading-tight">
+                  {cat.name}
+                </h1>
                 {cat.description && (
-                  <p className="mt-2 text-white/80 max-w-2xl text-lg">{cat.description}</p>
+                  <p className="mt-3 text-white/70 max-w-2xl text-lg leading-relaxed">{cat.description}</p>
                 )}
-              </div>
-            </div>
 
-            <div className="flex items-center gap-4 text-sm text-white/60">
-              <span className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                {businesses.length} providers found
-              </span>
-              <span className="flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                Verified Professionals
-              </span>
+                <div className="flex items-center gap-4 mt-5 text-sm text-white/50">
+                  <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Verified Professionals
+                  </span>
+                  <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-full">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Instant Booking
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
