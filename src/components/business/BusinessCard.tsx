@@ -153,7 +153,7 @@ export default function BusinessCard({
               <>
                 <a
                   href={`tel:${business.phone}`}
-                  className="flex-1 sm:flex-none btn-call flex items-center justify-center gap-2 rounded-xl py-3 min-h-[48px] transition-all duration-200"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-xl py-3 min-h-[48px] border border-primary-200 text-primary-700 font-semibold text-sm hover:bg-primary-50 transition-all duration-200"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -167,7 +167,7 @@ export default function BusinessCard({
             )}
             <Link
               href={`/book/${business.slug}`}
-              className="flex-1 sm:flex-none bg-accent-500 hover:bg-accent-600 text-white font-bold flex items-center justify-center gap-2 rounded-xl px-4 py-3 transition-all duration-200 text-sm min-h-[48px]"
+              className="flex-1 sm:flex-none bg-primary-600 hover:bg-primary-800 text-white font-bold flex items-center justify-center gap-2 rounded-xl px-4 py-3 transition-all duration-200 text-sm min-h-[48px]"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -266,11 +266,11 @@ export default function BusinessCard({
         {/* CTA */}
         <div className="flex gap-2 mt-auto pt-3">
           {business.phone && (
-            <a href={`tel:${business.phone}`} className="flex-1 text-center rounded-xl text-xs py-2.5 font-semibold border border-gray-200 text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all min-h-[38px] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <a href={`tel:${business.phone}`} className="flex-1 text-center rounded-xl text-xs py-2.5 font-semibold border border-primary-200 text-primary-700 hover:bg-primary-50 hover:border-primary-400 transition-all min-h-[38px] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
               Call
             </a>
           )}
-          <Link href={`/book/${business.slug}`} className="flex-1 bg-gray-900 hover:bg-gray-800 text-white text-center rounded-xl text-xs py-2.5 font-semibold transition-all min-h-[38px] flex items-center justify-center">
+          <Link href={`/book/${business.slug}`} className="flex-1 bg-primary-600 hover:bg-primary-800 text-white text-center rounded-xl text-xs py-2.5 font-semibold transition-all min-h-[38px] flex items-center justify-center">
             Book Now
           </Link>
         </div>
