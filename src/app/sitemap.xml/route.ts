@@ -8,6 +8,32 @@ interface SitemapEntry {
   priority?: number;
 }
 
+// Hardcoded fallback data — used when API is unreachable (e.g. Cloudflare blocks Vercel)
+const FALLBACK_CITIES = [
+  "hyderabad", "secunderabad", "warangal", "nizamabad", "karimnagar",
+  "khammam", "nalgonda", "adilabad", "mahabubnagar", "medak",
+  "rangareddy", "sangareddy", "siddipet", "mancherial", "suryapet",
+  "ramagundam", "vijayawada", "visakhapatnam",
+  "mumbai", "pune", "nagpur", "thane", "nashik",
+  "bangalore", "mysore", "chennai", "coimbatore", "madurai",
+  "new-delhi", "noida", "gurgaon", "faridabad",
+  "ahmedabad", "surat", "vadodara",
+  "jaipur", "jodhpur", "udaipur",
+  "lucknow", "kanpur", "varanasi",
+  "kolkata", "indore", "bhopal", "kochi", "thiruvananthapuram",
+  "chandigarh", "ludhiana", "patna", "bhubaneswar", "panaji",
+];
+
+const FALLBACK_CATEGORIES = [
+  "plumbing-services", "electrical-services", "hvac-services",
+  "auto-mechanic", "welding-services", "carpentry-services",
+  "painting-services", "appliance-repair", "elevator-lift-services",
+  "generator-services", "pump-services", "industrial-machinery",
+  "cnc-machining", "fabrication-services", "solar-panel-services",
+  "fire-safety-services", "pest-control", "waterproofing",
+  "ro-water-purifier", "cctv-security", "home-cleaning",
+];
+
 function escapeXml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -53,16 +79,13 @@ export async function GET() {
 
       if (Array.isArray(apiUrls) && apiUrls.length > 0) {
         for (const entry of apiUrls) {
-          // API may use "url" or "loc" key
           const rawUrl = entry.loc || entry.url || "";
           if (!rawUrl) continue;
 
-          // Fix: replace any localhost/wrong base URL with actual SITE_URL
           let loc = rawUrl;
           if (!loc.startsWith("http")) {
             loc = `${SITE_URL}${loc.startsWith("/") ? "" : "/"}${loc}`;
           } else if (loc.includes("localhost") || !loc.includes(new URL(SITE_URL).hostname)) {
-            // Extract the path portion and rebuild with correct domain
             try {
               const parsed = new URL(loc);
               loc = `${SITE_URL}${parsed.pathname}`;
@@ -71,7 +94,6 @@ export async function GET() {
             }
           }
 
-          // Fix: /categories/slug → /services/slug (correct Next.js route)
           loc = loc.replace(/\/categories\/([^/]+)$/, "/services/$1");
 
           urls.push({
@@ -84,81 +106,44 @@ export async function GET() {
       }
     }
   } catch (e) {
-    console.error("[Sitemap] Primary API /sitemap/urls failed:", e instanceof Error ? e.message : e);
+    console.error("[Sitemap] Primary API failed:", e instanceof Error ? e.message : e);
   }
 
-  // If API returned no valid URLs, generate from known data
+  // If API returned no URLs, build from hardcoded data
   if (urls.length === 0) {
     // Homepage
     urls.push({ loc: SITE_URL, changefreq: "daily", priority: 1.0, lastmod: today });
 
-    // Try to fetch cities and categories for fallback
-    try {
-      const [citiesRes, catsRes] = await Promise.allSettled([
-        fetchApi<any>("/cities", { revalidate: 3600, timeout: 30000 }),
-        fetchApi<any>("/categories", { revalidate: 3600, timeout: 30000 }),
-      ]);
+    // City pages
+    for (const slug of FALLBACK_CITIES) {
+      urls.push({
+        loc: `${SITE_URL}/${slug}`,
+        changefreq: "weekly",
+        priority: 0.8,
+        lastmod: today,
+      });
+    }
 
-      // Cities API returns { data: { cities: [...] } }
-      const citiesData =
-        citiesRes.status === "fulfilled" && citiesRes.value.success
-          ? citiesRes.value.data
-          : null;
-      const cities: { slug: string }[] =
-        Array.isArray(citiesData) ? citiesData
-        : citiesData?.cities && Array.isArray(citiesData.cities) ? citiesData.cities
-        : [];
+    // Category pages
+    for (const slug of FALLBACK_CATEGORIES) {
+      urls.push({
+        loc: `${SITE_URL}/services/${slug}`,
+        changefreq: "weekly",
+        priority: 0.8,
+        lastmod: today,
+      });
+    }
 
-      // Categories API returns { data: { categories: [...] } }
-      const catsData =
-        catsRes.status === "fulfilled" && catsRes.value.success
-          ? catsRes.value.data
-          : null;
-      const categories: { slug: string }[] =
-        Array.isArray(catsData) ? catsData
-        : catsData?.categories && Array.isArray(catsData.categories) ? catsData.categories
-        : [];
-
-      if (cities.length === 0 && categories.length === 0) {
-        console.warn("[Sitemap] Fallback: no cities or categories returned from API");
-      }
-
-      // City pages
-      for (const city of cities) {
-        if (!city.slug) continue;
+    // City + Category combos
+    for (const city of FALLBACK_CITIES) {
+      for (const cat of FALLBACK_CATEGORIES) {
         urls.push({
-          loc: `${SITE_URL}/${city.slug}`,
+          loc: `${SITE_URL}/${city}/${cat}`,
           changefreq: "weekly",
-          priority: 0.8,
+          priority: 0.7,
           lastmod: today,
         });
       }
-
-      // Category pages (/services/[category])
-      for (const cat of categories) {
-        if (!cat.slug) continue;
-        urls.push({
-          loc: `${SITE_URL}/services/${cat.slug}`,
-          changefreq: "weekly",
-          priority: 0.8,
-          lastmod: today,
-        });
-      }
-
-      // City + Category combos
-      for (const city of cities) {
-        for (const cat of categories) {
-          if (!city.slug || !cat.slug) continue;
-          urls.push({
-            loc: `${SITE_URL}/${city.slug}/${cat.slug}`,
-            changefreq: "weekly",
-            priority: 0.7,
-            lastmod: today,
-          });
-        }
-      }
-    } catch (e) {
-      console.error("[Sitemap] Fallback API calls failed:", e instanceof Error ? e.message : e);
     }
   }
 
