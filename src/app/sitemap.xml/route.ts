@@ -1,5 +1,4 @@
 import { SITE_URL } from "@/lib/seo";
-import { fetchApi } from "@/lib/api";
 
 interface SitemapEntry {
   loc: string;
@@ -8,20 +7,11 @@ interface SitemapEntry {
   priority?: number;
 }
 
-// Active Telangana cities (matches current geo_scope)
-const FALLBACK_CITIES = [
-  "hyderabad", "secunderabad", "warangal", "nizamabad",
-  "karimnagar", "khammam",
-];
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://obesityworldconference.com/api/m2/index.php/api";
 
-// Active service categories
-const FALLBACK_CATEGORIES = [
-  "plumbing-services", "electrical-services", "hvac-services",
-  "auto-mechanic", "painting-services", "carpentry-services",
-  "appliance-repair", "home-cleaning",
-];
-
-/** Strip trailing slash from base URL to prevent double slashes */
+/** Strip trailing slash to prevent double-slash URLs */
 const BASE = SITE_URL.replace(/\/+$/, "");
 
 function escapeXml(str: string): string {
@@ -56,70 +46,84 @@ ${urlEntries}
 </urlset>`;
 }
 
+async function fetchSitemapUrls(): Promise<any[] | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const res = await fetch(`${API_URL}/sitemap/urls`, {
+      signal: controller.signal,
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        Accept: "application/json",
+        "Accept-Language": "en-US,en;q=0.9",
+      },
+      next: { revalidate: 3600 },
+    } as any);
+
+    clearTimeout(timeout);
+
+    const contentType = res.headers.get("content-type") || "";
+    if (!res.ok || contentType.includes("text/html")) {
+      console.error(`[Sitemap] API returned ${res.status}, content-type: ${contentType}`);
+      return null;
+    }
+
+    const json = await res.json();
+    const data = json.data || json;
+    const urls = data.urls || data;
+
+    return Array.isArray(urls) && urls.length > 0 ? urls : null;
+  } catch (e) {
+    clearTimeout(timeout);
+    console.error("[Sitemap] Fetch failed:", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
+
 export async function GET() {
   const today = new Date().toISOString().split("T")[0];
   const urls: SitemapEntry[] = [];
 
-  try {
-    const res = await fetchApi<any>("/sitemap/urls", { revalidate: 3600, timeout: 30000 });
+  const apiUrls = await fetchSitemapUrls();
 
-    if (res.success && res.data) {
-      const apiUrls = res.data.urls || res.data || [];
+  if (apiUrls) {
+    for (const entry of apiUrls) {
+      const rawUrl = entry.loc || entry.url || "";
+      if (!rawUrl) continue;
 
-      if (Array.isArray(apiUrls) && apiUrls.length > 0) {
-        for (const entry of apiUrls) {
-          const rawUrl = entry.loc || entry.url || "";
-          if (!rawUrl) continue;
-
-          let loc = rawUrl;
-          if (!loc.startsWith("http")) {
-            loc = `${BASE}${loc.startsWith("/") ? "" : "/"}${loc}`;
-          } else if (loc.includes("localhost") || !loc.includes(new URL(BASE).hostname)) {
-            try {
-              const parsed = new URL(loc);
-              loc = `${BASE}${parsed.pathname}`;
-            } catch {
-              loc = `${BASE}/${loc.replace(/^https?:\/\/[^/]+\/?/, "")}`;
-            }
-          }
-
-          loc = loc.replace(/\/categories\/([^/]+)$/, "/services/$1");
-
-          urls.push({
-            loc,
-            lastmod: entry.lastmod || today,
-            changefreq: entry.changefreq || "weekly",
-            priority: entry.priority !== undefined ? Number(entry.priority) : 0.7,
-          });
-        }
+      let loc = rawUrl;
+      if (!loc.startsWith("http")) {
+        loc = `${BASE}${loc.startsWith("/") ? "" : "/"}${loc}`;
       }
+
+      urls.push({
+        loc,
+        lastmod: entry.lastmod || today,
+        changefreq: entry.changefreq || "weekly",
+        priority: entry.priority !== undefined ? Number(entry.priority) : 0.7,
+      });
     }
-  } catch (e) {
-    console.error("[Sitemap] API failed:", e instanceof Error ? e.message : e);
   }
 
-  // Fallback: use hardcoded active cities + categories
+  // Fallback: minimal static list if API is unreachable
   if (urls.length === 0) {
+    console.warn("[Sitemap] Using hardcoded fallback — API unreachable");
+    const cities = ["hyderabad", "secunderabad", "warangal", "nizamabad", "karimnagar", "khammam"];
+    const cats = [
+      "plumbing-services", "electrical-services", "hvac-services",
+      "auto-mechanic", "painting-services", "carpentry-services",
+      "appliance-repair", "home-cleaning",
+    ];
+
     urls.push({ loc: BASE, changefreq: "daily", priority: 1.0, lastmod: today });
-
-    for (const slug of FALLBACK_CITIES) {
-      urls.push({ loc: `${BASE}/${slug}`, changefreq: "weekly", priority: 0.8, lastmod: today });
-    }
-
-    for (const slug of FALLBACK_CATEGORIES) {
-      urls.push({ loc: `${BASE}/services/${slug}`, changefreq: "weekly", priority: 0.8, lastmod: today });
-    }
-
-    for (const city of FALLBACK_CITIES) {
-      for (const cat of FALLBACK_CATEGORIES) {
-        urls.push({ loc: `${BASE}/${city}/${cat}`, changefreq: "weekly", priority: 0.7, lastmod: today });
-      }
-    }
+    for (const s of cities) urls.push({ loc: `${BASE}/${s}`, changefreq: "weekly", priority: 0.8, lastmod: today });
+    for (const s of cats) urls.push({ loc: `${BASE}/services/${s}`, changefreq: "weekly", priority: 0.8, lastmod: today });
+    for (const c of cities) for (const s of cats) urls.push({ loc: `${BASE}/${c}/${s}`, changefreq: "weekly", priority: 0.7, lastmod: today });
   }
 
-  const xml = buildSitemapXml(urls);
-
-  return new Response(xml, {
+  return new Response(buildSitemapXml(urls), {
     headers: {
       "Content-Type": "application/xml",
       "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600",
