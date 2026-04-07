@@ -1,16 +1,15 @@
 import CategoryIcon from "@/components/ui/CategoryIcon";
 
+// Brand-aligned palette: shades of deep green + warm neutrals
 const PALETTES = [
-  { bg: "#0d9488", accent: "#14b8a6", light: "#99f6e4" },  // teal
-  { bg: "#2563eb", accent: "#3b82f6", light: "#bfdbfe" },  // blue
-  { bg: "#7c3aed", accent: "#8b5cf6", light: "#ddd6fe" },  // violet
-  { bg: "#dc2626", accent: "#ef4444", light: "#fecaca" },  // red
-  { bg: "#ea580c", accent: "#f97316", light: "#fed7aa" },  // orange
-  { bg: "#0891b2", accent: "#06b6d4", light: "#a5f3fc" },  // cyan
-  { bg: "#4f46e5", accent: "#6366f1", light: "#c7d2fe" },  // indigo
-  { bg: "#059669", accent: "#10b981", light: "#a7f3d0" },  // emerald
-  { bg: "#d946ef", accent: "#e879f9", light: "#f5d0fe" },  // fuchsia
-  { bg: "#0284c7", accent: "#0ea5e9", light: "#bae6fd" },  // sky
+  { bg: "#0A2912", accent: "#145224", light: "#b3e5c1" },  // primary-800 (darkest)
+  { bg: "#145224", accent: "#1a7a3a", light: "#d9f2e0" },  // primary-600 (brand)
+  { bg: "#0E3919", accent: "#145224", light: "#7ed39a" },  // primary-700
+  { bg: "#1a7a3a", accent: "#4abb70", light: "#b3e5c1" },  // primary-500
+  { bg: "#0A2912", accent: "#4abb70", light: "#d9f2e0" },  // dark + light green mix
+  { bg: "#145224", accent: "#7ed39a", light: "#f0faf3" },  // brand + soft
+  { bg: "#0E3919", accent: "#1a7a3a", light: "#b3e5c1" },  // muted green
+  { bg: "#145224", accent: "#0A2912", light: "#7ed39a" },  // inverted
 ];
 
 function hashName(name: string): number {

@@ -75,7 +75,7 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
                 </h2>
                 <p className="text-primary-600/60 mt-2">Book verified professionals for any home service</p>
               </div>
-              <Link href="/search" className="hidden sm:flex items-center gap-1.5 btn-primary text-sm">
+              <Link href="/services" className="hidden sm:flex items-center gap-1.5 btn-primary text-sm">
                 All services
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
@@ -110,7 +110,7 @@ export default function DynamicHomeSections({ serverCities, serverCategories, se
 
             {/* Mobile view all */}
             <div className="flex sm:hidden justify-center mt-8">
-              <Link href="/search" className="btn-primary text-sm">
+              <Link href="/services" className="btn-primary text-sm">
                 View all services
               </Link>
             </div>

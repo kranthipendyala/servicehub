@@ -126,10 +126,10 @@ export default function SearchBar({
     <div ref={wrapperRef} className="relative w-full">
       <form onSubmit={handleSubmit} className="flex w-full">
         <div
-          className={`flex w-full items-stretch ${
+          className={`flex w-full items-stretch bg-white transition-shadow ${
             isHero
-              ? "rounded-xl bg-white border border-gray-200 shadow-md focus-within:border-primary-500 focus-within:shadow-lg transition-all"
-              : "rounded-full bg-white border border-gray-200 shadow-sm focus-within:border-primary-400 focus-within:shadow-md transition-all"
+              ? "rounded-xl border border-gray-200 hover:shadow-sm"
+              : "rounded-full border border-gray-200 hover:shadow-sm"
           }`}
         >
           {/* City selector */}
@@ -222,27 +222,26 @@ export default function SearchBar({
           </div>
 
           {/* Search input */}
-          <div className="flex-1 flex items-center px-3">
-            <svg
-              className={`text-gray-300 mr-2 flex-shrink-0 ${isHero ? "w-5 h-5" : "w-4 h-4"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+          <div className="flex-1 flex items-center px-4">
             <input
-              type="text"
+              type="search"
               value={query}
               onChange={(e) => handleInputChange(e.target.value)}
               onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
-              className={`w-full focus:outline-none bg-transparent text-gray-800 placeholder:text-gray-400 ${
+              className={`w-full bg-transparent text-gray-800 placeholder:text-gray-400 border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none ${
                 isHero ? "py-3.5 text-base" : "py-2.5 text-sm"
               }`}
               aria-label="Search services"
               autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              name="search-q"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions && suggestions.length > 0}
             />
           </div>
 

@@ -103,10 +103,10 @@ export default async function HomePage() {
 
               {/* CTA buttons */}
               <div className="flex flex-wrap gap-4 mb-8 md:mb-10">
-                <Link href="/search" className="btn-primary">
+                <Link href="/services" className="btn-primary">
                   Find a Professional
                 </Link>
-                <Link href="/list-business" className="btn-white">
+                <Link href="/vendor/register" className="btn-white">
                   List Your Business
                 </Link>
               </div>
@@ -221,10 +221,10 @@ export default async function HomePage() {
             Join thousands of homeowners who trust our verified service providers for quality work at transparent prices.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/search" className="btn-primary">
+            <Link href="/services" className="btn-primary">
               Browse Services
             </Link>
-            <Link href="/list-business" className="btn-white">
+            <Link href="/vendor/register" className="btn-white">
               Join as a Provider
             </Link>
           </div>

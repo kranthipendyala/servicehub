@@ -21,10 +21,10 @@ const NAV_ITEMS = [
   },
   {
     label: "Book",
-    href: "/services/home-cleaning",
+    href: "/services",
     icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
     iconFilled: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
-    match: (p: string) => p.startsWith("/book"),
+    match: (p: string) => p === "/services" || p.startsWith("/book"),
     accent: true,
   },
   {
@@ -68,12 +68,12 @@ export default function MobileBottomNav() {
                 href={href}
                 className="flex flex-col items-center justify-center -mt-5"
               >
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent-500 to-accent-600 flex items-center justify-center shadow-lg shadow-accent-500/30">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center shadow-lg shadow-primary-600/40">
                   <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
                   </svg>
                 </div>
-                <span className="text-[10px] font-semibold text-accent-600 mt-1">{item.label}</span>
+                <span className="text-[10px] font-bold text-primary-700 mt-1">{item.label}</span>
               </Link>
             );
           }

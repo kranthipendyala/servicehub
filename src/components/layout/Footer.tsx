@@ -50,7 +50,7 @@ export default function Footer() {
               ].map(([name, href]) => (
                 <li key={href}><Link href={href} className="text-[13px] text-gray-500 hover:text-primary-400 transition-colors">{name}</Link></li>
               ))}
-              <li><Link href="/search" className="text-[13px] font-semibold text-primary-500 hover:text-primary-400 inline-flex items-center gap-1 transition-colors">More <span className="text-xs">→</span></Link></li>
+              <li><Link href="/services" className="text-[13px] font-semibold text-primary-500 hover:text-primary-400 inline-flex items-center gap-1 transition-colors">All services <span className="text-xs">→</span></Link></li>
             </ul>
           </div>
 

@@ -19,7 +19,7 @@ const NAV_LINKS = [
 
 const LOGGED_IN_NAV = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services/home-cleaning" },
+  { label: "Services", href: "/services" },
   { label: "My Bookings", href: "/my-bookings" },
 ];
 
@@ -140,7 +140,7 @@ export default function Header() {
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-1.5 hover:text-accent-300 transition-colors"
                 >
-                  <span className="w-6 h-6 bg-accent-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
+                  <span className="w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center text-xs font-bold text-white">
                     {user.name.charAt(0).toUpperCase()}
                   </span>
                   <span>{user.name.split(" ")[0]}</span>
@@ -186,7 +186,7 @@ export default function Header() {
             </div>
             <div className="hidden sm:block">
               <span className="text-xl font-heading font-bold text-primary-500">
-                Service<span className="text-accent-500">Hub</span>
+                Service<span className="text-primary-700">Hub</span>
               </span>
               <span className="block text-[10px] text-gray-400 -mt-0.5 tracking-wide">
                 {platform.geo_tagline || "Book Home Services Online"}
@@ -319,8 +319,8 @@ export default function Header() {
             ))}
             {user ? (
               <Link
-                href="/services/home-cleaning"
-                className="ml-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent-500 text-white text-sm font-bold hover:bg-accent-600 transition-all shadow-sm hover:shadow-md"
+                href="/services"
+                className="ml-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-bold hover:bg-primary-800 transition-all shadow-sm hover:shadow-md"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -389,6 +389,16 @@ export default function Header() {
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
                 </div>
+                <Link
+                  href="/services"
+                  className="mb-2 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary-600 text-white text-sm font-bold hover:bg-primary-800 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Book Service
+                </Link>
                 <Link href="/my-bookings" className="text-sm font-medium text-gray-700 hover:text-primary-500 py-3 px-4 rounded-lg transition-colors flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
                   <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                   My Bookings
