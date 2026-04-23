@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://catalysiscongress.com/api/m2/index.php/api";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://servicehub-tan.vercel.app").replace(/\/+$/, "");
 

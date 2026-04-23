@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://obesityworldconference.com/api/m2/index.php/api";
+  "https://catalysiscongress.com/api/m2/index.php/api";
 
 /**
  * Internal API proxy — bypasses Cloudflare by adding browser headers.

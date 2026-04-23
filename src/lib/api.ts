@@ -14,7 +14,7 @@ import type {
 } from "@/types";
 
 const EXTERNAL_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://obesityworldconference.com/api/m2/index.php/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://catalysiscongress.com/api/m2/index.php/api";
 
 // All fetch calls go to external API with browser headers via serverFetch
 const API_BASE_URL = EXTERNAL_API_URL;
